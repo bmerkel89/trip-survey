@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Survey Admin Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .header-title .count {
+            font-size: 1rem;
+            color: #64748b;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .stat-card {
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card.blue {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 2px solid #93c5fd;
+        }
+
+        .stat-card.green {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border: 2px solid #6ee7b7;
+        }
+
+        .stat-card.purple {
+            background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+            border: 2px solid #c084fc;
+        }
+
+        .stat-card h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .stat-list {
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-item .label {
+            color: #475569;
+        }
+
+        .stat-item .count {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .responses-container {
+            display: none;
+        }
+
+        .response-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .response-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+
+        .response-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .response-location {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .response-date {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .response-quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .quick-stat {
+            text-align: center;
+        }
+
+        .quick-stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .quick-stat-value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .response-details {
+            display: none;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-size: 0.95rem;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .detail-id {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .toggle-details {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: #f1f5f9;
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-details:hover {
+            background: #e2e8f0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 25px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                flex-direction: column;
+            }
+
+            .response-quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="header-title">
+                    <h1>Trip Survey Admin Dashboard</h1>
+                    <div class="count" id="responseCount">0 responses collected</div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="loadBtn">
+                        <span>🔄</span>
+                        <span>Load Responses</span>
+                    </button>
+                    <button class="btn btn-success" id="exportBtn" style="display: none;">
+                        <span>📥</span>
+                        <span>Export CSV</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="message error">
+                <span>⚠️</span>
+                <span>Failed to load responses. Check your API endpoint.</span>
+            </div>
+
+            <!-- Quick Analysis Stats -->
+            <div id="statsGrid" class="stats-grid">
+                <div class="stat-card blue">
+                    <h3>📅 Season Preferences</h3>
+                    <div id="seasonStats" class="stat-list"></div>
+                </div>
+                <div class="stat-card green">
+                    <h3>💰 Budget Ranges</h3>
+                    <div id="budgetStats" class="stat-list"></div>
+                </div>
+                <div class="stat-card purple">
+                    <h3>✈️ Travel Tolerance</h3>
+                    <div id="travelStats" class="stat-list"></div>
+                </div>
+            </div>
+
+            <!-- Responses List -->
+            <div id="responsesContainer" class="responses-container">
+                <h2 class="section-title">Individual Responses</h2>
+                <div id="responsesList"></div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <div class="icon">👥</div>
+                <p>No responses yet. Click "Load Responses" to check for submissions.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>💡 Tip: Export to CSV for deeper analysis in Excel or Google Sheets</p>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR AWS API GATEWAY URL
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzcoPuj6vO_HH4CjmKX84uvMaMbKQre3qDfvvIuCo0id8M9XvJyuwquouJI3_VvGXtS/exec';
+
+        let responses = [];
+
+        const loadBtn = document.getElementById('loadBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const responseCount = document.getElementById('responseCount');
+        const statsGrid = document.getElementById('statsGrid');
+        const responsesContainer = document.getElementById('responsesContainer');
+        const responsesList = document.getElementById('responsesList');
+        const emptyState = document.getElementById('emptyState');
+
+        function getClimateLabel(value) {
+            const labels = [
+                'Need winter/snow',
+                'Prefer cool',
+                'Flexible',
+                'Prefer warm',
+                'Need warm'
+            ];
+            return labels[value] || 'Unknown';
+        }
+
+        function getSeasonEmoji(season) {
+            const emojis = {
+                winter: '❄️',
+                spring: '🌸',
+                summer: '☀️',
+                fall: '🍂'
+            };
+            return emojis[season] || '';
+        }
+
+        function calculateStats() {
+            const seasonCounts = {};
+            const budgetCounts = {};
+            const travelCounts = {};
+
+            responses.forEach(r => {
+                if (Array.isArray(r.preferredSeason)) {
+                    r.preferredSeason.forEach(s => {
+                        seasonCounts[s] = (seasonCounts[s] || 0) + 1;
+                    });
+                }
+                if (r.budgetRange) {
+                    budgetCounts[r.budgetRange] = (budgetCounts[r.budgetRange] || 0) + 1;
+                }
+                if (r.travelTolerance) {
+                    travelCounts[r.travelTolerance] = (travelCounts[r.travelTolerance] || 0) + 1;
+                }
+            });
+
+            return { seasonCounts, budgetCounts, travelCounts };
+        }
+
+        function renderStats() {
+            const stats = calculateStats();
+
+            // Season Stats
+            const seasonStats = document.getElementById('seasonStats');
+            seasonStats.innerHTML = '';
+            Object.entries(stats.seasonCounts)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([season, count]) => {
+                    const item = document.createElement('div');
+                    item.className = 'stat-item';
+                    item.innerHTML = `
+                        <span class="label">${getSeasonEmoji(season)} ${season}</span>
+                        <span class="count">${count}/${responses.length}</span>
+                    `;
+                    seasonStats.appendChild(item);
+                });
+
+            // Budget Stats
+            const budgetStats = document.getElementById('budgetStats');
+            budgetStats.innerHTML = '';
+            Object.entries(stats.budgetCounts)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([budget, count]) => {
+                    const item = document.createElement('div');
+                    item.className = 'stat-item';
+                    item.innerHTML = `
+                        <span class="label">${budget}</span>
+                        <span class="count">${count}/${responses.length}</span>
+                    `;
+                    budgetStats.appendChild(item);
+                });
+
+            // Travel Stats
+            const travelStats = document.getElementById('travelStats');
+            travelStats.innerHTML = '';
+            Object.entries(stats.travelCounts)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([travel, count]) => {
+                    const item = document.createElement('div');
+                    item.className = 'stat-item';
+                    item.innerHTML = `
+                        <span class="label">${travel}</span>
+                        <span class="count">${count}/${responses.length}</span>
+                    `;
+                    travelStats.appendChild(item);
+                });
+
+            statsGrid.style.display = 'grid';
+        }
+
+        function renderResponses() {
+            responsesList.innerHTML = '';
+
+            responses.forEach((response, index) => {
+                const card = document.createElement('div');
+                card.className = 'response-card';
+
+                const seasons = Array.isArray(response.preferredSeason) && response.preferredSeason.length > 0
+                    ? response.preferredSeason.map(s => getSeasonEmoji(s)).join(' ')
+                    : 'Not specified';
+
+                card.innerHTML = `
+                    <div class="response-header">
+                        <div>
+                            <div class="response-name">
+                                <span>👥</span>
+                                <span>${response.coupleName}</span>
+                            </div>
+                            <div class="response-location">
+                                <span>📍</span>
+                                <span>${response.location}</span>
+                            </div>
+                        </div>
+                        <div class="response-date">
+                            ${new Date(response.submittedAt).toLocaleDateString()}
+                        </div>
+                    </div>
+
+                    <div class="response-quick-stats">
+                        <div class="quick-stat">
+                            <div class="quick-stat-label">Seasons</div>
+                            <div class="quick-stat-value">${seasons}</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-label">Climate</div>
+                            <div class="quick-stat-value">${getClimateLabel(response.climatePreference)}</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-label">Kids</div>
+                            <div class="quick-stat-value">${response.bringingKids || 'N/A'}</div>
+                        </div>
+                        <div class="quick-stat">
+                            <div class="quick-stat-label">Budget</div>
+                            <div class="quick-stat-value" style="font-size: 0.8rem;">${response.budgetRange || 'N/A'}</div>
+                        </div>
+                    </div>
+
+                    <span class="toggle-details" data-index="${index}">View Full Details ▼</span>
+
+                    <div class="response-details" id="details-${index}">
+                        ${response.blackoutDates ? `
+                            <div class="detail-section">
+                                <div class="detail-label">Blackout Dates</div>
+                                <div class="detail-value">${response.blackoutDates}</div>
+                            </div>
+                        ` : ''}
+
+                        ${response.mustHaves ? `
+                            <div class="detail-section">
+                                <div class="detail-label">Must-Have Activities</div>
+                                <div class="detail-value">${response.mustHaves}</div>
+                            </div>
+                        ` : ''}
+
+                        ${response.niceToHaves ? `
+                            <div class="detail-section">
+                                <div class="detail-label">Nice-to-Have Activities</div>
+                                <div class="detail-value">${response.niceToHaves}</div>
+                            </div>
+                        ` : ''}
+
+                        ${response.childcareConstraints ? `
+                            <div class="detail-section">
+                                <div class="detail-label">Childcare Constraints</div>
+                                <div class="detail-value">${response.childcareConstraints}</div>
+                            </div>
+                        ` : ''}
+
+                        ${response.additionalNotes ? `
+                            <div class="detail-section">
+                                <div class="detail-label">Additional Notes</div>
+                                <div class="detail-value">${response.additionalNotes}</div>
+                            </div>
+                        ` : ''}
+
+                        <div class="detail-section">
+                            <div class="detail-label">Travel Tolerance</div>
+                            <div class="detail-value">${response.travelTolerance || 'Not specified'}</div>
+                        </div>
+
+                        <div class="detail-id">Response ID: ${response.responseId}</div>
+                    </div>
+                `;
+
+                responsesList.appendChild(card);
+            });
+
+            // Add toggle functionality
+            document.querySelectorAll('.toggle-details').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.dataset.index;
+                    const details = document.getElementById(`details-${index}`);
+                    
+                    if (details.style.display === 'block') {
+                        details.style.display = 'none';
+                        e.target.textContent = 'View Full Details ▼';
+                    } else {
+                        details.style.display = 'block';
+                        e.target.textContent = 'Hide Details ▲';
+                    }
+                });
+            });
+
+            responsesContainer.style.display = 'block';
+            emptyState.style.display = 'none';
+        }
+
+        async function loadResponses() {
+            loadBtn.disabled = true;
+            loadBtn.innerHTML = '<span class="spinner"></span><span>Loading...</span>';
+            errorMessage.style.display = 'none';
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    responses = data.responses || [];
+
+                    responseCount.textContent = `${responses.length} response${responses.length !== 1 ? 's' : ''} collected`;
+
+                    if (responses.length > 0) {
+                        renderStats();
+                        renderResponses();
+                        exportBtn.style.display = 'flex';
+                    } else {
+                        statsGrid.style.display = 'none';
+                        responsesContainer.style.display = 'none';
+                        emptyState.style.display = 'block';
+                    }
+                } else {
+                    errorMessage.style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.style.display = 'flex';
+            } finally {
+                loadBtn.disabled = false;
+                loadBtn.innerHTML = '<span>🔄</span><span>Load Responses</span>';
+            }
+        }
+
+        function exportToCSV() {
+            if (responses.length === 0) return;
+
+            const headers = [
+                'Couple Name', 'Location', 'Blackout Dates', 'Preferred Seasons',
+                'Climate Preference', 'Bringing Kids', 'Childcare Constraints',
+                'Budget Range', 'Travel Tolerance', 'Must Haves', 'Nice to Haves',
+                'Additional Notes', 'Submitted At'
+            ];
+
+            const csvContent = [
+                headers.join(','),
+                ...responses.map(r => [
+                    `"${r.coupleName || ''}"`,
+                    `"${r.location || ''}"`,
+                    `"${r.blackoutDates || ''}"`,
+                    `"${Array.isArray(r.preferredSeason) ? r.preferredSeason.join('; ') : ''}"`,
+                    `"${getClimateLabel(r.climatePreference)}"`,
+                    `"${r.bringingKids || ''}"`,
+                    `"${r.childcareConstraints || ''}"`,
+                    `"${r.budgetRange || ''}"`,
+                    `"${r.travelTolerance || ''}"`,
+                    `"${r.mustHaves || ''}"`,
+                    `"${r.niceToHaves || ''}"`,
+                    `"${r.additionalNotes || ''}"`,
+                    `"${new Date(r.submittedAt).toLocaleString()}"`
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `trip-survey-responses-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        loadBtn.addEventListener('click', loadResponses);
+        exportBtn.addEventListener('click', exportToCSV);
+    </script>
+</body>
+</html>

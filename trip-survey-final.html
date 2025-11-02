@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Big Trip 2026!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .header .description {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-header .icon {
+            font-size: 1.8rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .section-note {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-hint {
+            display: block;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .season-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .season-btn {
+            padding: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .season-btn:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .season-btn.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            color: #4c51bf;
+        }
+
+        .season-btn .emoji {
+            font-size: 1.5rem;
+        }
+
+        .climate-slider-container {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .climate-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(to right, #3b82f6, #a855f7, #f59e0b);
+            -webkit-appearance: none;
+            appearance: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .climate-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .climate-slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #667eea;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .climate-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .climate-value {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+
+        .footer .main {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .season-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>The Big Trip 2026! 🎉</h1>
+                <div class="subtitle">DC × LA × Minneapolis = One Epic Adventure</div>
+                <div class="description">Let's figure out where three couples (and some little ones!) can have the time of their lives</div>
+            </div>
+
+            <div id="successMessage" class="message success">
+                <span>✅</span>
+                <span>Thanks! Your response has been saved successfully.</span>
+            </div>
+
+            <div id="errorMessage" class="message error">
+                <span>⚠️</span>
+                <span>Oops! Something went wrong. Please try again.</span>
+            </div>
+
+            <form id="surveyForm">
+                <!-- Basic Info -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="icon">👥</span>
+                        <h2>Basic Info</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Your Names</label>
+                        <input type="text" name="coupleName" class="form-input" placeholder='e.g., "Cody & Emma"' required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Your Home Base</label>
+                        <input type="text" name="location" class="form-input" placeholder="e.g., Los Angeles, CA" required>
+                    </div>
+                </div>
+
+                <!-- Timing & Schedule -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="icon">📅</span>
+                        <h2>Timing & Schedule</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Hard Blackout Dates</label>
+                        <span class="form-hint">Specific periods that absolutely don't work (holidays, work trips, etc.)</span>
+                        <textarea name="blackoutDates" class="form-textarea" placeholder="e.g., Dec 20-Jan 2 (family holidays), March 15-20 (work conference)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Preferred Season(s) - Select all that work</label>
+                        <div class="section-note">Yes, we know this is THE question (looking at you, Minneapolis winter vs LA skiing debate 😅)</div>
+                        <input type="hidden" name="preferredSeason" id="seasonInput">
+                        <div class="season-grid">
+                            <button type="button" class="season-btn" data-season="winter">
+                                <span class="emoji">❄️</span>
+                                <span>Winter (Dec-Feb)</span>
+                            </button>
+                            <button type="button" class="season-btn" data-season="spring">
+                                <span class="emoji">🌸</span>
+                                <span>Spring (Mar-May)</span>
+                            </button>
+                            <button type="button" class="season-btn" data-season="summer">
+                                <span class="emoji">☀️</span>
+                                <span>Summer (Jun-Aug)</span>
+                            </button>
+                            <button type="button" class="season-btn" data-season="fall">
+                                <span class="emoji">🍂</span>
+                                <span>Fall (Sep-Nov)</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Climate & Activities -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="icon">☀️</span>
+                        <h2>Climate & Activities</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Climate Preference</label>
+                        <div class="climate-slider-container">
+                            <input type="range" name="climatePreference" class="climate-slider" min="0" max="4" value="2" id="climateSlider">
+                            <div class="climate-labels">
+                                <span>❄️ Need snow</span>
+                                <span>🌤️ Flexible</span>
+                                <span>🏖️ Need warm</span>
+                            </div>
+                            <div class="climate-value" id="climateValue">Flexible on climate</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Must-Have Activities/Features</label>
+                        <span class="form-hint">Think: wine tastings, games nights, slopes, pools, toddler-friendly spots... whatever's non-negotiable</span>
+                        <textarea name="mustHaves" class="form-textarea" placeholder="e.g., skiing access, kid-friendly restaurants, good wine, game room, outdoor activities"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nice-to-Have Activities/Features</label>
+                        <textarea name="niceToHaves" class="form-textarea" placeholder="e.g., wine tasting, hiking trails, game room"></textarea>
+                    </div>
+                </div>
+
+                <!-- The Little Ones -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="icon">👶</span>
+                        <h2>The Little Ones</h2>
+                    </div>
+                    <div class="section-note">Because let's be real - the kiddos are calling the shots here 👶</div>
+
+                    <div class="form-group">
+                        <label class="form-label">Are you bringing kids?</label>
+                        <select name="bringingKids" class="form-select" id="bringingKids" required>
+                            <option value="">Select...</option>
+                            <option value="yes">Yes, bringing kids</option>
+                            <option value="no">No kids on this trip</option>
+                            <option value="maybe">TBD / Depends on timing</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="childcareGroup" style="display: none;">
+                        <label class="form-label">Any childcare constraints or needs?</label>
+                        <textarea name="childcareConstraints" class="form-textarea" placeholder="e.g., need nearby pediatric care, nap schedules, flight duration limits"></textarea>
+                    </div>
+                </div>
+
+                <!-- Budget & Travel -->
+                <div class="section">
+                    <div class="section-header">
+                        <span class="icon">💰</span>
+                        <h2>Budget & Travel</h2>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Budget Range (per person, excluding flights)</label>
+                        <select name="budgetRange" class="form-select" required>
+                            <option value="">Select range...</option>
+                            <option value="under1k">Under $1,000</option>
+                            <option value="1k-2k">$1,000 - $2,000</option>
+                            <option value="2k-3k">$2,000 - $3,000</option>
+                            <option value="over3k">Over $3,000</option>
+                            <option value="flexible">Flexible / Let's discuss</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Max Travel Time (door-to-door)</label>
+                        <select name="travelTolerance" class="form-select" required>
+                            <option value="">Select...</option>
+                            <option value="3hrs">~3 hours</option>
+                            <option value="5hrs">~5 hours</option>
+                            <option value="8hrs">~8 hours</option>
+                            <option value="flexible">Flexible / Worth it for the right place</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Additional Notes -->
+                <div class="section">
+                    <div class="form-group">
+                        <label class="form-label">Any Other Thoughts or Constraints?</label>
+                        <textarea name="additionalNotes" class="form-textarea" placeholder="Anything else we should consider?"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span>✈️</span>
+                    <span>Submit My Response</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="footer">
+            <p class="main">Thanks for taking the time to fill this out! 🙌</p>
+            <p>Questions? Text Ben or hit up the group chat</p>
+            <p style="font-size: 0.9rem; margin-top: 8px;">Let's make this happen!</p>
+        </div>
+    </div>
+
+    <script>
+        // REPLACE THIS WITH YOUR AWS API GATEWAY URL
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzcoPuj6vO_HH4CjmKX84uvMaMbKQre3qDfvvIuCo0id8M9XvJyuwquouJI3_VvGXtS/exec';
+
+        const climateLabels = [
+            'Need winter/snow activities',
+            'Prefer cool weather',
+            'Flexible on climate',
+            'Prefer warm weather',
+            'Need warm weather'
+        ];
+
+        // Initialize
+        const form = document.getElementById('surveyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const climateSlider = document.getElementById('climateSlider');
+        const climateValue = document.getElementById('climateValue');
+        const bringingKids = document.getElementById('bringingKids');
+        const childcareGroup = document.getElementById('childcareGroup');
+        const seasonInput = document.getElementById('seasonInput');
+        const seasonButtons = document.querySelectorAll('.season-btn');
+
+        // Season selection
+        const selectedSeasons = new Set();
+
+        seasonButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const season = btn.dataset.season;
+                if (selectedSeasons.has(season)) {
+                    selectedSeasons.delete(season);
+                    btn.classList.remove('active');
+                } else {
+                    selectedSeasons.add(season);
+                    btn.classList.add('active');
+                }
+                seasonInput.value = Array.from(selectedSeasons).join(',');
+            });
+        });
+
+        // Climate slider
+        climateSlider.addEventListener('input', (e) => {
+            climateValue.textContent = climateLabels[e.target.value];
+        });
+
+        // Kids selection
+        bringingKids.addEventListener('change', (e) => {
+            if (e.target.value === 'yes') {
+                childcareGroup.style.display = 'block';
+            } else {
+                childcareGroup.style.display = 'none';
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span><span>Submitting...</span>';
+
+            const formData = new FormData(form);
+            const data = {
+                coupleName: formData.get('coupleName'),
+                location: formData.get('location'),
+                blackoutDates: formData.get('blackoutDates'),
+                preferredSeason: formData.get('preferredSeason').split(',').filter(s => s),
+                climatePreference: parseInt(formData.get('climatePreference')),
+                bringingKids: formData.get('bringingKids'),
+                childcareConstraints: formData.get('childcareConstraints'),
+                budgetRange: formData.get('budgetRange'),
+                travelTolerance: formData.get('travelTolerance'),
+                mustHaves: formData.get('mustHaves'),
+                niceToHaves: formData.get('niceToHaves'),
+                additionalNotes: formData.get('additionalNotes'),
+                submittedAt: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    successMessage.style.display = 'flex';
+                    form.reset();
+                    selectedSeasons.clear();
+                    seasonButtons.forEach(btn => btn.classList.remove('active'));
+                    climateSlider.value = 2;
+                    climateValue.textContent = climateLabels[2];
+                    childcareGroup.style.display = 'none';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    errorMessage.style.display = 'flex';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMessage.style.display = 'flex';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>✈️</span><span>Submit My Response</span>';
+            }
+        });
+    </script>
+</body>
+</html>
