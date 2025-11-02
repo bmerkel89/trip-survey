@@ -567,8 +567,8 @@
             }
         });
 
-        // Form submission
-        form.addEventListener('submit', async (e) => {
+        // Form submission - Using iframe method for Google Apps Script
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
 
             successMessage.style.display = 'none';
@@ -578,12 +578,26 @@
             submitBtn.innerHTML = '<span class="spinner"></span><span>Submitting...</span>';
 
             const formData = new FormData(form);
+            
+            // Create a hidden iframe for submission
+            const iframe = document.createElement('iframe');
+            iframe.name = 'hidden_iframe';
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+
+            // Create a temporary form to submit to Google Apps Script
+            const tempForm = document.createElement('form');
+            tempForm.method = 'POST';
+            tempForm.action = API_ENDPOINT;
+            tempForm.target = 'hidden_iframe';
+
+            // Add all form data as hidden inputs
             const data = {
                 coupleName: formData.get('coupleName'),
                 location: formData.get('location'),
                 blackoutDates: formData.get('blackoutDates'),
-                preferredSeason: formData.get('preferredSeason').split(',').filter(s => s),
-                climatePreference: parseInt(formData.get('climatePreference')),
+                preferredSeason: formData.get('preferredSeason'),
+                climatePreference: formData.get('climatePreference'),
                 bringingKids: formData.get('bringingKids'),
                 childcareConstraints: formData.get('childcareConstraints'),
                 budgetRange: formData.get('budgetRange'),
@@ -594,34 +608,36 @@
                 submittedAt: new Date().toISOString()
             };
 
-            try {
-                const response = await fetch(API_ENDPOINT, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+            // Create hidden input fields
+            Object.keys(data).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = data[key] || '';
+                tempForm.appendChild(input);
+            });
 
-                if (response.ok) {
-                    successMessage.style.display = 'flex';
-                    form.reset();
-                    selectedSeasons.clear();
-                    seasonButtons.forEach(btn => btn.classList.remove('active'));
-                    climateSlider.value = 2;
-                    climateValue.textContent = climateLabels[2];
-                    childcareGroup.style.display = 'none';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else {
-                    errorMessage.style.display = 'flex';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                errorMessage.style.display = 'flex';
-            } finally {
+            document.body.appendChild(tempForm);
+            tempForm.submit();
+
+            // Show success after a brief delay
+            setTimeout(() => {
+                successMessage.style.display = 'flex';
+                form.reset();
+                selectedSeasons.clear();
+                seasonButtons.forEach(btn => btn.classList.remove('active'));
+                climateSlider.value = 2;
+                climateValue.textContent = climateLabels[2];
+                childcareGroup.style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<span>✈️</span><span>Submit My Response</span>';
-            }
+
+                // Clean up
+                document.body.removeChild(tempForm);
+                document.body.removeChild(iframe);
+            }, 1000);
         });
     </script>
 </body>
