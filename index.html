@@ -68,7 +68,12 @@
     box-shadow:0 3px 10px rgba(90,60,30,.15); }
   .hud-btn:hover{ background:#fff; }
   #wishlist-btn .badge{ background:var(--pink); color:#fff; border-radius:999px;
-    padding:1px 8px; margin-left:6px; font-size:13px; }
+    padding:1px 8px; margin-left:6px; font-size:13px; display:inline-block; }
+  #wishlist-btn .badge.pop{ animation:badgepop .35s ease; }
+  @keyframes badgepop{ 0%{transform:scale(1)} 40%{transform:scale(1.7)} 100%{transform:scale(1)} }
+  #discover-pill{ pointer-events:none; }
+  .heart-fly{ position:fixed; z-index:70; pointer-events:none; font-size:20px;
+    transition:transform .9s cubic-bezier(.2,.6,.3,1), opacity .9s ease-in; opacity:1; }
   #interact-prompt{ position:absolute; left:50%; bottom:92px; transform:translateX(-50%);
     background:rgba(90,74,66,.92); color:#fff; border-radius:999px; padding:10px 24px;
     font-size:16px; font-weight:bold; display:none; white-space:nowrap;
@@ -158,6 +163,7 @@
     <kbd>E</kbd> inspect · <kbd>Tab</kbd> wishlist · <kbd>M</kbd> music
   </div>
   <div id="hud-top-right">
+    <div id="discover-pill" class="hud-btn" title="Gifts Oliver has sniffed out">🐾 0/21</div>
     <button id="mute-btn" class="hud-btn" title="Toggle music (M)">🔊</button>
     <button id="wishlist-btn" class="hud-btn" title="Wishlist (Tab)">♥ Wishlist<span class="badge" id="wl-count">0</span></button>
   </div>
@@ -492,7 +498,8 @@ ZONES.forEach(z => {
   scene.add(title);
 });
 
-// Central fountain (spawn landmark)
+// Central fountain (spawn landmark) — orb bobs, ripples expand on the water
+const fountainFX = { orb:null, rings:[] };
 (function fountain(){
   const g = new THREE.Group();
   const base = cyl(3.2, 3.5, 0.7, 0xd8d3c8, 18); base.position.y = 0.35; g.add(base);
@@ -502,8 +509,74 @@ ZONES.forEach(z => {
   const col = cyl(0.45, 0.6, 1.6, 0xd8d3c8, 10); col.position.y = 1.5; g.add(col);
   const bowl = cyl(1.2, 0.9, 0.35, 0xd8d3c8, 12); bowl.position.y = 2.35; g.add(bowl);
   const orb = sph(0.35, 0x9fd9f0, 10); orb.position.y = 2.8; g.add(orb);
+  fountainFX.orb = orb;
+  for (let i=0; i<2; i++){
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1, 0.045, 5, 24),
+      new THREE.MeshBasicMaterial({ color:0xe2f5fc, transparent:true, opacity:0.8, depthWrite:false }));
+    ring.rotation.x = -Math.PI/2;
+    ring.position.y = 0.74;
+    fountainFX.rings.push(ring);
+    g.add(ring);
+  }
   scene.add(g);
   colliders.push({ x:0, z:0, r:3.9 });
+})();
+
+// Soft rounded hills framing the horizon (outside the playable bounds)
+for (let i=0; i<10; i++){
+  const a = (i/10)*Math.PI*2 + 0.3 + rng()*0.3;
+  const r = 118 + rng()*28;
+  const hill = sph(18 + rng()*14, [0x94c97f, 0x88bf74, 0x9ed489][i%3], 10);
+  hill.castShadow = false;
+  hill.scale.y = 0.35 + rng()*0.15;
+  hill.position.set(Math.cos(a)*r, 0, Math.sin(a)*r);
+  scene.add(hill);
+}
+
+// Hub signpost: one arm per zone, arrow pointing the way
+function boardTexture(text, accentCss){
+  const cv = document.createElement('canvas');
+  cv.width = 256; cv.height = 48;
+  const c = cv.getContext('2d');
+  c.fillStyle = '#fffdf8'; c.fillRect(0, 0, 256, 48);
+  c.fillStyle = accentCss;  c.fillRect(0, 0, 10, 48); // accent stripe
+  c.fillStyle = '#5a4a42';
+  let size = 26;
+  c.font = `bold ${size}px 'Trebuchet MS', sans-serif`;
+  while (c.measureText(text).width > 228 && size > 14){
+    size -= 2;
+    c.font = `bold ${size}px 'Trebuchet MS', sans-serif`;
+  }
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.fillText(text, 133, 26);
+  const tx = new THREE.CanvasTexture(cv);
+  tx.minFilter = THREE.LinearFilter;
+  return tx;
+}
+(function signpost(){
+  const SX = -6, SZ = -6;
+  const g = new THREE.Group();
+  const post = cyl(0.09, 0.13, 3.4, 0x9a6b4a, 8); post.position.y = 1.7; g.add(post);
+  const cap = sph(0.15, 0xd4af6a, 8); cap.position.y = 3.45; g.add(cap);
+  ZONES.forEach((z, i) => {
+    const dir = Math.atan2(z.z - SZ, z.x - SX);
+    const accentCss = '#' + z.accent.toString(16).padStart(6,'0');
+    const arm = new THREE.Group();
+    const brd = box(1.6, 0.34, 0.06, z.accent);
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(1.45, 0.26),
+      new THREE.MeshBasicMaterial({ map:boardTexture(z.name, accentCss), side:THREE.DoubleSide }));
+    face.position.z = 0.041;
+    const tip = cone(0.16, 0.28, z.accent, 8);
+    tip.rotation.z = -Math.PI/2;
+    tip.position.x = 0.94;
+    arm.add(brd, face, tip);
+    arm.rotation.y = -dir;                 // arm's +x (the arrow) points at the zone
+    arm.position.set(Math.cos(dir)*0.42, 1.05 + i*0.42, Math.sin(dir)*0.42);
+    g.add(arm);
+  });
+  g.position.set(SX, 0, SZ);
+  scene.add(g);
+  colliders.push({ x:SX, z:SZ, r:0.55 });
 })();
 
 // Trees — ring around the edge + scattered fills (kept off zones/paths)
@@ -932,6 +1005,43 @@ for (let i=0; i<7; i++){
   butterflies.push(b);
 }
 
+// Falling blossom petals: one Points cloud drifting down across the village
+const PETAL_N = 90;
+const petalData = [];
+for (let i=0; i<PETAL_N; i++){
+  petalData.push({ x:(rng()*2-1)*88, y:0.5 + rng()*11, z:(rng()*2-1)*88,
+                   v:0.45 + rng()*0.5, ph:rng()*Math.PI*2 });
+}
+const petalGeo = new THREE.BufferGeometry();
+petalGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(PETAL_N*3), 3));
+const petalPts = new THREE.Points(petalGeo, new THREE.PointsMaterial({
+  color:0xf7bfd3, size:0.17, transparent:true, opacity:0.85, depthWrite:false, sizeAttenuation:true }));
+scene.add(petalPts);
+
+// Landing dust puffs: small pooled fading discs at Oliver's feet
+const dustPool = [];
+const dustGeo = new THREE.CircleGeometry(0.16, 8);
+for (let i=0; i<10; i++){
+  const m = new THREE.Mesh(dustGeo,
+    new THREE.MeshBasicMaterial({ color:0xfff6e3, transparent:true, opacity:0, depthWrite:false }));
+  m.rotation.x = -Math.PI/2;
+  m.visible = false;
+  scene.add(m);
+  dustPool.push({ mesh:m, t:1, vx:0, vz:0 });
+}
+function spawnDust(x, z, n){
+  for (const d of dustPool){
+    if (n <= 0) break;
+    if (d.t < 0.45) continue; // still animating
+    d.t = 0;
+    d.vx = (Math.random()*2-1)*1.8;
+    d.vz = (Math.random()*2-1)*1.8;
+    d.mesh.visible = true;
+    d.mesh.position.set(x + d.vx*0.2, 0.06 + Math.random()*0.03, z + d.vz*0.2);
+    n--;
+  }
+}
+
 /* ============================================================
    8. OLIVER THE CAT 🐈
    ============================================================ */
@@ -1221,6 +1331,17 @@ function sfxOpen(){
   if (!audioCtx || muted) return;
   note(659.25, audioCtx.currentTime, 0.2, 0.07, 'triangle');
 }
+function sfxDiscover(){ // sparkly ascending blip on first sniff of a product
+  if (!audioCtx || muted) return;
+  const t = audioCtx.currentTime;
+  note(659.25, t, 0.18, 0.07, 'triangle');
+  note(880.0,  t + 0.08, 0.25, 0.07, 'triangle');
+}
+function sfxFanfare(){ // all 21 products discovered
+  if (!audioCtx || muted) return;
+  const t = audioCtx.currentTime;
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => note(f, t + i*0.13, 0.5, 0.1, 'triangle'));
+}
 function sfxJump(){
   if (!audioCtx || muted) return;
   const t = audioCtx.currentTime;
@@ -1245,10 +1366,18 @@ let cardOpenFor = null;
 let wishlist = []; // in-memory only (no localStorage by design)
 let toastTimer = null;
 
+let discoveredCount = 0;
+function updateDiscoverPill(){
+  document.getElementById('discover-pill').textContent = `🐾 ${discoveredCount}/${PRODUCTS.length}`;
+}
 function openCard(p){
   cardOpenFor = p;
-  document.getElementById('card-chip').textContent =
-    `${ZONES[p.zone].emoji} ${ZONES[p.zone].name} · ${p.cat}`;
+  const zone = ZONES[p.zone];
+  const accentCss = '#' + zone.accent.toString(16).padStart(6,'0');
+  const chip = document.getElementById('card-chip');
+  chip.textContent = `${zone.emoji} ${zone.name} · ${p.cat}`;
+  chip.style.color = accentCss;
+  document.getElementById('product-card').style.borderColor = accentCss + '66';
   document.getElementById('card-name').textContent = p.name;
   document.getElementById('card-price').textContent = `~ ${p.price}`;
   document.getElementById('card-blurb').textContent = p.blurb;
@@ -1256,7 +1385,17 @@ function openCard(p){
     '<b>Also lovely:</b> ' + p.alts.join(' · ');
   updateHeartBtn();
   cardOverlay.style.display = 'flex';
-  sfxOpen();
+  if (!p.discovered){
+    p.discovered = true;
+    discoveredCount++;
+    updateDiscoverPill();
+    sfxDiscover();
+    if (discoveredCount === PRODUCTS.length){
+      setTimeout(() => { showToast('🎉 Oliver sniffed out every gift in the village!'); sfxFanfare(); }, 500);
+    }
+  } else {
+    sfxOpen();
+  }
 }
 function closeCard(){
   cardOpenFor = null;
@@ -1269,11 +1408,28 @@ function updateHeartBtn(){
   btn.textContent = inList ? '✓ On Oliver\'s Wishlist' : '♥ Add to Oliver\'s Wishlist';
   btn.classList.toggle('in-list', inList);
 }
-document.getElementById('heart-btn').addEventListener('click', () => {
+function heartBurst(el){ // little shower of hearts from the ♥ button
+  const r = el.getBoundingClientRect();
+  for (let i=0; i<6; i++){
+    const s = document.createElement('span');
+    s.className = 'heart-fly';
+    s.textContent = i % 2 ? '🧡' : '♥';
+    s.style.left = (r.left + r.width/2) + 'px';
+    s.style.top  = (r.top + r.height/2) + 'px';
+    document.body.appendChild(s);
+    const dx = (Math.random()*2-1)*100, dy = -60 - Math.random()*100;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      s.style.transform = `translate(${dx}px, ${dy}px) scale(${0.6 + Math.random()})`;
+      s.style.opacity = '0';
+    }));
+    setTimeout(() => s.remove(), 950);
+  }
+}
+document.getElementById('heart-btn').addEventListener('click', e => {
   if (!cardOpenFor) return;
   const i = wishlist.indexOf(cardOpenFor);
   if (i >= 0) wishlist.splice(i, 1);
-  else { wishlist.push(cardOpenFor); sfxHeart(); }
+  else { wishlist.push(cardOpenFor); sfxHeart(); heartBurst(e.currentTarget); }
   updateHeartBtn();
   renderWishlist();
 });
@@ -1286,7 +1442,13 @@ document.getElementById('wl-close').addEventListener('click', toggleWishlist);
 
 function renderWishlist(){
   const box = document.getElementById('wishlist-items');
-  document.getElementById('wl-count').textContent = wishlist.length;
+  const badge = document.getElementById('wl-count');
+  if (badge.textContent !== String(wishlist.length)){
+    badge.classList.remove('pop');
+    void badge.offsetWidth; // restart the pop animation
+    badge.classList.add('pop');
+  }
+  badge.textContent = wishlist.length;
   if (!wishlist.length){
     box.innerHTML = '<div id="wishlist-empty">Nothing here yet!<br>Explore the village and press <b>♥</b> on the gifts Oliver loves.</div>';
     document.getElementById('wl-total').textContent = '$0';
@@ -1339,8 +1501,9 @@ function fallbackCopy(text, done){
   done(ok);
 }
 
-function showToast(text){
+function showToast(text, borderCss){
   toastEl.textContent = text;
+  toastEl.style.borderColor = borderCss || '#f3e3cf';
   toastEl.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
@@ -1355,6 +1518,7 @@ const player = {
   walkPhase: 0, moving: false,
 };
 let camYaw = 0, camPitch = 0.42, camDist = 8; // yaw 0 = camera behind the south-facing cat
+let catSquash = 0; // 0..1 landing squash, decays each frame
 const camPos = new THREE.Vector3(0, 6, 22);
 let nearStation = null, currentZone = -1;
 let started = false;
@@ -1402,7 +1566,12 @@ function updatePlayer(dt){
   if (!player.onGround){
     player.vy -= 24 * dt;
     player.pos.y += player.vy * dt;
-    if (player.pos.y <= 0){ player.pos.y = 0; player.vy = 0; player.onGround = true; }
+    if (player.pos.y <= 0){
+      const impact = player.vy; // negative on the way down
+      player.pos.y = 0; player.vy = 0; player.onGround = true;
+      catSquash = clamp(-impact/16, 0.35, 0.9); // squash-and-stretch on touchdown
+      spawnDust(player.pos.x, player.pos.z, impact < -7 ? 5 : 3);
+    }
   }
 
   // --- collisions: world bounds + circle colliders ---
@@ -1422,6 +1591,9 @@ function updatePlayer(dt){
   // --- apply to cat mesh + animate ---
   cat.position.copy(player.pos);
   cat.rotation.y = player.heading;
+  catSquash = Math.max(0, catSquash - dt*3.5);
+  const sq = catSquash * catSquash;
+  cat.scale.set(1 + 0.14*sq, 1 - 0.22*sq, 1 + 0.14*sq);
 
   const t = clockTime;
   const breathe = 1 + Math.sin(t*2.4) * 0.018;
@@ -1489,7 +1661,8 @@ function updatePlayer(dt){
   }
   if (inZone !== -1 && inZone !== currentZone){
     currentZone = inZone;
-    showToast(`${ZONES[inZone].emoji} ${ZONES[inZone].name}`);
+    const zn = ZONES[inZone];
+    showToast(`${zn.emoji} ${zn.name}`, '#' + zn.accent.toString(16).padStart(6,'0'));
   } else if (inZone === -1 && currentZone !== -1){
     const z = ZONES[currentZone];
     const dx = player.pos.x - z.x, dz = player.pos.z - z.z;
@@ -1518,6 +1691,34 @@ function updateAmbient(dt){
   }
   sparkGeo.attributes.position.needsUpdate = true;
   sparkles.material.opacity = 0.65 + Math.sin(t*3) * 0.3;
+  // fountain: bobbing orb + expanding ripples
+  fountainFX.orb.position.y = 2.8 + Math.sin(t*2) * 0.12;
+  fountainFX.rings.forEach((ring, i) => {
+    const k = (t*0.45 + i*0.5) % 1;
+    ring.scale.set(0.3 + k*2.2, 0.3 + k*2.2, 1);
+    ring.material.opacity = 0.7 * (1 - k);
+  });
+  // petals drift down with a sway, recycle at the top
+  const pp = petalGeo.attributes.position.array;
+  for (let i=0; i<PETAL_N; i++){
+    const p = petalData[i];
+    p.y -= p.v * dt;
+    if (p.y < 0.15){ p.y = 8 + rng()*4; p.x = (rng()*2-1)*88; p.z = (rng()*2-1)*88; }
+    pp[i*3]   = p.x + Math.sin(t*1.2 + p.ph) * 0.6;
+    pp[i*3+1] = p.y;
+    pp[i*3+2] = p.z + Math.cos(t*0.9 + p.ph) * 0.6;
+  }
+  petalGeo.attributes.position.needsUpdate = true;
+  // landing dust puffs: expand, drift, fade
+  for (const d of dustPool){
+    if (d.t >= 0.45){ d.mesh.visible = false; continue; }
+    d.t += dt;
+    const k = d.t / 0.45;
+    d.mesh.position.x += d.vx * dt;
+    d.mesh.position.z += d.vz * dt;
+    d.mesh.scale.setScalar(0.6 + k*2.6);
+    d.mesh.material.opacity = 0.45 * (1 - k);
+  }
   // clouds drift and wrap
   for (const c of clouds){
     c.position.x += c.userData.speed * dt;
