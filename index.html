@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Oliver's Registry Quest 🐾</title>
+<!-- ============================================================
+     OLIVER'S REGISTRY QUEST
+     A cozy 3D open-world browser game. You are Oliver, an orange
+     tabby cat, exploring Registry Village to sniff out the best
+     wedding-registry gifts. Walk up to a pedestal, press E to read
+     about the product, and ♥ it onto Oliver's Wishlist.
+
+     Tech notes:
+       • Single self-contained file. Only external dependency is
+         Three.js r128 from cdnjs (r128-compatible code only:
+         no CapsuleGeometry, no OrbitControls — custom follow cam).
+       • All 3D assets are procedural Three.js primitives.
+       • No localStorage / fetch — all state lives in memory.
+       • Perf: Lambert materials, 1 directional + 1 ambient light,
+         small shadow camera that follows the cat, low-poly meshes.
+     ============================================================ -->
+<style>
+  :root{
+    --ink:#5a4a42; --ink-soft:#8a766c; --card:#fffdf8; --accent:#e8923a;
+    --accent-dark:#c96f23; --pink:#f2a9c4; --panel-shadow:0 12px 40px rgba(90,60,30,.25);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html,body{ width:100%; height:100%; overflow:hidden; background:#cfe8f7;
+    font-family:'Trebuchet MS','Segoe UI',Verdana,sans-serif; color:var(--ink);
+    -webkit-user-select:none; user-select:none; touch-action:none; }
+  #game-canvas{ display:block; width:100%; height:100%; }
+
+  /* ---------- shared UI bits ---------- */
+  .panel{ background:var(--card); border-radius:20px; box-shadow:var(--panel-shadow);
+    border:3px solid #f3e3cf; }
+  button{ font-family:inherit; cursor:pointer; border:none; }
+  .btn{ background:var(--accent); color:#fff; font-weight:bold; border-radius:999px;
+    padding:12px 28px; font-size:17px; box-shadow:0 4px 0 var(--accent-dark);
+    transition:transform .08s, box-shadow .08s; }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn:active{ transform:translateY(3px); box-shadow:0 1px 0 var(--accent-dark); }
+  .btn.small{ padding:8px 18px; font-size:14px; }
+  .btn.ghost{ background:#f3e8da; color:var(--ink); box-shadow:0 4px 0 #dcc9ae; }
+
+  /* ---------- start screen ---------- */
+  #start-screen{ position:fixed; inset:0; z-index:60; display:flex; align-items:center;
+    justify-content:center; background:linear-gradient(180deg,#8fd0f5 0%,#cfe8f7 55%,#ffeedd 100%); }
+  #start-card{ text-align:center; padding:42px 48px; max-width:560px; width:92%;
+    animation:floaty 3.2s ease-in-out infinite; }
+  @keyframes floaty{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  #start-card .cat-emoji{ font-size:64px; line-height:1; display:block; margin-bottom:8px; }
+  #start-card h1{ font-size:34px; color:var(--accent-dark); letter-spacing:.5px; margin-bottom:6px; }
+  #start-card .tagline{ font-size:18px; color:var(--ink-soft); margin-bottom:20px; font-style:italic; }
+  #start-card .controls{ display:inline-block; text-align:left; background:#fdf3e3;
+    border-radius:14px; padding:14px 22px; margin-bottom:24px; font-size:14.5px; line-height:1.85; }
+  kbd{ background:#fff; border:1.5px solid #e0cdb2; border-bottom-width:3px; border-radius:6px;
+    padding:1px 7px; font-family:inherit; font-size:13px; font-weight:bold; color:var(--accent-dark); }
+
+  /* ---------- HUD ---------- */
+  #hud{ position:fixed; inset:0; z-index:20; pointer-events:none; display:none; }
+  #hint-bar{ position:absolute; left:14px; bottom:14px; background:rgba(255,253,248,.88);
+    border-radius:14px; padding:9px 16px; font-size:12.5px; line-height:1.9;
+    border:2px solid #f3e3cf; }
+  #hud-top-right{ position:absolute; top:14px; right:14px; display:flex; gap:10px; pointer-events:auto; }
+  .hud-btn{ background:rgba(255,253,248,.92); border:2px solid #f3e3cf; border-radius:999px;
+    padding:9px 18px; font-size:15px; font-weight:bold; color:var(--ink);
+    box-shadow:0 3px 10px rgba(90,60,30,.15); }
+  .hud-btn:hover{ background:#fff; }
+  #wishlist-btn .badge{ background:var(--pink); color:#fff; border-radius:999px;
+    padding:1px 8px; margin-left:6px; font-size:13px; }
+  #interact-prompt{ position:absolute; left:50%; bottom:92px; transform:translateX(-50%);
+    background:rgba(90,74,66,.92); color:#fff; border-radius:999px; padding:10px 24px;
+    font-size:16px; font-weight:bold; display:none; white-space:nowrap;
+    box-shadow:0 6px 20px rgba(0,0,0,.25); }
+  #interact-prompt kbd{ color:var(--accent-dark); }
+  #zone-toast{ position:absolute; top:26px; left:50%; transform:translateX(-50%) translateY(-16px);
+    background:rgba(255,253,248,.95); border:3px solid #f3e3cf; border-radius:999px;
+    padding:12px 34px; font-size:20px; font-weight:bold; color:var(--accent-dark);
+    opacity:0; transition:opacity .4s, transform .4s; white-space:nowrap; }
+  #zone-toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  /* ---------- product card ---------- */
+  #card-overlay{ position:fixed; inset:0; z-index:40; display:none; align-items:center;
+    justify-content:center; background:rgba(70,50,35,.35); }
+  #product-card{ width:min(440px,92vw); padding:26px 30px 24px; position:relative;
+    animation:pop .22s ease-out; }
+  @keyframes pop{ from{transform:scale(.85); opacity:0} to{transform:scale(1); opacity:1} }
+  #product-card .chip{ display:inline-block; background:#fdf0dc; color:var(--accent-dark);
+    border-radius:999px; padding:3px 13px; font-size:12.5px; font-weight:bold; margin-bottom:10px; }
+  #product-card h2{ font-size:23px; margin-bottom:4px; line-height:1.25; }
+  #product-card .price{ font-size:17px; color:var(--accent-dark); font-weight:bold; margin-bottom:12px; }
+  #product-card .blurb{ font-size:15px; line-height:1.55; margin-bottom:12px; }
+  #product-card .alts{ font-size:13.5px; color:var(--ink-soft); background:#faf3e8;
+    border-radius:12px; padding:10px 14px; margin-bottom:18px; line-height:1.5; }
+  #product-card .alts b{ color:var(--ink); }
+  #card-close{ position:absolute; top:12px; right:14px; background:#f3e8da; color:var(--ink-soft);
+    width:34px; height:34px; border-radius:50%; font-size:17px; font-weight:bold; }
+  #heart-btn{ width:100%; background:var(--pink); box-shadow:0 4px 0 #d581a3; }
+  #heart-btn.in-list{ background:#9fce89; box-shadow:0 4px 0 #7cab67; }
+
+  /* ---------- wishlist panel ---------- */
+  #wishlist-panel{ position:fixed; top:0; right:0; height:100%; width:min(360px,92vw); z-index:50;
+    background:var(--card); border-left:3px solid #f3e3cf; box-shadow:-10px 0 40px rgba(90,60,30,.2);
+    transform:translateX(105%); transition:transform .28s ease; display:flex; flex-direction:column; }
+  #wishlist-panel.open{ transform:translateX(0); }
+  #wishlist-panel header{ padding:20px 22px 12px; display:flex; align-items:center; justify-content:space-between; }
+  #wishlist-panel header h2{ font-size:21px; color:var(--accent-dark); }
+  #wishlist-items{ flex:1; overflow-y:auto; padding:0 18px; }
+  .wl-item{ display:flex; align-items:center; gap:10px; background:#faf3e8; border-radius:14px;
+    padding:11px 14px; margin-bottom:10px; }
+  .wl-item .wl-name{ flex:1; font-size:14px; font-weight:bold; line-height:1.3; }
+  .wl-item .wl-price{ font-size:13px; color:var(--accent-dark); font-weight:bold; white-space:nowrap; }
+  .wl-item .wl-remove{ background:#f0ddd2; color:#b0715a; border-radius:50%; width:26px; height:26px;
+    font-size:13px; font-weight:bold; flex:none; }
+  #wishlist-empty{ text-align:center; color:var(--ink-soft); font-size:14px; padding:36px 20px; line-height:1.6; }
+  #wishlist-footer{ padding:14px 20px 20px; border-top:2px dashed #eadbc4; }
+  #wishlist-total{ display:flex; justify-content:space-between; font-size:16px; font-weight:bold; margin-bottom:12px; }
+  #copy-btn{ width:100%; }
+
+  /* ---------- mobile touch controls ---------- */
+  #touch-ui{ position:fixed; inset:0; z-index:30; pointer-events:none; display:none; }
+  #joystick{ position:absolute; left:26px; bottom:88px; width:120px; height:120px; border-radius:50%;
+    background:rgba(255,255,255,.25); border:2px solid rgba(255,255,255,.5); pointer-events:auto; }
+  #joystick-knob{ position:absolute; left:50%; top:50%; width:52px; height:52px; border-radius:50%;
+    background:rgba(255,253,248,.85); transform:translate(-50%,-50%); border:2px solid #f3e3cf; }
+  .touch-btn{ position:absolute; width:64px; height:64px; border-radius:50%; pointer-events:auto;
+    background:rgba(255,253,248,.85); border:2px solid #f3e3cf; font-size:15px; font-weight:bold; color:var(--ink); }
+  #btn-jump{ right:30px; bottom:96px; }
+  #btn-act{ right:104px; bottom:60px; }
+
+  @media (max-width:640px){ #hint-bar{ display:none; } }
+</style>
+</head>
+<body>
+
+<canvas id="game-canvas"></canvas>
+
+<!-- Start screen -->
+<div id="start-screen">
+  <div id="start-card" class="panel">
+    <span class="cat-emoji">🐱🧡</span>
+    <h1>Oliver's Registry Quest</h1>
+    <p class="tagline">Help Oliver build the purr-fect registry!</p>
+    <div class="controls">
+      <kbd>W A S D</kbd> / <kbd>←↑↓→</kbd> &nbsp;walk &nbsp;·&nbsp; <kbd>Space</kbd> jump<br>
+      <kbd>Mouse drag</kbd> or <kbd>Q</kbd>/<kbd>E</kbd> orbit camera · <kbd>scroll</kbd> zoom<br>
+      <kbd>E</kbd> inspect a product &nbsp;·&nbsp; <kbd>Tab</kbd> wishlist &nbsp;·&nbsp; <kbd>M</kbd> music
+    </div><br>
+    <button id="start-btn" class="btn">Start exploring! 🐾</button>
+  </div>
+</div>
+
+<!-- HUD -->
+<div id="hud">
+  <div id="hint-bar">
+    🐾 <kbd>WASD</kbd> walk · <kbd>Space</kbd> jump · <kbd>Q</kbd>/<kbd>E</kbd>/drag camera ·
+    <kbd>E</kbd> inspect · <kbd>Tab</kbd> wishlist · <kbd>M</kbd> music
+  </div>
+  <div id="hud-top-right">
+    <button id="mute-btn" class="hud-btn" title="Toggle music (M)">🔊</button>
+    <button id="wishlist-btn" class="hud-btn" title="Wishlist (Tab)">♥ Wishlist<span class="badge" id="wl-count">0</span></button>
+  </div>
+  <div id="interact-prompt">Press <kbd>E</kbd> — <span id="prompt-name"></span></div>
+  <div id="zone-toast"></div>
+</div>
+
+<!-- Product card -->
+<div id="card-overlay">
+  <div id="product-card" class="panel">
+    <button id="card-close" title="Close (Esc)">✕</button>
+    <span class="chip" id="card-chip"></span>
+    <h2 id="card-name"></h2>
+    <div class="price" id="card-price"></div>
+    <p class="blurb" id="card-blurb"></p>
+    <div class="alts" id="card-alts"></div>
+    <button id="heart-btn" class="btn">♥ Add to Oliver's Wishlist</button>
+  </div>
+</div>
+
+<!-- Wishlist panel -->
+<div id="wishlist-panel">
+  <header>
+    <h2>🐾 Oliver's Wishlist</h2>
+    <button class="btn small ghost" id="wl-close">✕</button>
+  </header>
+  <div id="wishlist-items">
+    <div id="wishlist-empty">Nothing here yet!<br>Explore the village and press <b>♥</b> on the gifts Oliver loves.</div>
+  </div>
+  <div id="wishlist-footer">
+    <div id="wishlist-total"><span>Approx. total</span><span id="wl-total">$0</span></div>
+    <button id="copy-btn" class="btn small">📋 Copy list</button>
+  </div>
+</div>
+
+<!-- Touch controls (mobile only) -->
+<div id="touch-ui">
+  <div id="joystick"><div id="joystick-knob"></div></div>
+  <button class="touch-btn" id="btn-jump">⤴</button>
+  <button class="touch-btn" id="btn-act">E</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+'use strict';
+/* ============================================================
+   0. SMALL UTILITIES
+   ============================================================ */
+// Seeded RNG so decoration scatter is deterministic every load.
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rng = mulberry32(20260614); // wedding-ish seed :)
+const lerp  = (a, b, t) => a + (b - a) * t;
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+// frame-rate independent smoothing factor
+const damp = (k, dt) => 1 - Math.exp(-k * dt);
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+
+/* ============================================================
+   1. GAME DATA — zones & products
+   ============================================================ */
+const ZONES = [
+  { key:'kitchen', name:'Kitchen Plaza',        emoji:'🍳', x:-55, z:-40, color:0xf7d9a8, accent:0xe8a04b },
+  { key:'coffee',  name:'Coffee Corner',        emoji:'☕', x: 55, z:-45, color:0xe3c6ad, accent:0xa9744f },
+  { key:'dining',  name:'Dining Garden',        emoji:'🍽️', x: 66, z: 28, color:0xcfe6c2, accent:0x7fae6a },
+  { key:'bedroom', name:'Cozy Bedroom Meadow',  emoji:'🛏️', x:-66, z: 30, color:0xdcd2ef, accent:0x9a86c8 },
+  { key:'clean',   name:'Clean Home Court',     emoji:'🧹', x:  0, z:-72, color:0xc9e4ef, accent:0x6aa8c4 },
+  { key:'party',   name:'Entertaining Terrace', emoji:'🥂', x:  0, z: 68, color:0xf6cfd4, accent:0xd98a95 },
+];
+
+// Every product: display data + which procedural model to build.
+const PRODUCTS = [
+  // ---- Kitchen Plaza ----
+  { zone:0, model:'mixer',    name:'KitchenAid Artisan Stand Mixer', cat:'Kitchen',
+    price:'$380–$500', priceNum:450,
+    blurb:'The forever-appliance of wedding registries — it kneads, whips, and mixes for decades and looks adorable on the counter doing it. Pick a color you love; you\'ll see it every day.',
+    alts:['Cuisinart Precision Master (budget-friendly)', 'Smeg 50\'s Retro Stand Mixer (style splurge)'] },
+  { zone:0, model:'dutchoven', name:'Le Creuset Dutch Oven (5.5 qt)', cat:'Cookware',
+    price:'$370–$460', priceNum:420,
+    blurb:'Enameled cast iron that goes from stovetop braises to sourdough to the dinner table. It\'s the heirloom pot people pass down — and the classic "too nice to buy yourself" registry pick.',
+    alts:['Staub Round Cocotte', 'Lodge Enameled Dutch Oven (budget hero)'] },
+  { zone:0, model:'blender',  name:'Vitamix Blender', cat:'Kitchen',
+    price:'$350–$550', priceNum:450,
+    blurb:'Smoothies, soups, nut butters, frozen margaritas — a Vitamix pulverizes everything and lasts 10+ years. One of the most-used gifts on any registry.',
+    alts:['Blendtec Classic', 'Ninja Professional (budget pick)'] },
+  { zone:0, model:'skillet',  name:'All-Clad D3 Skillet (12")', cat:'Cookware',
+    price:'$100–$160', priceNum:130,
+    blurb:'Tri-ply stainless that heats evenly and sears beautifully — the pan you\'ll reach for every single night. A registry staple because great cookware is a joy to receive.',
+    alts:['Made In Stainless Frying Pan', 'Lodge Cast Iron Skillet ($30 legend)'] },
+  { zone:0, model:'knives',   name:'Zwilling Knife Block Set', cat:'Kitchen',
+    price:'$250–$400', priceNum:300,
+    blurb:'Sharp, balanced German knives in a tidy block — the upgrade that makes cooking together actually fun. Couples always say the knife set was their sleeper-hit gift.',
+    alts:['Wüsthof Classic set', 'Material Kitchen Trio (minimalist pick)'] },
+  // ---- Coffee Corner ----
+  { zone:1, model:'espresso', name:'Breville Barista Express', cat:'Coffee',
+    price:'$600–$750', priceNum:700,
+    blurb:'A café in a box: built-in grinder, real espresso, and a steam wand for latte art practice. The single most-hearted coffee item on modern registries.',
+    alts:['Breville Barista Pro (faster heat-up)', 'De\'Longhi Stilosa (starter espresso)'] },
+  { zone:1, model:'kettle',   name:'Fellow Stagg EKG Kettle + Ode Grinder', cat:'Coffee',
+    price:'$420–$500', priceNum:465,
+    blurb:'The pour-over dream team: a precise gooseneck kettle plus a quiet burr grinder, both gorgeous enough to live on the counter. For couples who treat coffee as a morning ritual.',
+    alts:['Bonavita Gooseneck Kettle', 'Baratza Encore Grinder (workhorse)'] },
+  { zone:1, model:'nespresso', name:'Nespresso Vertuo Plus', cat:'Coffee',
+    price:'$160–$230', priceNum:180,
+    blurb:'One-button coffee and espresso with zero cleanup — perfect for busy mornings and impressing overnight guests. A low-effort, high-delight registry add.',
+    alts:['Nespresso Vertuo Next', 'Keurig K-Elite (drip-style pods)'] },
+  // ---- Dining Garden ----
+  { zone:2, model:'dinnerware', name:'Porcelain Dinnerware Set (12-piece)', cat:'Dining',
+    price:'$150–$300', priceNum:200,
+    blurb:'Matching plates and bowls for real grown-up dinner parties. Registries exist for exactly this — building a set piece by piece with help from your favorite people.',
+    alts:['Crate & Barrel Aspen set', 'East Fork Pottery (artisan splurge)'] },
+  { zone:2, model:'flatware', name:'Stainless Flatware Set (45-piece)', cat:'Dining',
+    price:'$100–$200', priceNum:150,
+    blurb:'Weighty, matching flatware for eight — no more mismatched forks from three past apartments. One of those upgrades you feel every single meal.',
+    alts:['Oneida Mooncrest', 'West Elm Gold Flatware (glam option)'] },
+  { zone:2, model:'wineglasses', name:'Crystal Wine Glass Set (6)', cat:'Dining',
+    price:'$50–$120', priceNum:80,
+    blurb:'Thin-rimmed crystal that makes Tuesday wine feel like an occasion. Registry favorite because breakage happens — starting with six is wise.',
+    alts:['Riedel O stemless (dishwasher-brave)', 'Zwiesel Pure (durable crystal)'] },
+  { zone:2, model:'board',    name:'Acacia Serving Board', cat:'Dining',
+    price:'$40–$90', priceNum:60,
+    blurb:'The charcuterie stage. Cheese nights, birthday cakes, sandwich spreads — a big beautiful board gets used constantly and photographs adorably.',
+    alts:['Boos Block cutting board', 'Slate cheese board with chalk'] },
+  // ---- Cozy Bedroom Meadow ----
+  { zone:3, model:'percale',  name:'Percale Sheet Set', cat:'Bedroom',
+    price:'$120–$200', priceNum:150,
+    blurb:'Crisp, cool, hotel-bed sheets that get softer with every wash. The classic pick for warm sleepers — registry experts say upgrade bedding first, always.',
+    alts:['Brooklinen Classic Percale', 'L.L.Bean Pima Percale (budget gem)'] },
+  { zone:3, model:'sateen',   name:'Sateen Sheet Set', cat:'Bedroom',
+    price:'$130–$220', priceNum:160,
+    blurb:'Silky-smooth with a subtle sheen — the cozy, drapey counterpart to percale. Register for both weaves and settle the great sheet debate at home.',
+    alts:['Brooklinen Luxe Sateen', 'Quince Bamboo Sheets (extra silky)'] },
+  { zone:3, model:'duvet',    name:'Down Duvet Insert', cat:'Bedroom',
+    price:'$150–$350', priceNum:250,
+    blurb:'A cloud you sleep under. All-season down warmth is the difference between "bed" and "nest" — and precisely the kind of luxury people love to gift.',
+    alts:['Buffy Cloud Comforter (down-alternative)', 'IKEA Fjällhavre (budget down)'] },
+  { zone:3, model:'pillows',  name:'Down Pillows (pair)', cat:'Bedroom',
+    price:'$80–$180', priceNum:120,
+    blurb:'Plump, squishable, real-deal pillows — because you spend a third of married life on them. Oliver has personally napped on these and approves.',
+    alts:['Coop Adjustable Pillow (customizable fill)', 'Casper Original Pillow'] },
+  // ---- Clean Home Court ----
+  { zone:4, model:'dyson',    name:'Dyson V15 Cordless Vacuum', cat:'Home Care',
+    price:'$550–$750', priceNum:650,
+    blurb:'Cordless, powerful, and weirdly satisfying — it even shows a laser line of hidden dust. The most-requested "unromantic but thrilling" registry gift.',
+    alts:['Dyson V8 (lighter & cheaper)', 'Shark Stratos Cordless'] },
+  { zone:4, model:'robovac',  name:'Robot Vacuum', cat:'Home Care',
+    price:'$300–$600', priceNum:400,
+    blurb:'A tireless little roommate that patrols for crumbs and cat hair while you\'re out. Especially essential in homes with a certain fluffy orange gentleman.',
+    alts:['iRobot Roomba j7', 'Roborock Q5 (strong value)'] },
+  // ---- Entertaining Terrace ----
+  { zone:5, model:'cocktail', name:'Cocktail Shaker Set', cat:'Entertaining',
+    price:'$50–$120', priceNum:75,
+    blurb:'Shaker, jigger, strainer, and bar spoon — everything for a proper home happy hour. Small gift, big personality; perfect for guests on a budget.',
+    alts:['Viski Professional set', 'W&P Craft Cocktail Kit'] },
+  { zone:5, model:'cakestand', name:'Ceramic Cake Stand', cat:'Entertaining',
+    price:'$40–$80', priceNum:55,
+    blurb:'Elevates (literally) every birthday cake, cinnamon-roll Sunday, and cookie pile for the rest of time. A sweet, sentimental registry classic.',
+    alts:['Mosser Glass Cake Stand (heirloom glass)', 'Marble & wood pedestal stand'] },
+  { zone:5, model:'picnic',   name:'Outdoor Picnic Set', cat:'Entertaining',
+    price:'$80–$160', priceNum:120,
+    blurb:'Basket, blanket, and unbreakable dishes for golden-hour dinners in the park. The gift that schedules future date nights for you.',
+    alts:['Yeti Trailhead Blanket + tote', 'Picnic Time basket for 4'] },
+];
+
+/* ============================================================
+   2. RENDERER, SCENE, LIGHTS
+   ============================================================ */
+const canvas   = document.getElementById('game-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xcfe8f7, 70, 190);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 600);
+
+// One ambient + one directional light (perf budget).
+scene.add(new THREE.AmbientLight(0xfff2e0, 0.5));
+const sun = new THREE.DirectionalLight(0xfff6e5, 0.7);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+// Small shadow frustum that follows the cat — crisp shadows near the
+// player without paying for a 200x200 shadow map.
+sun.shadow.camera.left = -24; sun.shadow.camera.right = 24;
+sun.shadow.camera.top  =  24; sun.shadow.camera.bottom = -24;
+sun.shadow.camera.near = 10;  sun.shadow.camera.far = 130;
+sun.shadow.bias = -0.002;
+scene.add(sun);
+scene.add(sun.target);
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ============================================================
+   3. MESH HELPERS (low-poly primitive factories)
+   ============================================================ */
+const MATS = {}; // material cache — one Lambert per color keeps draw state small
+function mat(color, opts){
+  if (opts) return new THREE.MeshLambertMaterial(Object.assign({ color }, opts));
+  if (!MATS[color]) MATS[color] = new THREE.MeshLambertMaterial({ color });
+  return MATS[color];
+}
+function mesh(geo, color, opts){
+  const m = new THREE.Mesh(geo, mat(color, opts));
+  m.castShadow = true;
+  return m;
+}
+const box  = (w,h,d,c,o) => mesh(new THREE.BoxGeometry(w,h,d), c, o);
+const cyl  = (rt,rb,h,c,seg,o) => mesh(new THREE.CylinderGeometry(rt,rb,h,seg||12), c, o);
+const sph  = (r,c,seg,o) => mesh(new THREE.SphereGeometry(r,seg||12,Math.max(6,(seg||12)-2)), c, o);
+const cone = (r,h,c,seg,o) => mesh(new THREE.ConeGeometry(r,h,seg||10), c, o);
+const torus= (r,t,c,arc,o) => mesh(new THREE.TorusGeometry(r,t,7,16,arc||Math.PI*2), c, o);
+
+// Canvas-texture text sprite (floating labels — procedural, no assets).
+function makeTextSprite(text, opt){
+  opt = opt || {};
+  const fontSize = opt.fontSize || 46;
+  const pad = 26;
+  const cv = document.createElement('canvas');
+  const ctx = cv.getContext('2d');
+  ctx.font = `bold ${fontSize}px 'Trebuchet MS', sans-serif`;
+  cv.width  = Math.ceil(ctx.measureText(text).width) + pad*2;
+  cv.height = fontSize + pad*1.5;
+  const c2 = cv.getContext('2d');
+  c2.font = `bold ${fontSize}px 'Trebuchet MS', sans-serif`;
+  // rounded pill background
+  const r = cv.height/2 - 2;
+  c2.fillStyle = opt.bg || 'rgba(255,253,248,0.94)';
+  c2.strokeStyle = opt.border || '#e8b06a';
+  c2.lineWidth = 6;
+  c2.beginPath();
+  c2.moveTo(r,2); c2.lineTo(cv.width-r,2); c2.arc(cv.width-r,cv.height/2,r,-Math.PI/2,Math.PI/2);
+  c2.lineTo(r,cv.height-2); c2.arc(r,cv.height/2,r,Math.PI/2,Math.PI*1.5);
+  c2.closePath(); c2.fill(); c2.stroke();
+  c2.fillStyle = opt.color || '#5a4a42';
+  c2.textAlign = 'center'; c2.textBaseline = 'middle';
+  c2.fillText(text, cv.width/2, cv.height/2 + 3);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map:tex, transparent:true, depthWrite:false }));
+  const s = opt.scale || 0.011;
+  sp.scale.set(cv.width*s, cv.height*s, 1);
+  return sp;
+}
+
+/* ============================================================
+   4. THE WORLD — ground, sky, paths, decorations
+   ============================================================ */
+const WORLD_HALF = 95;           // playable bounds (world is ~200x200)
+const colliders  = [];           // {x, z, r} circle colliders
+
+// Ground
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(220, 220, 1, 1),
+  new THREE.MeshLambertMaterial({ color:0xa8d692 })
+);
+ground.rotation.x = -Math.PI/2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Sky: gradient dome from a small canvas (fog-free so it stays crisp)
+(function makeSky(){
+  const cv = document.createElement('canvas');
+  cv.width = 2; cv.height = 256;
+  const g = cv.getContext('2d');
+  const grad = g.createLinearGradient(0, 0, 0, 256);
+  grad.addColorStop(0.0, '#6fbdf0');
+  grad.addColorStop(0.5, '#aadcf7');
+  grad.addColorStop(0.78, '#e8f4f8');
+  grad.addColorStop(1.0, '#ffe9d2');
+  g.fillStyle = grad; g.fillRect(0,0,2,256);
+  const tex = new THREE.CanvasTexture(cv);
+  const dome = new THREE.Mesh(
+    new THREE.SphereGeometry(420, 20, 14),
+    new THREE.MeshBasicMaterial({ map:tex, side:THREE.BackSide, fog:false })
+  );
+  scene.add(dome);
+  // low sun disc for charm
+  const sunDisc = new THREE.Mesh(new THREE.CircleGeometry(22, 20),
+    new THREE.MeshBasicMaterial({ color:0xfff3c0, fog:false }));
+  sunDisc.position.set(180, 150, -300);
+  sunDisc.lookAt(0, 40, 0);
+  scene.add(sunDisc);
+})();
+
+// Winding pebble paths: hub → each zone as a bent chain of flat discs
+const pathMat = new THREE.MeshLambertMaterial({ color:0xd9c9a3 });
+function buildPath(x2, z2){
+  const from = new THREE.Vector2(0,0), to = new THREE.Vector2(x2,z2);
+  const mid = from.clone().add(to).multiplyScalar(0.5);
+  const perp = new THREE.Vector2(-(to.y-from.y), to.x-from.x).normalize()
+    .multiplyScalar(to.length()*0.22*(rng()<0.5?-1:1)); // the "winding" bend
+  mid.add(perp);
+  const N = 15;
+  for (let i=0; i<=N; i++){
+    const t = i/N;
+    // quadratic bezier
+    const a = from.clone().lerp(mid,t), b = mid.clone().lerp(to,t);
+    const p = a.lerp(b,t);
+    const disc = new THREE.Mesh(new THREE.CircleGeometry(1.35 + rng()*0.5, 9), pathMat);
+    disc.rotation.x = -Math.PI/2;
+    disc.position.set(p.x, 0.02 + i*0.0012, p.y);
+    disc.receiveShadow = true;
+    scene.add(disc);
+  }
+}
+ZONES.forEach(z => buildPath(z.x, z.z));
+
+// Zone ground patches + floating zone titles
+ZONES.forEach(z => {
+  const patch = new THREE.Mesh(new THREE.CircleGeometry(21, 26),
+    new THREE.MeshLambertMaterial({ color:z.color, transparent:true, opacity:0.75 }));
+  patch.rotation.x = -Math.PI/2;
+  patch.position.set(z.x, 0.035, z.z);
+  patch.receiveShadow = true;
+  scene.add(patch);
+  const title = makeTextSprite(`${z.emoji} ${z.name}`, { fontSize:56, scale:0.0105,
+    border:'#'+z.accent.toString(16).padStart(6,'0') });
+  title.position.set(z.x, 7.4, z.z);
+  scene.add(title);
+});
+
+// Central fountain (spawn landmark)
+(function fountain(){
+  const g = new THREE.Group();
+  const base = cyl(3.2, 3.5, 0.7, 0xd8d3c8, 18); base.position.y = 0.35; g.add(base);
+  const water = new THREE.Mesh(new THREE.CircleGeometry(2.7, 18),
+    new THREE.MeshLambertMaterial({ color:0x9fd9f0 }));
+  water.rotation.x = -Math.PI/2; water.position.y = 0.72; g.add(water);
+  const col = cyl(0.45, 0.6, 1.6, 0xd8d3c8, 10); col.position.y = 1.5; g.add(col);
+  const bowl = cyl(1.2, 0.9, 0.35, 0xd8d3c8, 12); bowl.position.y = 2.35; g.add(bowl);
+  const orb = sph(0.35, 0x9fd9f0, 10); orb.position.y = 2.8; g.add(orb);
+  scene.add(g);
+  colliders.push({ x:0, z:0, r:3.9 });
+})();
+
+// Trees — ring around the edge + scattered fills (kept off zones/paths)
+function makeTree(x, z, kind){
+  const g = new THREE.Group();
+  const trunk = cyl(0.16, 0.24, 1.3, 0x9a6b4a, 7);
+  trunk.position.y = 0.65; g.add(trunk);
+  if (kind === 0){ // fluffy round tree
+    const c1 = sph(1.15, 0x8fc97a, 9); c1.position.y = 2.1;  g.add(c1);
+    const c2 = sph(0.85, 0x9fd489, 9); c2.position.set(0.55, 2.7, 0.15); g.add(c2);
+    const c3 = sph(0.7,  0x83c06e, 9); c3.position.set(-0.5, 2.6, -0.2); g.add(c3);
+  } else if (kind === 1){ // pine
+    const p1 = cone(1.1, 1.5, 0x7db86b, 9); p1.position.y = 1.8; g.add(p1);
+    const p2 = cone(0.85, 1.3, 0x8fc97a, 9); p2.position.y = 2.7; g.add(p2);
+    const p3 = cone(0.55, 1.1, 0x9fd489, 9); p3.position.y = 3.5; g.add(p3);
+  } else { // pink blossom tree
+    const c1 = sph(1.0, 0xf4b8ce, 9); c1.position.y = 2.05; g.add(c1);
+    const c2 = sph(0.7, 0xf9cbd9, 9); c2.position.set(0.5, 2.6, -0.1); g.add(c2);
+  }
+  g.position.set(x, 0, z);
+  const s = 0.85 + rng()*0.5;
+  g.scale.set(s, s, s);
+  scene.add(g);
+  colliders.push({ x, z, r:0.9*s });
+}
+for (let i=0; i<16; i++){ // perimeter ring
+  const a = (i/16)*Math.PI*2 + rng()*0.25;
+  makeTree(Math.cos(a)*88, Math.sin(a)*88, i%3);
+}
+let placed = 0, guard = 0;
+while (placed < 14 && guard++ < 300){ // interior scatter, rejection-sampled
+  const x = (rng()*2-1)*78, z = (rng()*2-1)*78;
+  const nearZone = ZONES.some(zn => (x-zn.x)**2 + (z-zn.z)**2 < 25*25);
+  const nearHub  = x*x + z*z < 14*14;
+  const nearPath = ZONES.some(zn => { // crude path proximity: distance to hub→zone segment
+    const t = clamp((x*zn.x + z*zn.z) / (zn.x*zn.x + zn.z*zn.z), 0, 1);
+    return (x - zn.x*t)**2 + (z - zn.z*t)**2 < 8*8;
+  });
+  if (nearZone || nearHub || nearPath) continue;
+  makeTree(x, z, Math.floor(rng()*3));
+  placed++;
+}
+
+// Lampposts at path midpoints + hub
+function makeLamp(x, z){
+  const g = new THREE.Group();
+  const pole = cyl(0.06, 0.09, 2.7, 0x5a6273, 7); pole.position.y = 1.35; g.add(pole);
+  const head = sph(0.22, 0xffe9a8, 8, { emissive:0xffdf8a, emissiveIntensity:0.9 });
+  head.position.y = 2.85; g.add(head);
+  const cap = cone(0.28, 0.25, 0x5a6273, 8); cap.position.y = 3.1; g.add(cap);
+  g.position.set(x, 0, z);
+  scene.add(g);
+  colliders.push({ x, z, r:0.4 });
+}
+ZONES.forEach(z => makeLamp(z.x*0.5 + 2.5, z.z*0.5 + 2.5));
+makeLamp(6, -6); makeLamp(-6, 6);
+
+// Benches near the hub and each zone
+function makeBench(x, z, rotY){
+  const g = new THREE.Group();
+  const seat = box(1.9, 0.12, 0.6, 0xc09468); seat.position.y = 0.55; g.add(seat);
+  const back = box(1.9, 0.55, 0.1, 0xc09468); back.position.set(0, 0.95, -0.26); g.add(back);
+  const l1 = box(0.12, 0.55, 0.55, 0x8a6544); l1.position.set(-0.8, 0.27, 0); g.add(l1);
+  const l2 = box(0.12, 0.55, 0.55, 0x8a6544); l2.position.set( 0.8, 0.27, 0); g.add(l2);
+  g.position.set(x, 0, z); g.rotation.y = rotY;
+  scene.add(g);
+  colliders.push({ x, z, r:1.1 });
+}
+makeBench(9, 2, -Math.PI/2);
+makeBench(-9, -2, Math.PI/2);
+ZONES.forEach((z, i) => {
+  const a = Math.atan2(-z.z, -z.x) + 0.55; // beside the path entrance, outside the pedestal arc
+  makeBench(z.x + Math.cos(a)*19, z.z + Math.sin(a)*19, -a + Math.PI/2);
+});
+
+// Flowers sprinkled around (tiny — cheap merged look via few meshes)
+for (let i=0; i<40; i++){
+  const x = (rng()*2-1)*82, z = (rng()*2-1)*82;
+  if (x*x + z*z < 10*10) continue;
+  const f = new THREE.Group();
+  const stem = cyl(0.02, 0.02, 0.3, 0x6fae5c, 5); stem.position.y = 0.15; stem.castShadow = false; f.add(stem);
+  const head = sph(0.09, [0xf7c6d9, 0xfbe38e, 0xc9b6ee, 0xffffff][Math.floor(rng()*4)], 6);
+  head.position.y = 0.34; head.castShadow = false; f.add(head);
+  f.position.set(x, 0, z);
+  scene.add(f);
+}
+
+/* ============================================================
+   5. PROCEDURAL PRODUCT MODELS
+   Each builder returns a THREE.Group roughly 1–1.6 units tall,
+   sitting on y=0 (the pedestal top).
+   ============================================================ */
+const MODEL_BUILDERS = {
+  mixer(){ // KitchenAid: pistachio body, tilted head, steel bowl
+    const g = new THREE.Group(), c = 0xa9c9a0;
+    const base = box(0.9, 0.22, 0.6, c); base.position.y = 0.11; g.add(base);
+    const pillar = box(0.28, 0.75, 0.42, c); pillar.position.set(0.3, 0.55, 0); g.add(pillar);
+    const head = box(0.95, 0.3, 0.4, c); head.position.set(-0.08, 0.95, 0); head.rotation.z = -0.06; g.add(head);
+    const nose = cyl(0.1, 0.13, 0.22, 0xd8d8d8, 8); nose.position.set(-0.5, 0.82, 0); g.add(nose);
+    const whisk = cyl(0.02, 0.09, 0.3, 0xbfbfbf, 6); whisk.position.set(-0.5, 0.62, 0); g.add(whisk);
+    const bowl = cyl(0.34, 0.22, 0.35, 0xd8d8d8, 12); bowl.position.set(-0.42, 0.4, 0); g.add(bowl);
+    return g;
+  },
+  dutchoven(){ // Le Creuset: flame-orange pot
+    const g = new THREE.Group(), c = 0xe86a2e;
+    const pot = cyl(0.5, 0.44, 0.5, c, 14); pot.position.y = 0.25; g.add(pot);
+    const lid = cyl(0.53, 0.5, 0.12, c, 14); lid.position.y = 0.56; g.add(lid);
+    const knob = sph(0.09, 0xd4af6a, 8); knob.position.y = 0.68; g.add(knob);
+    for (const s of [-1, 1]){
+      const h = box(0.14, 0.08, 0.22, c); h.position.set(s*0.56, 0.42, 0); g.add(h);
+    }
+    return g;
+  },
+  blender(){ // Vitamix: dark base + tapered jar
+    const g = new THREE.Group();
+    const base = box(0.5, 0.42, 0.5, 0x3d3d44); base.position.y = 0.21; g.add(base);
+    const dial = sph(0.06, 0xd8d8d8, 6); dial.position.set(0, 0.28, 0.26); g.add(dial);
+    const jar = cyl(0.26, 0.18, 0.75, 0xcfe3ea, 8, { transparent:true, opacity:0.75 });
+    jar.position.y = 0.8; g.add(jar);
+    const smoothie = cyl(0.2, 0.16, 0.3, 0xf2a9c4, 8); smoothie.position.y = 0.62; g.add(smoothie);
+    const lid = cyl(0.24, 0.26, 0.1, 0x3d3d44, 8); lid.position.y = 1.2; g.add(lid);
+    return g;
+  },
+  skillet(){ // All-Clad: steel pan, long handle
+    const g = new THREE.Group();
+    const pan = cyl(0.5, 0.42, 0.16, 0xc7ccd1, 16); pan.position.y = 0.28; g.add(pan);
+    const inner = cyl(0.42, 0.4, 0.05, 0x8f979e, 14); inner.position.y = 0.34; g.add(inner);
+    const handle = box(0.65, 0.06, 0.12, 0x555a60); handle.position.set(0.78, 0.32, 0); g.add(handle);
+    const egg = cyl(0.14, 0.14, 0.03, 0xffffff, 10); egg.position.set(0.05, 0.38, 0.02); g.add(egg);
+    const yolk = sph(0.06, 0xffc93c, 8); yolk.position.set(0.05, 0.41, 0.02); g.add(yolk);
+    const stand = cyl(0.12, 0.16, 0.22, 0x8a6544, 8); stand.position.y = 0.1; g.add(stand);
+    return g;
+  },
+  knives(){ // Zwilling: tilted wood block with knife handles
+    const g = new THREE.Group();
+    const blockG = new THREE.Group();
+    const block = box(0.5, 0.85, 0.32, 0x9a6b4a); block.position.y = 0.42; blockG.add(block);
+    for (let i=0; i<3; i++){
+      const kh = cyl(0.04, 0.04, 0.28, 0x2e2e33, 6);
+      kh.position.set(-0.05 + i*0.11, 0.92, -0.06 + i*0.05);
+      kh.rotation.z = 0.5;
+      blockG.add(kh);
+    }
+    blockG.rotation.z = -0.28;
+    blockG.position.x = 0.08;
+    g.add(blockG);
+    const knife = box(0.05, 0.42, 0.02, 0xd8d8d8); // one knife leaning beside
+    knife.position.set(-0.42, 0.24, 0.1); knife.rotation.z = 0.35; g.add(knife);
+    return g;
+  },
+  espresso(){ // Breville: steel box, portafilter, tiny cup
+    const g = new THREE.Group(), steel = 0xc7ccd1;
+    const body = box(0.75, 0.75, 0.55, steel); body.position.y = 0.45; g.add(body);
+    const top = box(0.8, 0.1, 0.6, 0xa9b0b7); top.position.y = 0.87; g.add(top);
+    const grp = cyl(0.09, 0.09, 0.14, 0x555a60, 8); grp.position.set(0, 0.42, 0.33); g.add(grp);
+    const pf = cyl(0.03, 0.03, 0.3, 0x2e2e33, 6); pf.rotation.z = Math.PI/2;
+    pf.position.set(0.2, 0.38, 0.36); g.add(pf);
+    const tray = box(0.5, 0.04, 0.2, 0x555a60); tray.position.set(0, 0.12, 0.3); g.add(tray);
+    const cup = cyl(0.07, 0.05, 0.1, 0xffffff, 8); cup.position.set(0, 0.19, 0.32); g.add(cup);
+    const wand = cyl(0.02, 0.02, 0.3, 0xa9b0b7, 6); wand.position.set(0.42, 0.35, 0.2);
+    wand.rotation.z = 0.4; g.add(wand);
+    const dial = sph(0.07, 0x2e2e33, 6); dial.position.set(-0.25, 0.6, 0.29); g.add(dial);
+    return g;
+  },
+  kettle(){ // Fellow: matte black gooseneck + burr grinder
+    const g = new THREE.Group(), blk = 0x2e2e33;
+    const body = cyl(0.2, 0.28, 0.42, blk, 12); body.position.set(-0.25, 0.31, 0); g.add(body);
+    const lid = cone(0.16, 0.12, blk, 10); lid.position.set(-0.25, 0.57, 0); g.add(lid);
+    const spout = cyl(0.025, 0.035, 0.42, blk, 6);
+    spout.position.set(-0.52, 0.42, 0); spout.rotation.z = 0.9; g.add(spout);
+    const handle = box(0.22, 0.05, 0.05, 0x9a6b4a);
+    handle.position.set(-0.03, 0.56, 0); handle.rotation.z = 0.5; g.add(handle);
+    const grinder = cyl(0.14, 0.16, 0.5, blk, 10); grinder.position.set(0.28, 0.35, 0); g.add(grinder);
+    const hopper = cyl(0.1, 0.13, 0.14, 0x555a60, 8); hopper.position.set(0.28, 0.67, 0); g.add(hopper);
+    return g;
+  },
+  nespresso(){ // Vertuo: rounded pod machine + mug
+    const g = new THREE.Group(), c = 0x6a6f7a;
+    const body = cyl(0.24, 0.28, 0.6, c, 12); body.position.set(-0.1, 0.4, 0); g.add(body);
+    const dome = sph(0.24, c, 12); dome.scale.y = 0.6; dome.position.set(-0.1, 0.72, 0); g.add(dome);
+    const arm = box(0.16, 0.1, 0.4, 0x3d3d44); arm.position.set(-0.1, 0.6, 0.22); g.add(arm);
+    const mug = cyl(0.1, 0.08, 0.16, 0xe86a2e, 8); mug.position.set(-0.1, 0.18, 0.3); g.add(mug);
+    return g;
+  },
+  dinnerware(){ // stacked plates + a bowl
+    const g = new THREE.Group(), white = 0xf6f1e7, rim = 0x9ec3d8;
+    for (let i=0; i<4; i++){
+      const p = cyl(0.42 - i*0.02, 0.36 - i*0.02, 0.045, white, 14);
+      p.position.y = 0.1 + i*0.055; g.add(p);
+    }
+    const bowl = cyl(0.24, 0.14, 0.18, rim, 12); bowl.position.y = 0.41; g.add(bowl);
+    const plate = cyl(0.3, 0.26, 0.04, rim, 12);
+    plate.position.set(0.42, 0.22, 0.1); plate.rotation.z = -0.5; g.add(plate);
+    return g;
+  },
+  flatware(){ // tray with abstract cutlery
+    const g = new THREE.Group(), silver = 0xc7ccd1;
+    const tray = box(0.8, 0.06, 0.5, 0x9a6b4a); tray.position.y = 0.12; g.add(tray);
+    for (let i=0; i<4; i++){
+      const stick = cyl(0.02, 0.025, 0.45, silver, 6);
+      stick.position.set(-0.24 + i*0.16, 0.18, 0);
+      stick.rotation.x = Math.PI/2;
+      g.add(stick);
+      const head = i%2 ? sph(0.05, silver, 6) : box(0.05, 0.02, 0.1, silver);
+      head.position.set(-0.24 + i*0.16, 0.18, -0.2);
+      g.add(head);
+    }
+    return g;
+  },
+  wineglasses(){ // two glasses + bottle
+    const g = new THREE.Group();
+    const glassOpts = { transparent:true, opacity:0.55 };
+    for (const s of [-1, 1]){
+      const base = cyl(0.11, 0.13, 0.03, 0xdcedf2, 10, glassOpts); base.position.set(s*0.22, 0.02, 0.1); g.add(base);
+      const stem = cyl(0.02, 0.02, 0.3, 0xdcedf2, 6, glassOpts); stem.position.set(s*0.22, 0.18, 0.1); g.add(stem);
+      const bowl = sph(0.13, 0xdcedf2, 10, glassOpts); bowl.scale.y = 1.25; bowl.position.set(s*0.22, 0.42, 0.1); g.add(bowl);
+      const wine = sph(0.1, 0x8e3d5c, 8); wine.scale.y = 0.7; wine.position.set(s*0.22, 0.38, 0.1); g.add(wine);
+    }
+    const bottle = cyl(0.09, 0.09, 0.55, 0x3c5a3f, 8); bottle.position.set(0, 0.28, -0.18); g.add(bottle);
+    const neck = cyl(0.035, 0.06, 0.2, 0x3c5a3f, 6); neck.position.set(0, 0.63, -0.18); g.add(neck);
+    return g;
+  },
+  board(){ // acacia board with cheese & grapes
+    const g = new THREE.Group();
+    const brd = cyl(0.55, 0.55, 0.06, 0xb08154, 14); brd.position.y = 0.1; g.add(brd);
+    const hdl = box(0.3, 0.05, 0.16, 0xb08154); hdl.position.set(0.66, 0.1, 0); g.add(hdl);
+    const cheese = cyl(0.16, 0.16, 0.12, 0xffd977, 3); cheese.position.set(-0.15, 0.19, 0.1); g.add(cheese);
+    const brie = cyl(0.12, 0.12, 0.08, 0xfaf3e0, 10); brie.position.set(0.18, 0.17, -0.12); g.add(brie);
+    for (let i=0; i<5; i++){
+      const gr = sph(0.045, 0x7a5f9e, 6);
+      gr.position.set(0.05 + (i%3)*0.09, 0.17, 0.22 + Math.floor(i/3)*0.08);
+      g.add(gr);
+    }
+    return g;
+  },
+  percale(){ // crisp folded stack, cool blue-white
+    const g = new THREE.Group();
+    const colors = [0xffffff, 0xdcebf5, 0xffffff];
+    colors.forEach((c, i) => {
+      const fold = box(0.75 - i*0.04, 0.16, 0.55 - i*0.03, c);
+      fold.position.y = 0.1 + i*0.17;
+      fold.rotation.y = (i-1)*0.09;
+      g.add(fold);
+    });
+    const ribbon = box(0.08, 0.52, 0.6, 0x9ec3d8); ribbon.position.y = 0.27; g.add(ribbon);
+    return g;
+  },
+  sateen(){ // silky folded stack, blush
+    const g = new THREE.Group();
+    const colors = [0xf6dfe4, 0xf2ccd6, 0xf6dfe4];
+    colors.forEach((c, i) => {
+      const fold = box(0.75 - i*0.04, 0.16, 0.55 - i*0.03, c);
+      fold.position.y = 0.1 + i*0.17;
+      fold.rotation.y = -(i-1)*0.09;
+      g.add(fold);
+    });
+    const ribbon = box(0.08, 0.52, 0.6, 0xd98a95); ribbon.position.y = 0.27; g.add(ribbon);
+    return g;
+  },
+  duvet(){ // puffy cloud roll on a mini bed
+    const g = new THREE.Group();
+    const bed = box(1.0, 0.18, 0.75, 0xc09468); bed.position.y = 0.09; g.add(bed);
+    const puff = sph(0.42, 0xffffff, 12); puff.scale.set(1.15, 0.55, 0.85); puff.position.y = 0.4; g.add(puff);
+    const puff2 = sph(0.3, 0xf6f1e7, 10); puff2.scale.set(1, 0.5, 0.8); puff2.position.set(0.25, 0.55, 0.08); g.add(puff2);
+    return g;
+  },
+  pillows(){ // two squishy pillows leaning
+    const g = new THREE.Group();
+    const p1 = sph(0.34, 0xffffff, 10); p1.scale.set(1.25, 0.55, 0.85); p1.position.y = 0.2; g.add(p1);
+    const p2 = sph(0.32, 0xf6e7ea, 10); p2.scale.set(1.2, 0.5, 0.8);
+    p2.position.set(0.12, 0.42, -0.05); p2.rotation.z = 0.18; g.add(p2);
+    return g;
+  },
+  dyson(){ // stick vacuum leaning on a stand
+    const g = new THREE.Group();
+    const wand = cyl(0.035, 0.035, 0.95, 0xb08bc9, 8);
+    wand.position.set(0, 0.62, 0); wand.rotation.z = 0.16; g.add(wand);
+    const head = box(0.34, 0.09, 0.18, 0x8e5db3); head.position.set(0.12, 0.06, 0); g.add(head);
+    const motor = cyl(0.11, 0.11, 0.24, 0xc7ccd1, 10);
+    motor.rotation.z = Math.PI/2 + 0.16; motor.position.set(-0.12, 1.06, 0); g.add(motor);
+    const bin = cyl(0.07, 0.07, 0.2, 0xe3c2f0, 8, { transparent:true, opacity:0.8 });
+    bin.position.set(-0.08, 0.92, 0); bin.rotation.z = 0.16; g.add(bin);
+    const grip = box(0.06, 0.18, 0.05, 0x8e5db3); grip.position.set(-0.24, 1.16, 0); g.add(grip);
+    return g;
+  },
+  robovac(){ // flat disc robot with sensor + dust trail
+    const g = new THREE.Group();
+    const bodyv = cyl(0.42, 0.42, 0.13, 0x3d3d44, 18); bodyv.position.y = 0.08; g.add(bodyv);
+    const topv = cyl(0.4, 0.42, 0.03, 0x555a60, 18); topv.position.y = 0.16; g.add(topv);
+    const sensor = cyl(0.09, 0.09, 0.05, 0x2e2e33, 10); sensor.position.y = 0.2; g.add(sensor);
+    const btn = cyl(0.04, 0.04, 0.02, 0x9fd489, 8); btn.position.set(0.2, 0.19, 0); g.add(btn);
+    return g;
+  },
+  cocktail(){ // shaker, jigger, two coupes
+    const g = new THREE.Group(), gold = 0xd4af6a;
+    const shakerB = cyl(0.14, 0.17, 0.4, gold, 10); shakerB.position.set(-0.2, 0.25, 0); g.add(shakerB);
+    const shakerT = cyl(0.08, 0.13, 0.2, gold, 10); shakerT.position.set(-0.2, 0.55, 0); g.add(shakerT);
+    const cap = cyl(0.05, 0.07, 0.08, gold, 8); cap.position.set(-0.2, 0.69, 0); g.add(cap);
+    const jig1 = cone(0.07, 0.12, 0xc7ccd1, 8); jig1.position.set(0.05, 0.11, 0.15); g.add(jig1);
+    const jig2 = cone(0.05, 0.09, 0xc7ccd1, 8); jig2.rotation.x = Math.PI;
+    jig2.position.set(0.05, 0.21, 0.15); g.add(jig2);
+    const coupe = cyl(0.13, 0.02, 0.1, 0xdcedf2, 10, { transparent:true, opacity:0.6 });
+    coupe.position.set(0.3, 0.32, -0.05); g.add(coupe);
+    const stem = cyl(0.02, 0.02, 0.24, 0xdcedf2, 6, { transparent:true, opacity:0.6 });
+    stem.position.set(0.3, 0.14, -0.05); g.add(stem);
+    const cherry = sph(0.035, 0xd1495b, 6); cherry.position.set(0.3, 0.36, -0.05); g.add(cherry);
+    return g;
+  },
+  cakestand(){ // pedestal stand with strawberry cake
+    const g = new THREE.Group();
+    const foot = cyl(0.2, 0.26, 0.06, 0xf6f1e7, 12); foot.position.y = 0.05; g.add(foot);
+    const stem = cyl(0.05, 0.08, 0.22, 0xf6f1e7, 8); stem.position.y = 0.19; g.add(stem);
+    const plate = cyl(0.4, 0.36, 0.05, 0xf6f1e7, 14); plate.position.y = 0.33; g.add(plate);
+    const cake1 = cyl(0.26, 0.26, 0.16, 0xf7dfc0, 12); cake1.position.y = 0.44; g.add(cake1);
+    const cake2 = cyl(0.2, 0.2, 0.14, 0xf2ccd6, 12); cake2.position.y = 0.59; g.add(cake2);
+    const frosting = cyl(0.21, 0.19, 0.04, 0xffffff, 12); frosting.position.y = 0.68; g.add(frosting);
+    const berry = sph(0.05, 0xd1495b, 6); berry.position.y = 0.74; g.add(berry);
+    return g;
+  },
+  picnic(){ // basket + checkered blanket corner + apples
+    const g = new THREE.Group();
+    const blanket = box(1.1, 0.03, 0.9, 0xf2ccd6); blanket.position.y = 0.03;
+    blanket.rotation.y = 0.2; g.add(blanket);
+    const stripe1 = box(1.12, 0.032, 0.14, 0xffffff); stripe1.position.set(0, 0.032, -0.2);
+    stripe1.rotation.y = 0.2; g.add(stripe1);
+    const stripe2 = box(1.12, 0.032, 0.14, 0xffffff); stripe2.position.set(0, 0.032, 0.22);
+    stripe2.rotation.y = 0.2; g.add(stripe2);
+    const basket = box(0.5, 0.3, 0.34, 0xb08154); basket.position.set(-0.15, 0.2, 0); g.add(basket);
+    const lidL = box(0.24, 0.03, 0.36, 0x9a6b4a); lidL.position.set(-0.28, 0.36, 0); lidL.rotation.z = 0.3; g.add(lidL);
+    const handleArc = torus(0.16, 0.025, 0x9a6b4a, Math.PI);
+    handleArc.position.set(-0.15, 0.36, 0); g.add(handleArc);
+    const apple = sph(0.07, 0xd1495b, 8); apple.position.set(0.3, 0.1, 0.2); g.add(apple);
+    const apple2 = sph(0.07, 0x9fd489, 8); apple2.position.set(0.42, 0.1, 0.05); g.add(apple2);
+    return g;
+  },
+};
+
+/* ============================================================
+   6. PEDESTALS + LABELS + SPARKLES
+   ============================================================ */
+const productStations = []; // { product, group, model, label, x, z }
+const sparkleBase = [];     // base positions for the shared sparkle Points
+
+PRODUCTS.forEach(p => {
+  const zone = ZONES[p.zone];
+  const inZone = PRODUCTS.filter(q => q.zone === p.zone);
+  const idx = inZone.indexOf(p), n = inZone.length;
+  // arc of pedestals facing the village center
+  const toHub = Math.atan2(-zone.z, -zone.x);
+  const spread = (n - 1) * 0.5;
+  const a = toHub + Math.PI + (idx - spread) * (Math.PI * 0.85 / Math.max(n - 1, 1) ) * ((n>1)?1:0);
+  const R = n > 3 ? 11 : 8.5;
+  const x = zone.x + Math.cos(a) * R;
+  const z = zone.z + Math.sin(a) * R;
+
+  const g = new THREE.Group();
+  // pedestal: cream column with zone-accent top rim
+  const ped = cyl(0.85, 1.05, 1.0, 0xf6f1e7, 14); ped.position.y = 0.5; ped.receiveShadow = true; g.add(ped);
+  const rim = cyl(0.95, 0.95, 0.1, zone.accent, 14); rim.position.y = 1.0; g.add(rim);
+  const base = cyl(1.15, 1.25, 0.16, 0xe0d6c2, 14); base.position.y = 0.08; g.add(base);
+
+  // product model on a slow turntable
+  const model = MODEL_BUILDERS[p.model]();
+  model.position.y = 1.06;
+  g.add(model);
+
+  // floating name label
+  const label = makeTextSprite(p.name, { fontSize:40, scale:0.0046,
+    border:'#'+zone.accent.toString(16).padStart(6,'0') });
+  label.position.y = 3.15;
+  g.add(label);
+
+  g.position.set(x, 0, z);
+  g.rotation.y = -a + Math.PI/2; // face outward from arc → toward zone center
+  scene.add(g);
+  colliders.push({ x, z, r:1.45 });
+
+  for (let s=0; s<3; s++) sparkleBase.push({ x: x + (rng()*2-1)*1.6, y: 1.4 + rng()*1.6, z: z + (rng()*2-1)*1.6, ph: rng()*Math.PI*2 });
+  productStations.push({ product:p, group:g, model, label, x, z });
+});
+
+// One shared THREE.Points cloud for all sparkles (1 draw call)
+for (let s=0; s<14; s++) sparkleBase.push({ x:(rng()*2-1)*3, y:2 + rng()*2.5, z:(rng()*2-1)*3, ph:rng()*Math.PI*2 }); // fountain
+const sparkGeo = new THREE.BufferGeometry();
+const sparkPos = new Float32Array(sparkleBase.length * 3);
+sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
+const sparkles = new THREE.Points(sparkGeo, new THREE.PointsMaterial({
+  color:0xfff2b0, size:0.22, transparent:true, opacity:0.9, depthWrite:false, sizeAttenuation:true }));
+scene.add(sparkles);
+
+/* ============================================================
+   7. CLOUDS & BUTTERFLIES
+   ============================================================ */
+const clouds = [];
+for (let i=0; i<9; i++){
+  const c = new THREE.Group();
+  const puffs = 3 + Math.floor(rng()*2);
+  for (let j=0; j<puffs; j++){
+    const s = sph(3 + rng()*2.4, 0xffffff, 8);
+    s.material = mat(0xffffff, { transparent:true, opacity:0.92 });
+    s.castShadow = false;
+    s.scale.y = 0.55;
+    s.position.set(j*3.4 - puffs*1.6, (rng()-0.5)*1.2, (rng()-0.5)*2.5);
+    c.add(s);
+  }
+  c.position.set((rng()*2-1)*160, 42 + rng()*22, (rng()*2-1)*160);
+  c.userData.speed = 0.8 + rng()*1.2;
+  scene.add(c);
+  clouds.push(c);
+}
+
+const butterflies = [];
+for (let i=0; i<7; i++){
+  const b = new THREE.Group();
+  const wingGeo = new THREE.PlaneGeometry(0.28, 0.22);
+  const wc = [0xf2a9c4, 0xffd977, 0xb0d9f0, 0xc9b6ee][i % 4];
+  const wm = mat(wc, { side:THREE.DoubleSide });
+  const w1 = new THREE.Mesh(wingGeo, wm); w1.position.x = -0.14; b.add(w1);
+  const w2 = new THREE.Mesh(wingGeo, wm); w2.position.x =  0.14; b.add(w2);
+  const bod = cyl(0.02, 0.02, 0.2, 0x5a4a42, 5); bod.rotation.x = Math.PI/2; bod.castShadow = false; b.add(bod);
+  const zone = ZONES[i % ZONES.length];
+  b.userData = { cx: zone.x + (rng()*2-1)*8, cz: zone.z + (rng()*2-1)*8,
+                 r: 3 + rng()*5, sp: 0.4 + rng()*0.5, ph: rng()*Math.PI*2, h: 1.2 + rng()*1.8,
+                 w1, w2 };
+  scene.add(b);
+  butterflies.push(b);
+}
+
+/* ============================================================
+   8. OLIVER THE CAT 🐈
+   ============================================================ */
+const ORANGE = 0xe8923a, DARK = 0xc96f23, CREAM = 0xfaeed9, PINK = 0xf2a9c4;
+const cat = new THREE.Group();
+const catParts = {};
+
+(function buildOliver(){
+  // body: elongated sphere, faces +Z
+  const body = sph(0.55, ORANGE, 14);
+  body.scale.set(0.9, 0.82, 1.35);
+  body.position.y = 0.58;
+  cat.add(body);
+  catParts.body = body;
+
+  // tabby stripes: half-torus arcs draped over the back
+  [-0.32, 0, 0.32].forEach(zo => {
+    const f = Math.sqrt(Math.max(0.15, 1 - (zo/0.74)**2)); // taper to body curve
+    const stripe = torus(0.5, 0.055, DARK, Math.PI*0.62);  // arc over the spine only
+    stripe.rotation.z = Math.PI*0.19;                       // center the arc on top
+    stripe.scale.set(0.88*f, 0.82*f, 1);                    // mostly embedded — just a ridge shows
+    stripe.position.set(0, 0.58, body.position.z + zo);
+    cat.add(stripe);
+  });
+
+  // cream chest
+  const chest = sph(0.3, CREAM, 10);
+  chest.scale.set(0.9, 1.0, 0.8);
+  chest.position.set(0, 0.42, 0.5);
+  cat.add(chest);
+
+  // head group (so it can idle-look-around)
+  const head = new THREE.Group();
+  head.position.set(0, 1.02, 0.62);
+  cat.add(head);
+  catParts.head = head;
+
+  const skull = sph(0.38, ORANGE, 14);
+  skull.scale.set(1, 0.92, 0.95);
+  head.add(skull);
+
+  const muzzle = sph(0.19, CREAM, 10);
+  muzzle.scale.set(1.25, 0.75, 0.9);
+  muzzle.position.set(0, -0.1, 0.3);
+  head.add(muzzle);
+
+  const nose = cone(0.05, 0.05, PINK, 4);
+  nose.rotation.x = Math.PI; // point down
+  nose.position.set(0, -0.02, 0.44);
+  head.add(nose);
+
+  // eyes: green with dark pupils
+  for (const s of [-1, 1]){
+    const eye = sph(0.062, 0x7cae4f, 8); eye.castShadow = false;
+    eye.position.set(s*0.15, 0.08, 0.31);
+    head.add(eye);
+    const pupil = sph(0.03, 0x27231f, 6); pupil.castShadow = false;
+    pupil.position.set(s*0.15, 0.08, 0.365);
+    head.add(pupil);
+  }
+
+  // pointy ears (4-sided cones) + pink inner
+  for (const s of [-1, 1]){
+    const ear = cone(0.14, 0.3, ORANGE, 4);
+    ear.position.set(s*0.21, 0.36, -0.02);
+    ear.rotation.y = Math.PI/4;
+    ear.rotation.z = s * -0.22;
+    head.add(ear);
+    const inner = cone(0.08, 0.18, PINK, 4);
+    inner.position.set(s*0.21, 0.34, 0.02);
+    inner.rotation.y = Math.PI/4;
+    inner.rotation.z = s * -0.22;
+    inner.castShadow = false;
+    head.add(inner);
+  }
+
+  // whiskers: 3 thin cylinders per side
+  for (const s of [-1, 1]){
+    for (let i=0; i<3; i++){
+      const wsk = cyl(0.006, 0.006, 0.42, 0xffffff, 4);
+      wsk.castShadow = false;
+      wsk.rotation.z = Math.PI/2;
+      wsk.rotation.y = s * (0.35 - i*0.12);
+      wsk.rotation.x = (i-1) * 0.14;
+      wsk.position.set(s*0.3, -0.08 + (i-1)*-0.03, 0.32);
+      head.add(wsk);
+    }
+  }
+
+  // legs: pivoted at the hip so they can swing while walking
+  catParts.legs = [];
+  const legPos = [[-0.26, 0.42], [0.26, 0.42], [-0.26, -0.42], [0.26, -0.42]];
+  legPos.forEach(([lx, lz], i) => {
+    const hip = new THREE.Group();
+    hip.position.set(lx, 0.42, lz);
+    const leg = cyl(0.085, 0.09, 0.42, ORANGE, 8);
+    leg.position.y = -0.2;
+    hip.add(leg);
+    const paw = sph(0.105, CREAM, 8);
+    paw.scale.set(1, 0.7, 1.15);
+    paw.position.set(0, -0.38, 0.04);
+    hip.add(paw);
+    cat.add(hip);
+    catParts.legs.push(hip);
+  });
+
+  // tail: chain of shrinking spheres, striped, curling upward
+  const tail = new THREE.Group();
+  tail.position.set(0, 0.78, -0.7);
+  cat.add(tail);
+  catParts.tail = tail;
+  catParts.tailSegs = [];
+  // raised "question mark" tail: rises steeply, tip hooks forward
+  const TAIL_CURL = [0.5, 0.5, 0.45, 0.4, 0.35, 0.3];
+  let parent = tail;
+  for (let i=0; i<6; i++){
+    const seg = new THREE.Group();
+    seg.position.set(0, i===0 ? 0 : 0.02, i===0 ? 0 : -0.125);
+    seg.userData.baseRotX = TAIL_CURL[i];
+    const ball = sph(0.12 - i*0.008, (i%2) ? DARK : ORANGE, 8);
+    seg.add(ball);
+    parent.add(seg);
+    catParts.tailSegs.push(seg);
+    parent = seg;
+  }
+
+  // soft blob shadow to ground the cat during jumps
+  const blob = new THREE.Mesh(new THREE.CircleGeometry(0.55, 14),
+    new THREE.MeshBasicMaterial({ color:0x3a5230, transparent:true, opacity:0.28, depthWrite:false }));
+  blob.rotation.x = -Math.PI/2;
+  blob.position.y = 0.045;
+  catParts.blob = blob;
+  scene.add(blob);
+
+  scene.add(cat);
+})();
+
+/* ============================================================
+   9. INPUT
+   ============================================================ */
+const keys = {};
+let mouseDown = false, lastMX = 0, lastMY = 0;
+const IS_TOUCH = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+const touch = { moveX:0, moveY:0, jump:false, camDX:0, camDY:0 };
+
+window.addEventListener('keydown', e => {
+  const k = e.key.toLowerCase();
+  if (k === 'tab'){ e.preventDefault(); if (started) toggleWishlist(); return; }
+  if (k === 'escape'){ closeCard(); wishlistPanel.classList.remove('open'); return; }
+  if (k === 'm' && started){ toggleMute(); return; }
+  if (k === 'e'){
+    // E = interact when near a product / card open; otherwise camera orbit
+    if (cardOpenFor){ closeCard(); return; }
+    if (nearStation && started && !wishlistPanel.classList.contains('open')){ openCard(nearStation.product); return; }
+  }
+  if (k === ' ') e.preventDefault();
+  keys[k] = true;
+});
+window.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+canvas.addEventListener('mousedown', e => { mouseDown = true; lastMX = e.clientX; lastMY = e.clientY; });
+window.addEventListener('mouseup',   () => { mouseDown = false; });
+window.addEventListener('mousemove', e => {
+  if (!mouseDown) return;
+  camYaw   -= (e.clientX - lastMX) * 0.0055;
+  camPitch += (e.clientY - lastMY) * 0.0045;
+  camPitch  = clamp(camPitch, 0.12, 1.25);
+  lastMX = e.clientX; lastMY = e.clientY;
+});
+canvas.addEventListener('wheel', e => {
+  camDist = clamp(camDist + e.deltaY * 0.008, 4.5, 14);
+}, { passive:true });
+
+// --- touch controls ---
+if (IS_TOUCH){
+  document.getElementById('touch-ui').style.display = 'block';
+  const joy = document.getElementById('joystick');
+  const knob = document.getElementById('joystick-knob');
+  let joyId = null, camId = null, camLX = 0, camLY = 0;
+
+  function setKnob(dx, dy){
+    knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  }
+  window.addEventListener('touchstart', e => {
+    for (const t of e.changedTouches){
+      const r = joy.getBoundingClientRect();
+      if (t.clientX > r.left - 30 && t.clientX < r.right + 30 && t.clientY > r.top - 30 && t.clientY < r.bottom + 30 && joyId === null){
+        joyId = t.identifier;
+      } else if (camId === null && t.clientX > window.innerWidth * 0.4 &&
+                 !e.target.closest('button') && !e.target.closest('.panel')){
+        camId = t.identifier; camLX = t.clientX; camLY = t.clientY;
+      }
+    }
+  }, { passive:true });
+  window.addEventListener('touchmove', e => {
+    for (const t of e.changedTouches){
+      if (t.identifier === joyId){
+        const r = joy.getBoundingClientRect();
+        let dx = t.clientX - (r.left + r.width/2), dy = t.clientY - (r.top + r.height/2);
+        const len = Math.hypot(dx, dy), max = 44;
+        if (len > max){ dx = dx/len*max; dy = dy/len*max; }
+        touch.moveX = dx / max; touch.moveY = dy / max;
+        setKnob(dx, dy);
+      } else if (t.identifier === camId){
+        camYaw   -= (t.clientX - camLX) * 0.006;
+        camPitch  = clamp(camPitch + (t.clientY - camLY) * 0.005, 0.12, 1.25);
+        camLX = t.clientX; camLY = t.clientY;
+      }
+    }
+  }, { passive:true });
+  window.addEventListener('touchend', e => {
+    for (const t of e.changedTouches){
+      if (t.identifier === joyId){ joyId = null; touch.moveX = touch.moveY = 0; setKnob(0,0); }
+      if (t.identifier === camId) camId = null;
+    }
+  }, { passive:true });
+  document.getElementById('btn-jump').addEventListener('touchstart', e => { e.preventDefault(); touch.jump = true; });
+  document.getElementById('btn-jump').addEventListener('touchend',   e => { e.preventDefault(); touch.jump = false; });
+  document.getElementById('btn-act').addEventListener('touchstart',  e => {
+    e.preventDefault();
+    if (cardOpenFor) closeCard();
+    else if (nearStation) openCard(nearStation.product);
+  });
+}
+
+/* ============================================================
+   10. AUDIO — tiny WebAudio chime loop + SFX
+   ============================================================ */
+let audioCtx = null, masterGain = null, musicTimer = null, muted = false;
+
+function initAudio(){
+  if (audioCtx) return;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return;
+  audioCtx = new AC();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.value = muted ? 0 : 1;
+  // gentle echo for dreaminess
+  const delay = audioCtx.createDelay(1.0); delay.delayTime.value = 0.34;
+  const fb = audioCtx.createGain(); fb.gain.value = 0.3;
+  const wet = audioCtx.createGain(); wet.gain.value = 0.35;
+  masterGain.connect(audioCtx.destination);
+  delay.connect(fb); fb.connect(delay);
+  delay.connect(wet); wet.connect(audioCtx.destination);
+  masterGain.connect(delay);
+  startMusicLoop();
+}
+function note(freq, t0, dur, vol, type){
+  if (!audioCtx || muted) return;
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.type = type || 'sine'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, t0);
+  g.gain.linearRampToValueAtTime(vol, t0 + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(g); g.connect(masterGain);
+  o.start(t0); o.stop(t0 + dur + 0.05);
+}
+// A slow, sparse pentatonic music box. -1 = rest.
+const MELODY = [0, -1, 2, -1, 4, -1, 3, -1, 2, -1, 0, -1, 1, -1, -1, -1,
+                4, -1, 3, -1, 2, -1, 4, -1, 5, -1, 4, -1, 2, -1, -1, -1];
+const SCALE = [523.25, 587.33, 659.25, 783.99, 880.0, 1046.5]; // C major pentatonic-ish
+let melodyStep = 0;
+function startMusicLoop(){
+  if (musicTimer) return;
+  let nextT = audioCtx.currentTime + 0.1;
+  musicTimer = setInterval(() => {
+    if (!audioCtx) return;
+    while (nextT < audioCtx.currentTime + 0.3){
+      const stepIdx = MELODY[melodyStep % MELODY.length];
+      if (stepIdx >= 0){
+        note(SCALE[stepIdx], nextT, 1.6, 0.045, 'sine');
+        note(SCALE[stepIdx]*2, nextT, 0.9, 0.012, 'triangle'); // shimmer octave
+      }
+      if (melodyStep % 8 === 0) note(SCALE[0]/2, nextT, 2.2, 0.03, 'sine'); // low root pad
+      melodyStep++;
+      nextT += 0.45;
+    }
+  }, 120);
+}
+function sfxHeart(){ // happy two-note chime on wishlist add
+  if (!audioCtx || muted) return;
+  const t = audioCtx.currentTime;
+  note(783.99, t, 0.35, 0.12, 'triangle');
+  note(1046.5, t + 0.09, 0.5, 0.12, 'triangle');
+}
+function sfxOpen(){
+  if (!audioCtx || muted) return;
+  note(659.25, audioCtx.currentTime, 0.2, 0.07, 'triangle');
+}
+function sfxJump(){
+  if (!audioCtx || muted) return;
+  const t = audioCtx.currentTime;
+  note(392, t, 0.12, 0.05, 'sine');
+  note(523.25, t + 0.06, 0.15, 0.05, 'sine');
+}
+function toggleMute(){
+  muted = !muted;
+  if (masterGain) masterGain.gain.value = muted ? 0 : 1;
+  document.getElementById('mute-btn').textContent = muted ? '🔇' : '🔊';
+}
+document.getElementById('mute-btn').addEventListener('click', toggleMute);
+
+/* ============================================================
+   11. UI — product card, wishlist, toast
+   ============================================================ */
+const cardOverlay = document.getElementById('card-overlay');
+const wishlistPanel = document.getElementById('wishlist-panel');
+const promptEl = document.getElementById('interact-prompt');
+const toastEl = document.getElementById('zone-toast');
+let cardOpenFor = null;
+let wishlist = []; // in-memory only (no localStorage by design)
+let toastTimer = null;
+
+function openCard(p){
+  cardOpenFor = p;
+  document.getElementById('card-chip').textContent =
+    `${ZONES[p.zone].emoji} ${ZONES[p.zone].name} · ${p.cat}`;
+  document.getElementById('card-name').textContent = p.name;
+  document.getElementById('card-price').textContent = `~ ${p.price}`;
+  document.getElementById('card-blurb').textContent = p.blurb;
+  document.getElementById('card-alts').innerHTML =
+    '<b>Also lovely:</b> ' + p.alts.join(' · ');
+  updateHeartBtn();
+  cardOverlay.style.display = 'flex';
+  sfxOpen();
+}
+function closeCard(){
+  cardOpenFor = null;
+  cardOverlay.style.display = 'none';
+}
+function updateHeartBtn(){
+  const btn = document.getElementById('heart-btn');
+  if (!cardOpenFor) return;
+  const inList = wishlist.includes(cardOpenFor);
+  btn.textContent = inList ? '✓ On Oliver\'s Wishlist' : '♥ Add to Oliver\'s Wishlist';
+  btn.classList.toggle('in-list', inList);
+}
+document.getElementById('heart-btn').addEventListener('click', () => {
+  if (!cardOpenFor) return;
+  const i = wishlist.indexOf(cardOpenFor);
+  if (i >= 0) wishlist.splice(i, 1);
+  else { wishlist.push(cardOpenFor); sfxHeart(); }
+  updateHeartBtn();
+  renderWishlist();
+});
+document.getElementById('card-close').addEventListener('click', closeCard);
+cardOverlay.addEventListener('click', e => { if (e.target === cardOverlay) closeCard(); });
+
+function toggleWishlist(){ wishlistPanel.classList.toggle('open'); }
+document.getElementById('wishlist-btn').addEventListener('click', toggleWishlist);
+document.getElementById('wl-close').addEventListener('click', toggleWishlist);
+
+function renderWishlist(){
+  const box = document.getElementById('wishlist-items');
+  document.getElementById('wl-count').textContent = wishlist.length;
+  if (!wishlist.length){
+    box.innerHTML = '<div id="wishlist-empty">Nothing here yet!<br>Explore the village and press <b>♥</b> on the gifts Oliver loves.</div>';
+    document.getElementById('wl-total').textContent = '$0';
+    return;
+  }
+  box.innerHTML = '';
+  let total = 0;
+  wishlist.forEach((p, i) => {
+    total += p.priceNum;
+    const div = document.createElement('div');
+    div.className = 'wl-item';
+    const nm = document.createElement('span'); nm.className = 'wl-name'; nm.textContent = p.name;
+    const pr = document.createElement('span'); pr.className = 'wl-price'; pr.textContent = '~' + money(p.priceNum);
+    const rm = document.createElement('button'); rm.className = 'wl-remove'; rm.textContent = '✕';
+    rm.title = 'Remove';
+    rm.addEventListener('click', () => { wishlist.splice(i, 1); renderWishlist(); updateHeartBtn(); });
+    div.append(nm, pr, rm);
+    box.appendChild(div);
+  });
+  document.getElementById('wl-total').textContent = '~' + money(total);
+}
+
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const lines = ['🐾 Oliver\'s Registry Wishlist', '────────────────────'];
+  let total = 0;
+  wishlist.forEach(p => {
+    total += p.priceNum;
+    lines.push(`• ${p.name} — ${p.cat} — ${p.price}`);
+  });
+  lines.push('────────────────────', `Approx. total: ~${money(total)}`, '', 'Curated with love by Oliver the cat 🧡');
+  const text = lines.join('\n');
+  const btn = document.getElementById('copy-btn');
+  const done = ok => {
+    btn.textContent = ok ? '✓ Copied!' : '⚠ Copy failed';
+    setTimeout(() => { btn.textContent = '📋 Copy list'; }, 1600);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(() => done(true), () => fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+});
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch(e){ ok = false; }
+  document.body.removeChild(ta);
+  done(ok);
+}
+
+function showToast(text){
+  toastEl.textContent = text;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+}
+
+/* ============================================================
+   12. PLAYER CONTROLLER + FOLLOW CAMERA
+   ============================================================ */
+const player = {
+  pos: new THREE.Vector3(0, 0, 10), // start just south of the fountain
+  vy: 0, onGround: true, heading: Math.PI, speed: 11,
+  walkPhase: 0, moving: false,
+};
+let camYaw = 0, camPitch = 0.42, camDist = 8; // yaw 0 = camera behind the south-facing cat
+const camPos = new THREE.Vector3(0, 6, 22);
+let nearStation = null, currentZone = -1;
+let started = false;
+
+function updatePlayer(dt){
+  const uiOpen = !!cardOpenFor;
+  // --- input direction (camera-relative) ---
+  let ix = 0, iz = 0;
+  if (!uiOpen){
+    if (keys['w'] || keys['arrowup'])    iz += 1;
+    if (keys['s'] || keys['arrowdown'])  iz -= 1;
+    if (keys['a'] || keys['arrowleft'])  ix -= 1;
+    if (keys['d'] || keys['arrowright']) ix += 1;
+    ix += touch.moveX; iz -= touch.moveY;
+  }
+  // camera orbit via Q / E (E only rotates when not near a product)
+  if (keys['q']) camYaw += 1.9 * dt;
+  if (keys['e'] && !nearStation && !uiOpen) camYaw -= 1.9 * dt;
+
+  const len = Math.hypot(ix, iz);
+  player.moving = len > 0.15;
+  if (player.moving){
+    const nx = ix/len, nz = iz/len;
+    // forward = camera facing direction projected on ground
+    const fx = -Math.sin(camYaw), fz = -Math.cos(camYaw);
+    const rx = -fz, rz = fx; // right vector
+    const dirX = fx*nz + rx*nx, dirZ = fz*nz + rz*nx;
+    const target = Math.atan2(dirX, dirZ);
+    // shortest-path angle lerp
+    let d = target - player.heading;
+    while (d >  Math.PI) d -= Math.PI*2;
+    while (d < -Math.PI) d += Math.PI*2;
+    player.heading += d * damp(12, dt);
+
+    const spd = player.speed * Math.min(len, 1);
+    player.pos.x += Math.sin(player.heading) * spd * dt;
+    player.pos.z += Math.cos(player.heading) * spd * dt;
+    player.walkPhase += dt * spd * 1.35;
+  }
+
+  // --- jump & gravity ---
+  if ((keys[' '] || touch.jump) && player.onGround && !uiOpen){
+    player.vy = 8.4; player.onGround = false; sfxJump();
+  }
+  if (!player.onGround){
+    player.vy -= 24 * dt;
+    player.pos.y += player.vy * dt;
+    if (player.pos.y <= 0){ player.pos.y = 0; player.vy = 0; player.onGround = true; }
+  }
+
+  // --- collisions: world bounds + circle colliders ---
+  player.pos.x = clamp(player.pos.x, -WORLD_HALF, WORLD_HALF);
+  player.pos.z = clamp(player.pos.z, -WORLD_HALF, WORLD_HALF);
+  const PR = 0.55;
+  for (const c of colliders){
+    const dx = player.pos.x - c.x, dz = player.pos.z - c.z;
+    const rr = c.r + PR, d2 = dx*dx + dz*dz;
+    if (d2 < rr*rr && d2 > 1e-6){
+      const d = Math.sqrt(d2);
+      player.pos.x = c.x + dx/d * rr;
+      player.pos.z = c.z + dz/d * rr;
+    }
+  }
+
+  // --- apply to cat mesh + animate ---
+  cat.position.copy(player.pos);
+  cat.rotation.y = player.heading;
+
+  const t = clockTime;
+  const breathe = 1 + Math.sin(t*2.4) * 0.018;
+  catParts.body.scale.set(0.9*breathe, 0.82/breathe*1.0, 1.35);
+  if (player.moving && player.onGround){
+    cat.position.y = player.pos.y + Math.abs(Math.sin(player.walkPhase)) * 0.07;
+    catParts.legs.forEach((hip, i) => {
+      hip.rotation.x = Math.sin(player.walkPhase + (i===0||i===3 ? 0 : Math.PI)) * 0.6;
+    });
+  } else {
+    catParts.legs.forEach(hip => { hip.rotation.x = lerp(hip.rotation.x, 0, damp(10, dt)); });
+    if (!player.onGround){ // little hop pose: legs tucked
+      catParts.legs.forEach((hip, i) => { hip.rotation.x = i<2 ? 0.5 : -0.5; });
+    }
+  }
+  // idle head look-around + tail sway
+  catParts.head.rotation.y = Math.sin(t*0.6) * (player.moving ? 0.05 : 0.3);
+  catParts.head.rotation.x = Math.sin(t*0.9) * 0.05;
+  const wag = player.moving ? 1.6 : 0.7;
+  catParts.tailSegs.forEach((seg, i) => {
+    seg.rotation.x = seg.userData.baseRotX + Math.sin(t*2.2 + i*0.6) * 0.05;
+    seg.rotation.z = Math.sin(t*wag + i*0.7) * (0.1 + i*0.05);
+  });
+  // blob shadow follows, fades with jump height
+  catParts.blob.position.x = player.pos.x;
+  catParts.blob.position.z = player.pos.z;
+  catParts.blob.material.opacity = 0.28 * clamp(1 - player.pos.y/3, 0.25, 1);
+
+  // --- follow camera with smooth lag ---
+  const focus = new THREE.Vector3(player.pos.x, player.pos.y + 1.1, player.pos.z);
+  const ideal = new THREE.Vector3(
+    focus.x + Math.sin(camYaw) * Math.cos(camPitch) * camDist,
+    focus.y + Math.sin(camPitch) * camDist,
+    focus.z + Math.cos(camYaw) * Math.cos(camPitch) * camDist
+  );
+  camPos.lerp(ideal, damp(6, dt));
+  if (camPos.y < 0.6) camPos.y = 0.6; // never sink into the ground
+  camera.position.copy(camPos);
+  camera.lookAt(focus);
+
+  // --- shadow camera follows the player ---
+  sun.position.set(player.pos.x + 28, 55, player.pos.z + 18);
+  sun.target.position.set(player.pos.x, 0, player.pos.z);
+
+  // --- proximity: products ---
+  nearStation = null;
+  let best = 3.4 * 3.4;
+  for (const st of productStations){
+    const dx = player.pos.x - st.x, dz = player.pos.z - st.z;
+    const d2 = dx*dx + dz*dz;
+    if (d2 < best){ best = d2; nearStation = st; }
+  }
+  if (nearStation && !cardOpenFor){
+    document.getElementById('prompt-name').textContent = nearStation.product.name;
+    promptEl.style.display = 'block';
+  } else {
+    promptEl.style.display = 'none';
+  }
+
+  // --- zone entry toast (with hysteresis) ---
+  let inZone = -1;
+  for (let i=0; i<ZONES.length; i++){
+    const dx = player.pos.x - ZONES[i].x, dz = player.pos.z - ZONES[i].z;
+    if (dx*dx + dz*dz < 23*23){ inZone = i; break; }
+  }
+  if (inZone !== -1 && inZone !== currentZone){
+    currentZone = inZone;
+    showToast(`${ZONES[inZone].emoji} ${ZONES[inZone].name}`);
+  } else if (inZone === -1 && currentZone !== -1){
+    const z = ZONES[currentZone];
+    const dx = player.pos.x - z.x, dz = player.pos.z - z.z;
+    if (dx*dx + dz*dz > 26*26) currentZone = -1;
+  }
+}
+
+/* ============================================================
+   13. AMBIENT ANIMATION + MAIN LOOP
+   ============================================================ */
+function updateAmbient(dt){
+  const t = clockTime;
+  // slow product turntables + label bob
+  for (let i=0; i<productStations.length; i++){
+    const st = productStations[i];
+    st.model.rotation.y = t * 0.5 + i;
+    st.label.position.y = 3.15 + Math.sin(t*1.3 + i) * 0.08;
+  }
+  // sparkles twinkle-bob
+  const pos = sparkGeo.attributes.position.array;
+  for (let i=0; i<sparkleBase.length; i++){
+    const b = sparkleBase[i];
+    pos[i*3]   = b.x;
+    pos[i*3+1] = b.y + Math.sin(t*1.8 + b.ph) * 0.25;
+    pos[i*3+2] = b.z;
+  }
+  sparkGeo.attributes.position.needsUpdate = true;
+  sparkles.material.opacity = 0.65 + Math.sin(t*3) * 0.3;
+  // clouds drift and wrap
+  for (const c of clouds){
+    c.position.x += c.userData.speed * dt;
+    if (c.position.x > 190) c.position.x = -190;
+  }
+  // butterflies flutter in circles
+  for (const b of butterflies){
+    const u = b.userData;
+    const a = t * u.sp + u.ph;
+    b.position.set(u.cx + Math.cos(a)*u.r, u.h + Math.sin(t*1.7 + u.ph)*0.4, u.cz + Math.sin(a)*u.r);
+    b.rotation.y = -a; // face along travel direction
+    const flap = Math.sin(t*14 + u.ph) * 0.9;
+    u.w1.rotation.y =  flap;
+    u.w2.rotation.y = -flap;
+  }
+}
+
+let clockTime = 0;
+const clock = new THREE.Clock();
+function tick(){
+  requestAnimationFrame(tick);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  clockTime += dt;
+  if (started) updatePlayer(dt);
+  updateAmbient(dt);
+  renderer.render(scene, camera);
+}
+tick(); // world is alive behind the start screen
+
+/* ============================================================
+   14. START
+   ============================================================ */
+document.getElementById('start-btn').addEventListener('click', () => {
+  started = true;
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('hud').style.display = 'block';
+  initAudio();
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  showToast('🐾 Welcome to Registry Village!');
+});
+</script>
+</body>
+</html>
