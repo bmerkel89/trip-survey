@@ -200,12 +200,12 @@
         <div class="card">
             <div class="header">
                 <h1>✈️ Flight Finder</h1>
-                <div class="subtitle">Honeymoon flights by price, duration &amp; comfort — 300k Chase UR points + $4,000 cash</div>
+                <div class="subtitle">East Africa honeymoon — into Kigali by Jan 22, home from Dar es Salaam after Feb 5<br>Budget: 300k Chase UR points + $4,000 cash for two travelers</div>
             </div>
 
-            <div class="banner" id="sampleBanner">
-                <span>⚠️</span>
-                <span><strong>Sample data only.</strong> These placeholder flights (Rome shown as a stand-in destination) demonstrate how the tool works. Real award availability from seats.aero will replace them once the destination and dates are set.</span>
+            <div class="banner" id="sampleBanner" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd">
+                <span>🛰️</span>
+                <span><strong>Live award availability</strong> from seats.aero, pulled July 5, 2026. Each option is <strong>one direction for both travelers</strong> — shortlist one Outbound and one Return to build the trip. Award space changes daily; verify on the program's site before transferring points. The Kigali → Dar es Salaam hop mid-trip is a separate cash ticket (roughly $250–350/person).</span>
             </div>
 
             <div class="section">
@@ -250,8 +250,8 @@
                 <div class="section-header"><span class="icon">🔍</span><h2>Options</h2></div>
                 <div class="section-note">One filter row scopes everything below it — the chart, the ranked list and the table.</div>
                 <div class="filter-row" id="filterRow">
-                    <span class="flabel">FROM</span>
-                    <span id="originChips"></span>
+                    <span class="flabel">LEG</span>
+                    <span id="legChips"></span>
                     <span class="flabel" style="margin-left:12px">CABIN</span>
                     <span id="cabinChips"></span>
                 </div>
@@ -265,7 +265,7 @@
 
             <div class="section">
                 <div class="section-header"><span class="icon">🏆</span><h2>Ranked picks</h2></div>
-                <div class="section-note">Score blends the three axes using your weights. Shortlist an option to see the budget impact.</div>
+                <div class="section-note">Score blends the three axes using your weights. Shortlist one Outbound + one Return to see the budget impact.</div>
                 <div id="optionList"></div>
             </div>
 
@@ -289,35 +289,43 @@
 
     <script>
         // ============================================================
-        // DATA — replace this block with real seats.aero results.
-        // Origins: the honeymooners can leave from PHL, EWR, JFK/LGA, or DC (IAD/DCA/BWI).
-        // All costs are round-trip for the couple (2 seats).
-        // points: UR points after 1:1 transfer; cash: fare or award taxes/fees ($).
-        // durationH: total one-way travel time in hours. cabin: 1=Economy, 2=Premium, 3=Business/First.
+        // DATA — real seats.aero award availability, pulled 2026-07-05.
+        // Each option is ONE DIRECTION (leg: 'out' = US→KGL arriving by Jan 22,
+        // 'ret' = DAR→US departing Feb 6-9) priced for BOTH travelers (2 seats confirmed).
+        // points: UR points after 1:1 transfer; cash: award taxes/fees ($, estimated
+        // where the program under-reports). durationH: total door-to-door travel time.
+        // cabin: 1=Economy, 2=Premium, 3=Business/First.
         // ============================================================
-        const SAMPLE = true;
+        const SAMPLE = false;
         const CABIN_NAMES = { 1: 'Economy', 2: 'Premium', 3: 'Business/First' };
         const CABIN_COLORS = { 1: '#86b6ef', 2: '#2a78d6', 3: '#104281' };
 
         const OPTIONS = [
-            { id: 1,  origin: 'EWR', route: 'EWR → FCO nonstop', program: 'United Polaris (UR transfer)',  cabin: 3, stops: 0, points: 280000, cash: 180,  durationH: 8.5 },
-            { id: 2,  origin: 'EWR', route: 'EWR → FCO nonstop', program: 'United (UR transfer)',          cabin: 1, stops: 0, points: 140000, cash: 150,  durationH: 8.5 },
-            { id: 3,  origin: 'JFK', route: 'JFK → FCO via CDG', program: 'Flying Blue (UR transfer)',     cabin: 3, stops: 1, points: 240000, cash: 800,  durationH: 10.7 },
-            { id: 4,  origin: 'JFK', route: 'JFK → FCO nonstop', program: 'Virgin pts on Delta One (UR)',  cabin: 3, stops: 0, points: 260000, cash: 560,  durationH: 8.7 },
-            { id: 5,  origin: 'JFK', route: 'JFK → FCO nonstop', program: 'Cash — Delta Premium Select',   cabin: 2, stops: 0, points: 0,      cash: 3000, durationH: 8.7 },
-            { id: 6,  origin: 'PHL', route: 'PHL → FCO via LHR', program: 'BA Avios on BA (UR transfer)',  cabin: 3, stops: 1, points: 250000, cash: 1600, durationH: 11.0 },
-            { id: 7,  origin: 'PHL', route: 'PHL → FCO nonstop', program: 'Cash fare — AA',                cabin: 1, stops: 0, points: 0,      cash: 1900, durationH: 8.8 },
-            { id: 8,  origin: 'PHL', route: 'PHL → FCO via MAD', program: 'Iberia Avios on IB (UR)',       cabin: 3, stops: 1, points: 204000, cash: 420,  durationH: 11.4 },
-            { id: 9,  origin: 'IAD', route: 'IAD → FCO nonstop', program: 'United (UR transfer)',          cabin: 1, stops: 0, points: 148000, cash: 150,  durationH: 8.6 },
-            { id: 10, origin: 'IAD', route: 'IAD → FCO via YUL', program: 'Aeroplan (UR transfer)',        cabin: 3, stops: 1, points: 280000, cash: 600,  durationH: 11.2 },
+            // ---- OUTBOUND: arrive Kigali by Jan 22 ----
+            { id: 1,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'Kenya Airways — Virgin Atlantic pts',           cabin: 1, stops: 1, points: 59000,  cash: 700,  durationH: 17.5 },
+            { id: 2,  leg: 'out', origin: 'JFK', route: 'JFK → BRU → KGL · dep Jan 20',     program: 'Brussels Airlines — Aeroplan through-award*',   cabin: 3, stops: 1, points: 175000, cash: 420,  durationH: 19.5 },
+            { id: 3,  leg: 'out', origin: 'JFK', route: 'JFK/IAD → DOH → KGL · dep Jan 20', program: 'Qatar Airways — Avios (BA/Iberia transfer)',    cabin: 1, stops: 1, points: 96000,  cash: 150,  durationH: 20.0 },
+            { id: 4,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian lie-flat — United miles',             cabin: 3, stops: 1, points: 266000, cash: 140,  durationH: 21.0 },
+            { id: 5,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian — United miles',                      cabin: 1, stops: 1, points: 134000, cash: 80,   durationH: 21.0 },
+            { id: 6,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'KQ Premium — Flying Blue + Virgin pts',         cabin: 2, stops: 1, points: 141000, cash: 1160, durationH: 17.5 },
+            // ---- RETURN: depart Dar es Salaam Feb 6-9 ----
+            { id: 7,  leg: 'ret', origin: 'DAR', route: 'DAR → DOH → PHL/JFK · dep Feb 6–8', program: 'Qatar Airways — Avios (BA/Iberia transfer)',   cabin: 1, stops: 1, points: 105000, cash: 150,  durationH: 22.0 },
+            { id: 8,  leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways — Virgin Atlantic pts',          cabin: 1, stops: 1, points: 59000,  cash: 930,  durationH: 20.0 },
+            { id: 9,  leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK · dep Feb 8',       program: 'Ethiopian lie-flat — Aeroplan through-award*', cabin: 3, stops: 1, points: 200000, cash: 320,  durationH: 21.0 },
+            { id: 10, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK/IAD · dep Feb 6–8', program: 'Ethiopian lie-flat — United miles',            cabin: 3, stops: 1, points: 266000, cash: 310,  durationH: 21.0 },
+            { id: 11, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → US · dep Feb 6–9',      program: 'Ethiopian — United miles',                     cabin: 1, stops: 1, points: 134000, cash: 310,  durationH: 21.0 },
+            { id: 12, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 6–9',     program: 'KQ Premium — Flying Blue',                     cabin: 2, stops: 1, points: 140000, cash: 1340, durationH: 20.0 },
+            { id: 13, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 7 or 9',  program: 'Kenya Airways lie-flat — Virgin Atlantic pts', cabin: 3, stops: 1, points: 309000, cash: 1590, durationH: 20.0 },
         ];
+        // * Through-award pricing (one booking spanning both segments on the program's own
+        //   site) — cheaper than the segment-by-segment cache prices; confirm when booking.
 
         const BUDGET = { points: 300000, cash: 4000 };
         const CENTS_PER_POINT = 1.25; // UR portal redemption value, used only to place points+cash on one cost axis
 
         // ---------- state ----------
         const state = {
-            origin: 'All', cabin: 'All',
+            leg: 'All', cabin: 'All',
             weights: { price: 5, dur: 5, comfort: 5 },
             shortlist: new Set(),
         };
@@ -327,9 +335,10 @@
         const fmtMoney = n => '$' + Math.round(n).toLocaleString();
         const fmtDur = h => Math.floor(h) + 'h ' + String(Math.round(h % 1 * 60)).padStart(2, '0') + 'm';
 
+        const LEG_NAMES = { out: 'Outbound → Kigali', ret: 'Return from Dar' };
         function filtered() {
             return OPTIONS.filter(o =>
-                (state.origin === 'All' || o.origin === state.origin) &&
+                (state.leg === 'All' || o.leg === state.leg) &&
                 (state.cabin === 'All' || String(o.cabin) === state.cabin));
         }
 
@@ -355,9 +364,9 @@
 
         // ---------- filters ----------
         function buildChips() {
-            const origins = ['All', ...new Set(OPTIONS.map(o => o.origin))];
-            document.getElementById('originChips').innerHTML = origins.map(o =>
-                `<button class="chip ${state.origin === o ? 'active' : ''}" data-k="origin" data-v="${o}">${o}</button>`).join(' ');
+            const legs = ['All', ...new Set(OPTIONS.map(o => o.leg))];
+            document.getElementById('legChips').innerHTML = legs.map(l =>
+                `<button class="chip ${state.leg === l ? 'active' : ''}" data-k="leg" data-v="${l}">${l === 'All' ? 'All' : LEG_NAMES[l]}</button>`).join(' ');
             const cabins = ['All', ...new Set(OPTIONS.map(o => o.cabin))].map(String);
             document.getElementById('cabinChips').innerHTML = cabins.map(c =>
                 `<button class="chip ${state.cabin === c ? 'active' : ''}" data-k="cabin" data-v="${c}">${c === 'All' ? 'All' : CABIN_NAMES[c]}</button>`).join(' ');
@@ -393,8 +402,8 @@
                 g += `<text class="axis-tick" x="${X(xv)}" y="${m.t + ih + 18}" text-anchor="middle">${xv}h</text>`;
             }
             g += `<line x1="${m.l}" y1="${m.t + ih}" x2="${W - m.r}" y2="${m.t + ih}" stroke="#c3c2b7" stroke-width="1"/>`;
-            g += `<text class="axis-title" x="${m.l + iw / 2}" y="${H - 8}" text-anchor="middle">Travel time (one way)</text>`;
-            g += `<text class="axis-title" transform="rotate(-90 14 ${m.t + ih / 2})" x="14" y="${m.t + ih / 2}" text-anchor="middle">Trip cost for the couple (points valued at 1.25¢)</text>`;
+            g += `<text class="axis-title" x="${m.l + iw / 2}" y="${H - 8}" text-anchor="middle">Door-to-door travel time</text>`;
+            g += `<text class="axis-title" transform="rotate(-90 14 ${m.t + ih / 2})" x="14" y="${m.t + ih / 2}" text-anchor="middle">Cost for 2, one direction (points at 1.25¢)</text>`;
 
             // best-per-cabin gets a direct label; the rest rely on tooltip + table
             const bestPerCabin = {};
@@ -448,7 +457,7 @@
                         <div class="route"><span class="cabin-dot" style="background:${CABIN_COLORS[o.cabin]}"></span>${o.route} · ${CABIN_NAMES[o.cabin]}</div>
                         <div class="meta">${o.program} · ${o.stops === 0 ? 'nonstop' : o.stops + ' stop'} ·
                             <b>${o.points ? fmtPts(o.points) + ' pts' : ''}${o.points && o.cash ? ' + ' : ''}${o.cash ? fmtMoney(o.cash) : ''}</b>
-                            · ${fmtDur(o.durationH)} each way</div>
+                            · ${fmtDur(o.durationH)} door-to-door</div>
                         <div class="pick"><label><input type="checkbox" data-id="${o.id}" ${state.shortlist.has(o.id) ? 'checked' : ''}> ☆ Shortlist this option</label></div>
                     </div>
                     <div class="axis-bars">
