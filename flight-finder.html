@@ -200,12 +200,12 @@
         <div class="card">
             <div class="header">
                 <h1>✈️ Flight Finder</h1>
-                <div class="subtitle">Best options by price, duration &amp; comfort — 300k Chase UR points + $4,000 cash</div>
+                <div class="subtitle">Honeymoon flights by price, duration &amp; comfort — 300k Chase UR points + $4,000 cash</div>
             </div>
 
             <div class="banner" id="sampleBanner">
                 <span>⚠️</span>
-                <span><strong>Sample data only.</strong> These placeholder flights show how the tool works. Real award availability from seats.aero will replace them once the destination, dates and network access are set.</span>
+                <span><strong>Sample data only.</strong> These placeholder flights (Rome shown as a stand-in destination) demonstrate how the tool works. Real award availability from seats.aero will replace them once the destination and dates are set.</span>
             </div>
 
             <div class="section">
@@ -265,7 +265,7 @@
 
             <div class="section">
                 <div class="section-header"><span class="icon">🏆</span><h2>Ranked picks</h2></div>
-                <div class="section-note">Score blends the three axes using your weights. Shortlist one option per couple to see the budget impact.</div>
+                <div class="section-note">Score blends the three axes using your weights. Shortlist an option to see the budget impact.</div>
                 <div id="optionList"></div>
             </div>
 
@@ -290,6 +290,7 @@
     <script>
         // ============================================================
         // DATA — replace this block with real seats.aero results.
+        // Origins: the honeymooners can leave from PHL, EWR, JFK/LGA, or DC (IAD/DCA/BWI).
         // All costs are round-trip for the couple (2 seats).
         // points: UR points after 1:1 transfer; cash: fare or award taxes/fees ($).
         // durationH: total one-way travel time in hours. cabin: 1=Economy, 2=Premium, 3=Business/First.
@@ -299,16 +300,16 @@
         const CABIN_COLORS = { 1: '#86b6ef', 2: '#2a78d6', 3: '#104281' };
 
         const OPTIONS = [
-            { id: 1,  origin: 'LAX', route: 'LAX → MIA nonstop', program: 'United (UR transfer)',        cabin: 1, stops: 0, points: 50000,  cash: 22,   durationH: 5.1 },
-            { id: 2,  origin: 'LAX', route: 'LAX → MIA nonstop', program: 'BA Avios on AA (UR transfer)', cabin: 3, stops: 0, points: 100000, cash: 110,  durationH: 4.9 },
-            { id: 3,  origin: 'LAX', route: 'LAX → MIA via YYZ', program: 'Aeroplan (UR transfer)',       cabin: 3, stops: 1, points: 120000, cash: 150,  durationH: 9.5 },
-            { id: 4,  origin: 'LAX', route: 'LAX → MIA nonstop', program: 'Cash fare — AA',               cabin: 1, stops: 0, points: 0,      cash: 680,  durationH: 4.9 },
-            { id: 5,  origin: 'ORD', route: 'ORD → MIA nonstop', program: 'United (UR transfer)',         cabin: 1, stops: 0, points: 40000,  cash: 22,   durationH: 3.2 },
-            { id: 6,  origin: 'ORD', route: 'ORD → MIA nonstop', program: 'Virgin pts on Delta (UR)',     cabin: 3, stops: 0, points: 70000,  cash: 22,   durationH: 3.3 },
-            { id: 7,  origin: 'ORD', route: 'ORD → MIA nonstop', program: 'Cash fare — AA',               cabin: 1, stops: 0, points: 0,      cash: 520,  durationH: 3.1 },
-            { id: 8,  origin: 'JFK', route: 'JFK → MIA nonstop', program: 'Cash fare — JetBlue Mint',     cabin: 3, stops: 0, points: 0,      cash: 1200, durationH: 3.4 },
-            { id: 9,  origin: 'JFK', route: 'EWR → MIA nonstop', program: 'United (UR transfer)',         cabin: 1, stops: 0, points: 36000,  cash: 22,   durationH: 3.3 },
-            { id: 10, origin: 'JFK', route: 'JFK → MIA nonstop', program: 'Chase portal — Delta',         cabin: 1, stops: 0, points: 46400,  cash: 0,    durationH: 3.5 },
+            { id: 1,  origin: 'EWR', route: 'EWR → FCO nonstop', program: 'United Polaris (UR transfer)',  cabin: 3, stops: 0, points: 280000, cash: 180,  durationH: 8.5 },
+            { id: 2,  origin: 'EWR', route: 'EWR → FCO nonstop', program: 'United (UR transfer)',          cabin: 1, stops: 0, points: 140000, cash: 150,  durationH: 8.5 },
+            { id: 3,  origin: 'JFK', route: 'JFK → FCO via CDG', program: 'Flying Blue (UR transfer)',     cabin: 3, stops: 1, points: 240000, cash: 800,  durationH: 10.7 },
+            { id: 4,  origin: 'JFK', route: 'JFK → FCO nonstop', program: 'Virgin pts on Delta One (UR)',  cabin: 3, stops: 0, points: 260000, cash: 560,  durationH: 8.7 },
+            { id: 5,  origin: 'JFK', route: 'JFK → FCO nonstop', program: 'Cash — Delta Premium Select',   cabin: 2, stops: 0, points: 0,      cash: 3000, durationH: 8.7 },
+            { id: 6,  origin: 'PHL', route: 'PHL → FCO via LHR', program: 'BA Avios on BA (UR transfer)',  cabin: 3, stops: 1, points: 250000, cash: 1600, durationH: 11.0 },
+            { id: 7,  origin: 'PHL', route: 'PHL → FCO nonstop', program: 'Cash fare — AA',                cabin: 1, stops: 0, points: 0,      cash: 1900, durationH: 8.8 },
+            { id: 8,  origin: 'PHL', route: 'PHL → FCO via MAD', program: 'Iberia Avios on IB (UR)',       cabin: 3, stops: 1, points: 204000, cash: 420,  durationH: 11.4 },
+            { id: 9,  origin: 'IAD', route: 'IAD → FCO nonstop', program: 'United (UR transfer)',          cabin: 1, stops: 0, points: 148000, cash: 150,  durationH: 8.6 },
+            { id: 10, origin: 'IAD', route: 'IAD → FCO via YUL', program: 'Aeroplan (UR transfer)',        cabin: 3, stops: 1, points: 280000, cash: 600,  durationH: 11.2 },
         ];
 
         const BUDGET = { points: 300000, cash: 4000 };
@@ -383,7 +384,8 @@
 
             let g = '';
             // gridlines + ticks (solid hairlines)
-            for (let yv = 0; yv <= yMax; yv += 400) {
+            const yStep = yMax > 2500 ? 800 : 400;
+            for (let yv = 0; yv <= yMax; yv += yStep) {
                 g += `<line x1="${m.l}" y1="${Y(yv)}" x2="${W - m.r}" y2="${Y(yv)}" stroke="#e1e0d9" stroke-width="1"/>`;
                 g += `<text class="axis-tick" x="${m.l - 8}" y="${Y(yv) + 4}" text-anchor="end">$${yv.toLocaleString()}</text>`;
             }
@@ -447,7 +449,7 @@
                         <div class="meta">${o.program} · ${o.stops === 0 ? 'nonstop' : o.stops + ' stop'} ·
                             <b>${o.points ? fmtPts(o.points) + ' pts' : ''}${o.points && o.cash ? ' + ' : ''}${o.cash ? fmtMoney(o.cash) : ''}</b>
                             · ${fmtDur(o.durationH)} each way</div>
-                        <div class="pick"><label><input type="checkbox" data-id="${o.id}" ${state.shortlist.has(o.id) ? 'checked' : ''}> ☆ Shortlist for this couple</label></div>
+                        <div class="pick"><label><input type="checkbox" data-id="${o.id}" ${state.shortlist.has(o.id) ? 'checked' : ''}> ☆ Shortlist this option</label></div>
                     </div>
                     <div class="axis-bars">
                         <div class="abar"><span>Price</span><div class="track"><div class="fill" style="width:${Math.round(a.price * 100)}%"></div></div></div>
