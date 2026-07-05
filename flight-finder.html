@@ -205,7 +205,7 @@
 
             <div class="banner" id="sampleBanner" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd">
                 <span>🛰️</span>
-                <span><strong>Live award availability</strong> from seats.aero, pulled July 5, 2026 (auto-refreshed daily around 8am ET). Each option is <strong>one direction for both travelers</strong> — shortlist one Outbound and one Return to build the trip. Award space changes daily; verify on the program's site before transferring points. The Kigali → Dar es Salaam hop mid-trip is a separate cash ticket (roughly $250–350/person).</span>
+                <span><strong>Live award availability</strong> from seats.aero, pulled July 5, 2026 (auto-refreshed daily around 8am ET). Each option is <strong>one direction for both travelers</strong> — shortlist one Outbound and one Return to build the trip. Award space changes daily; verify on the program's site before transferring points. The Kigali → Dar es Salaam hop mid-trip is a separate cash ticket (roughly $250–350/person). <strong>Bonus alert:</strong> Chase → Virgin Atlantic has a 30% transfer bonus through <strong>July 14, 2026</strong> — Kenya Airways options show their discounted UR cost, and the budget meter uses it.</span>
             </div>
 
             <div class="section">
@@ -302,20 +302,22 @@
 
         const OPTIONS = [
             // ---- OUTBOUND: arrive Kigali by Jan 22 ----
-            { id: 1,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'Kenya Airways — Virgin Atlantic pts',           cabin: 1, stops: 1, points: 59000,  cash: 700,  durationH: 17.5 },
+            // ur: effective UR points needed with the 30% Chase → Virgin Atlantic
+            // transfer bonus (runs through Jul 14, 2026). Meters & scores use ur when present.
+            { id: 1,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'Kenya Airways — Virgin Atlantic pts',           cabin: 1, stops: 1, points: 59000,  ur: 45400,  cash: 700,  durationH: 17.5 },
             { id: 2,  leg: 'out', origin: 'JFK', route: 'JFK → BRU → KGL · dep Jan 20',     program: 'Brussels Airlines — Aeroplan through-award*',   cabin: 3, stops: 1, points: 175000, cash: 420,  durationH: 19.5 },
             { id: 3,  leg: 'out', origin: 'JFK', route: 'JFK/IAD → DOH → KGL · dep Jan 20', program: 'Qatar Airways — Avios (BA/Iberia transfer)',    cabin: 1, stops: 1, points: 96000,  cash: 150,  durationH: 20.0 },
             { id: 4,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian lie-flat — United miles',             cabin: 3, stops: 1, points: 266000, cash: 140,  durationH: 21.0 },
             { id: 5,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian — United miles',                      cabin: 1, stops: 1, points: 134000, cash: 80,   durationH: 21.0 },
-            { id: 6,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'KQ Premium — Flying Blue + Virgin pts',         cabin: 2, stops: 1, points: 141000, cash: 1160, durationH: 17.5 },
+            { id: 6,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'KQ Premium — Flying Blue + Virgin pts',         cabin: 2, stops: 1, points: 141000, ur: 138500, cash: 1160, durationH: 17.5 },
             // ---- RETURN: depart Dar es Salaam Feb 6-9 ----
             { id: 7,  leg: 'ret', origin: 'DAR', route: 'DAR → DOH → PHL/JFK · dep Feb 6–8', program: 'Qatar Airways — Avios (BA/Iberia transfer)',   cabin: 1, stops: 1, points: 105000, cash: 150,  durationH: 22.0 },
-            { id: 8,  leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways — Virgin Atlantic pts',          cabin: 1, stops: 1, points: 59000,  cash: 930,  durationH: 20.0 },
+            { id: 8,  leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways — Virgin Atlantic pts',          cabin: 1, stops: 1, points: 59000,  ur: 45400,  cash: 930,  durationH: 20.0 },
             { id: 9,  leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK · dep Feb 8',       program: 'Ethiopian lie-flat — Aeroplan through-award*', cabin: 3, stops: 1, points: 200000, cash: 320,  durationH: 21.0 },
             { id: 10, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK/IAD · dep Feb 6–8', program: 'Ethiopian lie-flat — United miles',            cabin: 3, stops: 1, points: 266000, cash: 310,  durationH: 21.0 },
             { id: 11, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → US · dep Feb 6–9',      program: 'Ethiopian — United miles',                     cabin: 1, stops: 1, points: 134000, cash: 310,  durationH: 21.0 },
             { id: 12, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 6–9',     program: 'KQ Premium — Flying Blue',                     cabin: 2, stops: 1, points: 140000, cash: 1340, durationH: 20.0 },
-            { id: 13, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 7 or 9',  program: 'Kenya Airways lie-flat — Virgin Atlantic pts', cabin: 3, stops: 1, points: 309000, cash: 1590, durationH: 20.0 },
+            { id: 13, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 7 or 9',  program: 'Kenya Airways lie-flat — Virgin Atlantic pts', cabin: 3, stops: 1, points: 309000, ur: 237700, cash: 1590, durationH: 20.0 },
         ];
         // * Through-award pricing (one booking spanning both segments on the program's own
         //   site) — cheaper than the segment-by-segment cache prices; confirm when booking.
@@ -330,7 +332,8 @@
             shortlist: new Set(),
         };
 
-        const dollarEquiv = o => o.cash + o.points * CENTS_PER_POINT / 100;
+        const urCost = o => o.ur ?? o.points;   // UR points actually leaving the Chase account
+        const dollarEquiv = o => o.cash + urCost(o) * CENTS_PER_POINT / 100;
         const fmtPts = n => n.toLocaleString();
         const fmtMoney = n => '$' + Math.round(n).toLocaleString();
         const fmtDur = h => Math.floor(h) + 'h ' + String(Math.round(h % 1 * 60)).padStart(2, '0') + 'm';
@@ -456,7 +459,7 @@
                     <div class="opt-main">
                         <div class="route"><span class="cabin-dot" style="background:${CABIN_COLORS[o.cabin]}"></span>${o.route} · ${CABIN_NAMES[o.cabin]}</div>
                         <div class="meta">${o.program} · ${o.stops === 0 ? 'nonstop' : o.stops + ' stop'} ·
-                            <b>${o.points ? fmtPts(o.points) + ' pts' : ''}${o.points && o.cash ? ' + ' : ''}${o.cash ? fmtMoney(o.cash) : ''}</b>
+                            <b>${o.points ? fmtPts(o.points) + ' pts' : ''}${o.ur ? ' (≈' + fmtPts(o.ur) + ' UR with bonus)' : ''}${o.points && o.cash ? ' + ' : ''}${o.cash ? fmtMoney(o.cash) : ''}</b>
                             · ${fmtDur(o.durationH)} door-to-door</div>
                         <div class="pick"><label><input type="checkbox" data-id="${o.id}" ${state.shortlist.has(o.id) ? 'checked' : ''}> ☆ Shortlist this option</label></div>
                     </div>
@@ -482,7 +485,7 @@
                 <tr>
                     <td>${o.route}<br><span style="color:#898781;font-size:0.78rem">${o.program}</span></td>
                     <td>${o.origin}</td><td>${CABIN_NAMES[o.cabin]}</td><td>${o.stops}</td>
-                    <td class="num">${o.points ? fmtPts(o.points) : '—'}</td>
+                    <td class="num">${o.points ? fmtPts(o.points) : '—'}${o.ur ? '<br><span style="color:#898781;font-size:0.78rem">≈' + fmtPts(o.ur) + ' UR</span>' : ''}</td>
                     <td class="num">${o.cash ? fmtMoney(o.cash) : '—'}</td>
                     <td class="num">${fmtDur(o.durationH)}</td>
                     <td class="num"><strong>${s}</strong></td>
@@ -492,7 +495,7 @@
         // ---------- budget meters ----------
         function drawMeters() {
             const picks = OPTIONS.filter(o => state.shortlist.has(o.id));
-            const pts = picks.reduce((n, o) => n + o.points, 0);
+            const pts = picks.reduce((n, o) => n + urCost(o), 0);
             const cash = picks.reduce((n, o) => n + o.cash, 0);
             document.getElementById('pointsUsed').textContent = fmtPts(pts);
             document.getElementById('cashUsed').textContent = fmtMoney(cash);
