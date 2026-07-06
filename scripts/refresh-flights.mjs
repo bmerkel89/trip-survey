@@ -30,7 +30,7 @@ const HUBS_RET = 'ADD,IST,DOH,DXB,AMS,NBO,ZRH,CDG';
 const QUERIES = {
   out_long:   { o: US, d: HUBS_OUT, s: '2027-01-19', e: '2027-01-21' },
   out_feed:   { o: HUBS_OUT, d: 'KGL', s: '2027-01-20', e: '2027-01-22' },
-  ret_feed:   { o: 'DAR', d: HUBS_RET, s: '2027-02-05', e: '2027-02-08' },
+  ret_feed:   { o: 'DAR', d: HUBS_RET, s: '2027-02-05', e: '2027-02-09' },
   ret_long:   { o: HUBS_RET, d: US, s: '2027-02-06', e: '2027-02-09' },
 };
 
