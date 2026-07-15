@@ -205,12 +205,12 @@
 
             <div class="banner" id="sampleBanner" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd">
                 <span>🛰️</span>
-                <span><strong>Live award availability</strong> from seats.aero, pulled July 14, 2026 (auto-refreshed daily around 8am ET). Each option is <strong>one direction for both travelers</strong> — shortlist one Outbound and one Return to build the trip. Award space changes daily; verify on the program's site before transferring points. The Kigali → Dar es Salaam hop mid-trip is a separate cash ticket (roughly $250–350/person). <strong>Bonus alert:</strong> Chase → Virgin Atlantic has a 30% transfer bonus through <strong>July 14, 2026</strong> — Kenya Airways options show their discounted UR cost, and the budget meter uses it.</span>
+                <span><strong>Live award availability</strong> from seats.aero, pulled July 15, 2026 (auto-refreshed daily around 8am ET). Each option is <strong>one direction for both travelers</strong> — shortlist one Outbound and one Return to build the trip. Award space changes daily; verify on the program's site before transferring points. The Kigali → Dar es Salaam hop mid-trip is a separate cash ticket (roughly $250–350/person).</span>
             </div>
 
             <div class="section">
                 <div class="section-header"><span class="icon">💰</span><h2>Budget</h2></div>
-                <div class="section-note">Totals update as you shortlist options below (☆ Shortlist). Points transfer 1:1 from Chase Ultimate Rewards (1:1.3 to Virgin Atlantic through Jul 14).</div>
+                <div class="section-note">Totals update as you shortlist options below (☆ Shortlist). Points transfer 1:1 from Chase Ultimate Rewards.</div>
                 <div class="meters">
                     <div class="meter-tile">
                         <div class="meter-label">Ultimate Rewards points</div>
@@ -289,7 +289,7 @@
 
     <script>
         // ============================================================
-        // DATA — real seats.aero award availability, pulled 2026-07-14.
+        // DATA — real seats.aero award availability, pulled 2026-07-15.
         // Each option is ONE DIRECTION (leg: 'out' = US→KGL arriving by Jan 22,
         // 'ret' = DAR→US departing Feb 6-9) priced for BOTH travelers (2 seats confirmed).
         // points: UR points after 1:1 transfer; cash: award taxes/fees ($, estimated
@@ -302,22 +302,22 @@
 
         const OPTIONS = [
             // ---- OUTBOUND: arrive Kigali by Jan 22 ----
-            // ur: effective UR points needed with the 30% Chase → Virgin Atlantic
-            // transfer bonus (runs through Jul 14, 2026). Meters & scores use ur when present.
-            { id: 1,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'Kenya Airways — Virgin Atlantic pts',           cabin: 1, stops: 1, points: 59000,  ur: 45400,  cash: 700,  durationH: 17.5 },
+            // ur: effective UR cost when a transfer bonus applies (none active —
+            // the 30% Virgin Atlantic bonus ended Jul 14, 2026). Meters & scores use ur when present.
+            { id: 1,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'Kenya Airways — Virgin Atlantic pts',           cabin: 1, stops: 1, points: 59000,  cash: 700,  durationH: 17.5 },
             { id: 2,  leg: 'out', origin: 'JFK', route: 'JFK → BRU → KGL · dep Jan 20',     program: 'Brussels Airlines — Aeroplan through-award*',   cabin: 3, stops: 1, points: 175000, cash: 420,  durationH: 19.5 },
             { id: 3,  leg: 'out', origin: 'JFK', route: 'JFK/IAD → DOH → KGL · dep Jan 20', program: 'Qatar Airways — Avios (BA/Iberia transfer)',    cabin: 1, stops: 1, points: 96000,  cash: 150,  durationH: 20.0 },
             { id: 4,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian lie-flat — United miles',             cabin: 3, stops: 1, points: 266000, cash: 140,  durationH: 21.0 },
             { id: 5,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian — United miles',                      cabin: 1, stops: 1, points: 134000, cash: 80,   durationH: 21.0 },
-            { id: 6,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'KQ Premium — Flying Blue + Virgin pts',         cabin: 2, stops: 1, points: 141000, ur: 138500, cash: 1160, durationH: 17.5 },
+            { id: 6,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'KQ Premium — Flying Blue + Virgin pts',         cabin: 2, stops: 1, points: 141000, cash: 1160, durationH: 17.5 },
             // ---- RETURN: depart Dar es Salaam Feb 6-9 ----
             { id: 7,  leg: 'ret', origin: 'DAR', route: 'DAR → DOH → PHL/JFK · dep Feb 6–8', program: 'Qatar Airways — Avios (BA/Iberia transfer)',   cabin: 1, stops: 1, points: 105000, cash: 150,  durationH: 22.0 },
-            { id: 8,  leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways — Virgin Atlantic pts',          cabin: 1, stops: 1, points: 59000,  ur: 45400,  cash: 930,  durationH: 20.0 },
+            { id: 8,  leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways — Virgin Atlantic pts',          cabin: 1, stops: 1, points: 59000,  cash: 930,  durationH: 20.0 },
             { id: 9,  leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK · dep Feb 8',       program: 'Ethiopian lie-flat — Aeroplan through-award*', cabin: 3, stops: 1, points: 200000, cash: 320,  durationH: 21.0 },
             { id: 10, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK/IAD · dep Feb 6–8', program: 'Ethiopian lie-flat — United miles',            cabin: 3, stops: 1, points: 266000, cash: 310,  durationH: 21.0 },
             { id: 11, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → US · dep Feb 6–9',      program: 'Ethiopian — United miles',                     cabin: 1, stops: 1, points: 134000, cash: 310,  durationH: 21.0 },
             { id: 12, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 6–9',     program: 'KQ Premium — Flying Blue',                     cabin: 2, stops: 1, points: 140000, cash: 1340, durationH: 20.0 },
-            { id: 13, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways lie-flat — Virgin Atlantic pts', cabin: 3, stops: 1, points: 276000, ur: 212400, cash: 2486, durationH: 20.0 },
+            { id: 13, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways lie-flat — Virgin Atlantic pts', cabin: 3, stops: 1, points: 276000, cash: 2486, durationH: 20.0 },
         ];
         // * Through-award pricing (one booking spanning both segments on the program's own
         //   site) — cheaper than the segment-by-segment cache prices; confirm when booking.
