@@ -1,8 +1,8 @@
 {
- "pulledAt": "2026-08-22T12:06:43.536Z",
+ "pulledAt": "2026-08-23T12:07:25.856Z",
  "queries": {
   "out_long": {
-   "total": 527,
+   "total": 528,
    "rows": [
     {
      "rt": "JFK-LHR",
@@ -95,7 +95,17 @@
      "direct": false
     },
     {
-     "rt": "JFK-CDG",
+     "rt": "EWR-CDG",
+     "src": "virginatlantic",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 165,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "IAD-CDG",
      "src": "virginatlantic",
      "date": "2027-01-19",
      "cab": "econ",
@@ -106,36 +116,6 @@
     },
     {
      "rt": "JFK-AMS",
-     "src": "virginatlantic",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 164,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-CDG",
-     "src": "virginatlantic",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 164,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-BRU",
-     "src": "virginatlantic",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 195,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IAD-CDG",
      "src": "virginatlantic",
      "date": "2027-01-19",
      "cab": "econ",
@@ -155,19 +135,19 @@
      "direct": false
     },
     {
-     "rt": "EWR-CDG",
+     "rt": "JFK-BRU",
      "src": "virginatlantic",
-     "date": "2027-01-20",
+     "date": "2027-01-19",
      "cab": "econ",
      "miles": 12000,
-     "tax": 164,
+     "tax": 195,
      "seats": 9,
-     "direct": true
+     "direct": false
     },
     {
      "rt": "JFK-CDG",
      "src": "virginatlantic",
-     "date": "2027-01-20",
+     "date": "2027-01-19",
      "cab": "econ",
      "miles": 12000,
      "tax": 165,
@@ -180,7 +160,27 @@
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 12000,
-     "tax": 164,
+     "tax": 165,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-CDG",
+     "src": "virginatlantic",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 165,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-CDG",
+     "src": "virginatlantic",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 165,
      "seats": 9,
      "direct": true
     },
@@ -205,24 +205,14 @@
      "direct": false
     },
     {
-     "rt": "JFK-AMS",
+     "rt": "IAD-AMS",
      "src": "virginatlantic",
      "date": "2027-01-21",
      "cab": "econ",
      "miles": 12000,
-     "tax": 165,
+     "tax": 164,
      "seats": 9,
      "direct": true
-    },
-    {
-     "rt": "JFK-BRU",
-     "src": "virginatlantic",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 196,
-     "seats": 9,
-     "direct": false
     },
     {
      "rt": "JFK-CDG",
@@ -235,16 +225,6 @@
      "direct": true
     },
     {
-     "rt": "IAD-AMS",
-     "src": "virginatlantic",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 164,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "IAD-CDG",
      "src": "virginatlantic",
      "date": "2027-01-21",
@@ -253,6 +233,26 @@
      "tax": 196,
      "seats": 9,
      "direct": false
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "virginatlantic",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 196,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-AMS",
+     "src": "virginatlantic",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 165,
+     "seats": 9,
+     "direct": true
     },
     {
      "rt": "JFK-LHR",
@@ -295,32 +295,12 @@
      "direct": false
     },
     {
-     "rt": "JFK-CDG",
-     "src": "flyingblue",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 18750,
-     "tax": 138,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "JFK-AMS",
      "src": "flyingblue",
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 18750,
      "tax": 137,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-LHR",
-     "src": "flyingblue",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 18750,
-     "tax": 168,
      "seats": 9,
      "direct": true
     },
@@ -335,12 +315,22 @@
      "direct": false
     },
     {
-     "rt": "JFK-LHR",
+     "rt": "JFK-CDG",
      "src": "flyingblue",
-     "date": "2027-01-21",
+     "date": "2027-01-20",
      "cab": "econ",
      "miles": 18750,
-     "tax": 169,
+     "tax": 138,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-LHR",
+     "src": "flyingblue",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 18750,
+     "tax": 168,
      "seats": 9,
      "direct": true
     },
@@ -365,6 +355,16 @@
      "direct": true
     },
     {
+     "rt": "JFK-LHR",
+     "src": "flyingblue",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 18750,
+     "tax": 169,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "PHL-LHR",
      "src": "qatar",
      "date": "2027-01-19",
@@ -435,7 +435,7 @@
      "direct": true
     },
     {
-     "rt": "JFK-LHR",
+     "rt": "PHL-LHR",
      "src": "qatar",
      "date": "2027-01-21",
      "cab": "econ",
@@ -445,7 +445,7 @@
      "direct": true
     },
     {
-     "rt": "PHL-LHR",
+     "rt": "JFK-LHR",
      "src": "qatar",
      "date": "2027-01-21",
      "cab": "econ",
@@ -460,7 +460,7 @@
      "date": "2027-01-19",
      "cab": "econ",
      "miles": 24000,
-     "tax": 248,
+     "tax": 249,
      "seats": 9,
      "direct": true
     },
@@ -545,16 +545,6 @@
      "direct": false
     },
     {
-     "rt": "JFK-BRU",
-     "src": "flyingblue",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 25000,
-     "tax": 167,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "IAD-AMS",
      "src": "flyingblue",
      "date": "2027-01-21",
@@ -563,6 +553,16 @@
      "tax": 138,
      "seats": 9,
      "direct": true
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "flyingblue",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 25000,
+     "tax": 167,
+     "seats": 9,
+     "direct": false
     },
     {
      "rt": "EWR-CDG",
@@ -795,12 +795,12 @@
      "direct": false
     },
     {
-     "rt": "JFK-CDG",
+     "rt": "JFK-AMS",
      "src": "flyingblue",
      "date": "2027-01-20",
      "cab": "prem",
      "miles": 30000,
-     "tax": 230,
+     "tax": 248,
      "seats": 9,
      "direct": true
     },
@@ -815,12 +815,12 @@
      "direct": true
     },
     {
-     "rt": "JFK-AMS",
+     "rt": "JFK-CDG",
      "src": "flyingblue",
      "date": "2027-01-20",
      "cab": "prem",
      "miles": 30000,
-     "tax": 248,
+     "tax": 230,
      "seats": 9,
      "direct": true
     },
@@ -925,22 +925,22 @@
      "direct": true
     },
     {
-     "rt": "EWR-BRU",
-     "src": "aeroplan",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 32500,
-     "tax": 46,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "EWR-CDG",
      "src": "aeroplan",
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 32500,
      "tax": 45,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-BRU",
+     "src": "aeroplan",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 32500,
+     "tax": 46,
      "seats": 9,
      "direct": true
     },
@@ -1105,7 +1105,27 @@
      "direct": true
     },
     {
+     "rt": "EWR-AMS",
+     "src": "aeroplan",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 79,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "EWR-LHR",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-AMS",
      "src": "united",
      "date": "2027-01-19",
      "cab": "econ",
@@ -1135,37 +1155,7 @@
      "direct": true
     },
     {
-     "rt": "EWR-AMS",
-     "src": "aeroplan",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 79,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "EWR-BRU",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-AMS",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IAD-LHR",
      "src": "united",
      "date": "2027-01-19",
      "cab": "econ",
@@ -1205,7 +1195,37 @@
      "direct": true
     },
     {
+     "rt": "IAD-LHR",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-BRU",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "EWR-LHR",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-AMS",
      "src": "united",
      "date": "2027-01-20",
      "cab": "econ",
@@ -1245,17 +1265,7 @@
      "direct": true
     },
     {
-     "rt": "EWR-AMS",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-BRU",
+     "rt": "IAD-LHR",
      "src": "united",
      "date": "2027-01-20",
      "cab": "econ",
@@ -1275,16 +1285,6 @@
      "direct": true
     },
     {
-     "rt": "IAD-LHR",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "EWR-CDG",
      "src": "united",
      "date": "2027-01-20",
@@ -1292,16 +1292,6 @@
      "miles": 40000,
      "tax": 6,
      "seats": null,
-     "direct": true
-    },
-    {
-     "rt": "IAD-CDG",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
      "direct": true
     },
     {
@@ -1315,7 +1305,17 @@
      "direct": true
     },
     {
-     "rt": "IAD-AMS",
+     "rt": "IAD-CDG",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-CDG",
      "src": "united",
      "date": "2027-01-21",
      "cab": "econ",
@@ -1325,7 +1325,7 @@
      "direct": true
     },
     {
-     "rt": "EWR-LHR",
+     "rt": "EWR-AMS",
      "src": "united",
      "date": "2027-01-21",
      "cab": "econ",
@@ -1355,7 +1355,47 @@
      "direct": true
     },
     {
-     "rt": "EWR-CDG",
+     "rt": "EWR-LHR",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "IAD-AMS",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-NBO",
+     "src": "flyingblue",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 287,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "IAD-AMS",
+     "src": "aeroplan",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 79,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "IAD-CDG",
      "src": "united",
      "date": "2027-01-21",
      "cab": "econ",
@@ -1375,47 +1415,7 @@
      "direct": true
     },
     {
-     "rt": "EWR-AMS",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "IAD-BRU",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IAD-AMS",
-     "src": "aeroplan",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 79,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-NBO",
-     "src": "flyingblue",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 287,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IAD-CDG",
      "src": "united",
      "date": "2027-01-21",
      "cab": "econ",
@@ -1465,13 +1465,13 @@
      "direct": false
     },
     {
-     "rt": "JFK-BRU",
+     "rt": "JFK-IST",
      "src": "aeroplan",
      "date": "2027-01-19",
      "cab": "econ",
      "miles": 42500,
-     "tax": 108,
-     "seats": 9,
+     "tax": 112,
+     "seats": 4,
      "direct": false
     },
     {
@@ -1485,13 +1485,13 @@
      "direct": false
     },
     {
-     "rt": "JFK-IST",
+     "rt": "JFK-BRU",
      "src": "aeroplan",
      "date": "2027-01-19",
      "cab": "econ",
      "miles": 42500,
-     "tax": 112,
-     "seats": 4,
+     "tax": 108,
+     "seats": 9,
      "direct": false
     },
     {
@@ -1500,8 +1500,18 @@
      "date": "2027-01-19",
      "cab": "econ",
      "miles": 42500,
-     "tax": 155,
-     "seats": 9,
+     "tax": 154,
+     "seats": 4,
+     "direct": false
+    },
+    {
+     "rt": "EWR-IST",
+     "src": "aeroplan",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 42500,
+     "tax": 112,
+     "seats": 4,
      "direct": false
     },
     {
@@ -1510,8 +1520,8 @@
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 42500,
-     "tax": 113,
-     "seats": 9,
+     "tax": 112,
+     "seats": 4,
      "direct": false
     },
     {
@@ -1521,26 +1531,6 @@
      "cab": "econ",
      "miles": 42500,
      "tax": 108,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-IST",
-     "src": "aeroplan",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 42500,
-     "tax": 114,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-IST",
-     "src": "aeroplan",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 42500,
-     "tax": 112,
      "seats": 9,
      "direct": false
     },
@@ -1565,52 +1555,12 @@
      "direct": false
     },
     {
-     "rt": "JFK-IST",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 25,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IAD-IST",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 25,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "EWR-IST",
-     "src": "united",
-     "date": "2027-01-19",
+     "src": "aeroplan",
+     "date": "2027-01-21",
      "cab": "econ",
-     "miles": 44000,
-     "tax": 6,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "JFK-LHR",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 25,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-BRU",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 14,
+     "miles": 42500,
+     "tax": 112,
      "seats": 9,
      "direct": false
     },
@@ -1625,12 +1575,62 @@
      "direct": true
     },
     {
-     "rt": "JFK-AMS",
+     "rt": "IAD-IST",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-LHR",
      "src": "united",
      "date": "2027-01-19",
      "cab": "econ",
      "miles": 44000,
      "tax": 25,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-AMS",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 26,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 14,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-IST",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 26,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "EWR-IST",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 52,
      "seats": 9,
      "direct": false
     },
@@ -1645,12 +1645,12 @@
      "direct": true
     },
     {
-     "rt": "JFK-LHR",
+     "rt": "EWR-IST",
      "src": "united",
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 44000,
-     "tax": 25,
+     "tax": 6,
      "seats": 9,
      "direct": true
     },
@@ -1662,27 +1662,17 @@
      "miles": 44000,
      "tax": 6,
      "seats": 9,
-     "direct": false
+     "direct": true
     },
     {
-     "rt": "JFK-BRU",
+     "rt": "JFK-LHR",
      "src": "united",
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 44000,
-     "tax": 14,
+     "tax": 25,
      "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "JFK-IST",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 41,
-     "seats": 9,
-     "direct": false
+     "direct": true
     },
     {
      "rt": "JFK-CDG",
@@ -1695,12 +1685,22 @@
      "direct": false
     },
     {
-     "rt": "EWR-IST",
+     "rt": "JFK-IST",
      "src": "united",
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 44000,
      "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 14,
      "seats": 9,
      "direct": false
     },
@@ -1710,9 +1710,29 @@
      "date": "2027-01-20",
      "cab": "econ",
      "miles": 44000,
-     "tax": 27,
+     "tax": 15,
      "seats": 9,
      "direct": true
+    },
+    {
+     "rt": "JFK-IST",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 25,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 14,
+     "seats": 9,
+     "direct": false
     },
     {
      "rt": "JFK-CDG",
@@ -1735,22 +1755,12 @@
      "direct": true
     },
     {
-     "rt": "JFK-BRU",
+     "rt": "IAD-IST",
      "src": "united",
      "date": "2027-01-21",
      "cab": "econ",
      "miles": 44000,
-     "tax": 14,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "JFK-IST",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 25,
+     "tax": 6,
      "seats": 9,
      "direct": false
     },
@@ -1765,22 +1775,12 @@
      "direct": false
     },
     {
-     "rt": "IAD-IST",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 6,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "EWR-DXB",
      "src": "united",
      "date": "2027-01-21",
      "cab": "econ",
      "miles": 44000,
-     "tax": 15,
+     "tax": 27,
      "seats": 9,
      "direct": true
     },
@@ -1855,6 +1855,16 @@
      "direct": false
     },
     {
+     "rt": "EWR-ADD",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 49500,
+     "tax": 14,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "JFK-ADD",
      "src": "united",
      "date": "2027-01-21",
@@ -1875,27 +1885,7 @@
      "direct": false
     },
     {
-     "rt": "EWR-ADD",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 49500,
-     "tax": 14,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "EWR-LHR",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-BRU",
      "src": "united",
      "date": "2027-01-19",
      "cab": "prem",
@@ -1915,7 +1905,7 @@
      "direct": true
     },
     {
-     "rt": "IAD-LHR",
+     "rt": "EWR-BRU",
      "src": "united",
      "date": "2027-01-19",
      "cab": "prem",
@@ -1935,7 +1925,37 @@
      "direct": true
     },
     {
+     "rt": "IAD-LHR",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-BRU",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "EWR-LHR",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-AMS",
      "src": "united",
      "date": "2027-01-20",
      "cab": "prem",
@@ -1975,26 +1995,6 @@
      "direct": true
     },
     {
-     "rt": "EWR-AMS",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-BRU",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "IAD-LHR",
      "src": "virginatlantic",
      "date": "2027-01-20",
@@ -2015,27 +2015,17 @@
      "direct": true
     },
     {
-     "rt": "EWR-LHR",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IAD-LHR",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 6,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "EWR-AMS",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-LHR",
      "src": "united",
      "date": "2027-01-21",
      "cab": "prem",
@@ -2059,8 +2049,8 @@
      "src": "aeroplan",
      "date": "2027-01-20",
      "cab": "econ",
-     "miles": 54200,
-     "tax": 54,
+     "miles": 54500,
+     "tax": 58,
      "seats": 9,
      "direct": true
     },
@@ -2115,6 +2105,16 @@
      "direct": false
     },
     {
+     "rt": "JFK-DXB",
+     "src": "aeroplan",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 91,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "JFK-ADD",
      "src": "aeroplan",
      "date": "2027-01-20",
@@ -2123,16 +2123,6 @@
      "tax": 90,
      "seats": 9,
      "direct": false
-    },
-    {
-     "rt": "JFK-DXB",
-     "src": "aeroplan",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 60000,
-     "tax": 91,
-     "seats": 9,
-     "direct": true
     },
     {
      "rt": "EWR-ADD",
@@ -2195,16 +2185,6 @@
      "direct": true
     },
     {
-     "rt": "JFK-CDG",
-     "src": "qatar",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 62000,
-     "tax": 0,
-     "seats": 2,
-     "direct": true
-    },
-    {
      "rt": "JFK-NBO",
      "src": "flyingblue",
      "date": "2027-01-19",
@@ -2245,13 +2225,13 @@
      "direct": true
     },
     {
-     "rt": "JFK-BRU",
+     "rt": "JFK-IST",
      "src": "aeroplan",
      "date": "2027-01-19",
      "cab": "biz",
      "miles": 75000,
-     "tax": 108,
-     "seats": 9,
+     "tax": 112,
+     "seats": 4,
      "direct": false
     },
     {
@@ -2305,16 +2285,6 @@
      "direct": false
     },
     {
-     "rt": "JFK-IST",
-     "src": "aeroplan",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 75000,
-     "tax": 112,
-     "seats": 4,
-     "direct": false
-    },
-    {
      "rt": "EWR-LHR",
      "src": "aeroplan",
      "date": "2027-01-19",
@@ -2325,7 +2295,37 @@
      "direct": false
     },
     {
-     "rt": "EWR-LHR",
+     "rt": "JFK-BRU",
+     "src": "aeroplan",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 75000,
+     "tax": 108,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "EWR-IST",
+     "src": "aeroplan",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 75000,
+     "tax": 112,
+     "seats": 3,
+     "direct": false
+    },
+    {
+     "rt": "JFK-IST",
+     "src": "aeroplan",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 75000,
+     "tax": 112,
+     "seats": 4,
+     "direct": false
+    },
+    {
+     "rt": "EWR-CDG",
      "src": "aeroplan",
      "date": "2027-01-20",
      "cab": "biz",
@@ -2335,13 +2335,13 @@
      "direct": false
     },
     {
-     "rt": "JFK-IST",
+     "rt": "EWR-BRU",
      "src": "aeroplan",
      "date": "2027-01-20",
      "cab": "biz",
      "miles": 75000,
      "tax": 113,
-     "seats": 4,
+     "seats": 9,
      "direct": false
     },
     {
@@ -2365,17 +2365,7 @@
      "direct": false
     },
     {
-     "rt": "EWR-BRU",
-     "src": "aeroplan",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 75000,
-     "tax": 113,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-CDG",
+     "rt": "EWR-LHR",
      "src": "aeroplan",
      "date": "2027-01-20",
      "cab": "biz",
@@ -2385,13 +2375,13 @@
      "direct": false
     },
     {
-     "rt": "EWR-IST",
+     "rt": "JFK-BRU",
      "src": "aeroplan",
      "date": "2027-01-21",
      "cab": "biz",
      "miles": 75000,
-     "tax": 112,
-     "seats": 4,
+     "tax": 113,
+     "seats": 9,
      "direct": false
     },
     {
@@ -2401,16 +2391,6 @@
      "cab": "biz",
      "miles": 75000,
      "tax": 112,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-BRU",
-     "src": "aeroplan",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 75000,
-     "tax": 113,
      "seats": 9,
      "direct": false
     },
@@ -2425,7 +2405,17 @@
      "direct": false
     },
     {
-     "rt": "JFK-BRU",
+     "rt": "JFK-IST",
+     "src": "aeroplan",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 75000,
+     "tax": 112,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "EWR-BRU",
      "src": "aeroplan",
      "date": "2027-01-21",
      "cab": "biz",
@@ -2445,13 +2435,13 @@
      "direct": false
     },
     {
-     "rt": "JFK-IST",
+     "rt": "EWR-IST",
      "src": "aeroplan",
      "date": "2027-01-21",
      "cab": "biz",
      "miles": 75000,
      "tax": 112,
-     "seats": 9,
+     "seats": 4,
      "direct": false
     },
     {
@@ -2495,6 +2485,16 @@
      "direct": true
     },
     {
+     "rt": "JFK-CDG",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 14,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "JFK-ADD",
      "src": "united",
      "date": "2027-01-19",
@@ -2503,6 +2503,76 @@
      "tax": 14,
      "seats": 4,
      "direct": false
+    },
+    {
+     "rt": "JFK-LHR",
+     "src": "qatar",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 0,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "IAD-IST",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 14,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-LHR",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 25,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-AMS",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 26,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 26,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "EWR-LHR",
+     "src": "qatar",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 0,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "EWR-LHR",
+     "src": "united",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 25,
+     "seats": 9,
+     "direct": true
     },
     {
      "rt": "JFK-IST",
@@ -2515,7 +2585,7 @@
      "direct": false
     },
     {
-     "rt": "IAD-IST",
+     "rt": "EWR-IST",
      "src": "united",
      "date": "2027-01-19",
      "cab": "biz",
@@ -2525,63 +2595,13 @@
      "direct": false
     },
     {
-     "rt": "EWR-LHR",
-     "src": "qatar",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 0,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-LHR",
+     "rt": "EWR-AMS",
      "src": "united",
      "date": "2027-01-19",
      "cab": "biz",
      "miles": 88000,
      "tax": 25,
      "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-IST",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 14,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "JFK-LHR",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 25,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "JFK-LHR",
-     "src": "qatar",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 0,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IAD-LHR",
-     "src": "qatar",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 0,
-     "seats": 6,
      "direct": true
     },
     {
@@ -2605,24 +2625,14 @@
      "direct": true
     },
     {
-     "rt": "JFK-BRU",
-     "src": "united",
+     "rt": "IAD-LHR",
+     "src": "qatar",
      "date": "2027-01-19",
      "cab": "biz",
      "miles": 88000,
-     "tax": 26,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "JFK-CDG",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 14,
-     "seats": 9,
-     "direct": false
+     "tax": 0,
+     "seats": 6,
+     "direct": true
     },
     {
      "rt": "EWR-BRU",
@@ -2635,27 +2645,7 @@
      "direct": true
     },
     {
-     "rt": "JFK-AMS",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 25,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-AMS",
-     "src": "united",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 25,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-LHR",
+     "rt": "EWR-BRU",
      "src": "united",
      "date": "2027-01-20",
      "cab": "biz",
@@ -2665,14 +2655,24 @@
      "direct": true
     },
     {
-     "rt": "JFK-LHR",
+     "rt": "EWR-IST",
      "src": "united",
      "date": "2027-01-20",
      "cab": "biz",
      "miles": 88000,
-     "tax": 52,
-     "seats": 8,
+     "tax": 9,
+     "seats": 9,
      "direct": false
+    },
+    {
+     "rt": "IAD-IST",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 6,
+     "seats": 9,
+     "direct": true
     },
     {
      "rt": "JFK-ADD",
@@ -2685,12 +2685,82 @@
      "direct": false
     },
     {
+     "rt": "JFK-LHR",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 52,
+     "seats": 8,
+     "direct": false
+    },
+    {
+     "rt": "EWR-LHR",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 30,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-CDG",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 52,
+     "seats": 8,
+     "direct": false
+    },
+    {
+     "rt": "EWR-ADD",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 30,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "EWR-AMS",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 30,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-IST",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 6,
+     "seats": 4,
+     "direct": true
+    },
+    {
      "rt": "IAD-AMS",
      "src": "united",
      "date": "2027-01-20",
      "cab": "biz",
      "miles": 88000,
      "tax": 14,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "PHL-LHR",
+     "src": "qatar",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 0,
      "seats": 9,
      "direct": true
     },
@@ -2705,32 +2775,22 @@
      "direct": true
     },
     {
-     "rt": "IAD-IST",
+     "rt": "JFK-BRU",
      "src": "united",
      "date": "2027-01-20",
      "cab": "biz",
      "miles": 88000,
-     "tax": 9,
+     "tax": 14,
      "seats": 9,
      "direct": false
     },
     {
-     "rt": "EWR-ADD",
-     "src": "united",
+     "rt": "JFK-LHR",
+     "src": "qatar",
      "date": "2027-01-20",
      "cab": "biz",
      "miles": 88000,
-     "tax": 30,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-AMS",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 30,
+     "tax": 0,
      "seats": 9,
      "direct": true
     },
@@ -2745,87 +2805,17 @@
      "direct": true
     },
     {
-     "rt": "EWR-BRU",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 30,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "PHL-LHR",
-     "src": "qatar",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 0,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-LHR",
-     "src": "qatar",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 0,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-BRU",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 14,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "JFK-IST",
      "src": "united",
-     "date": "2027-01-20",
+     "date": "2027-01-21",
      "cab": "biz",
      "miles": 88000,
      "tax": 51,
-     "seats": 4,
-     "direct": false
-    },
-    {
-     "rt": "JFK-CDG",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 52,
-     "seats": 8,
-     "direct": false
-    },
-    {
-     "rt": "IAD-AMS",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 14,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-CDG",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 52,
      "seats": 9,
      "direct": false
     },
     {
-     "rt": "EWR-LHR",
+     "rt": "EWR-CDG",
      "src": "united",
      "date": "2027-01-21",
      "cab": "biz",
@@ -2835,27 +2825,7 @@
      "direct": true
     },
     {
-     "rt": "JFK-LHR",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 52,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "EWR-BRU",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 14,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "JFK-BRU",
+     "rt": "EWR-ADD",
      "src": "united",
      "date": "2027-01-21",
      "cab": "biz",
@@ -2865,17 +2835,7 @@
      "direct": false
     },
     {
-     "rt": "JFK-LHR",
-     "src": "qatar",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 0,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "EWR-CDG",
+     "rt": "EWR-AMS",
      "src": "united",
      "date": "2027-01-21",
      "cab": "biz",
@@ -2895,6 +2855,36 @@
      "direct": false
     },
     {
+     "rt": "EWR-BRU",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 14,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-BRU",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 14,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "JFK-CDG",
+     "src": "united",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 52,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "IAD-ADD",
      "src": "united",
      "date": "2027-01-21",
@@ -2905,37 +2895,37 @@
      "direct": false
     },
     {
-     "rt": "EWR-ADD",
-     "src": "united",
+     "rt": "PHL-LHR",
+     "src": "qatar",
      "date": "2027-01-21",
      "cab": "biz",
      "miles": 88000,
-     "tax": 14,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IAD-LHR",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 14,
+     "tax": 0,
      "seats": 9,
      "direct": true
     },
     {
-     "rt": "JFK-IST",
+     "rt": "JFK-LHR",
+     "src": "qatar",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 0,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "JFK-LHR",
      "src": "united",
      "date": "2027-01-21",
      "cab": "biz",
      "miles": 88000,
-     "tax": 51,
+     "tax": 52,
      "seats": 9,
      "direct": false
     },
     {
-     "rt": "EWR-AMS",
+     "rt": "EWR-LHR",
      "src": "united",
      "date": "2027-01-21",
      "cab": "biz",
@@ -2945,13 +2935,23 @@
      "direct": true
     },
     {
-     "rt": "PHL-LHR",
-     "src": "qatar",
+     "rt": "IAD-AMS",
+     "src": "united",
      "date": "2027-01-21",
      "cab": "biz",
      "miles": 88000,
-     "tax": 0,
+     "tax": 14,
      "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "IAD-DXB",
+     "src": "aeroplan",
+     "date": "2027-01-19",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 91,
+     "seats": 6,
      "direct": true
     },
     {
@@ -2995,33 +2995,13 @@
      "direct": false
     },
     {
-     "rt": "IAD-DXB",
-     "src": "aeroplan",
-     "date": "2027-01-19",
-     "cab": "biz",
-     "miles": 90000,
-     "tax": 91,
-     "seats": 6,
-     "direct": true
-    },
-    {
      "rt": "IAD-IST",
      "src": "aeroplan",
      "date": "2027-01-19",
      "cab": "biz",
      "miles": 90000,
      "tax": 89,
-     "seats": 6,
-     "direct": false
-    },
-    {
-     "rt": "JFK-ADD",
-     "src": "aeroplan",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 90000,
-     "tax": 90,
-     "seats": 6,
+     "seats": 2,
      "direct": false
     },
     {
@@ -3035,7 +3015,27 @@
      "direct": false
     },
     {
+     "rt": "JFK-ADD",
+     "src": "aeroplan",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 90,
+     "seats": 6,
+     "direct": false
+    },
+    {
      "rt": "JFK-DXB",
+     "src": "aeroplan",
+     "date": "2027-01-21",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 91,
+     "seats": 6,
+     "direct": true
+    },
+    {
+     "rt": "IAD-DXB",
      "src": "aeroplan",
      "date": "2027-01-21",
      "cab": "biz",
@@ -3060,7 +3060,7 @@
      "date": "2027-01-19",
      "cab": "biz",
      "miles": 97000,
-     "tax": 502,
+     "tax": 504,
      "seats": 2,
      "direct": true
     },
@@ -3165,16 +3165,6 @@
      "direct": true
     },
     {
-     "rt": "JFK-NBO",
-     "src": "virginatlantic",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 140000,
-     "tax": 551,
-     "seats": 2,
-     "direct": true
-    },
-    {
      "rt": "IAD-DOH",
      "src": "qatar",
      "date": "2027-01-20",
@@ -3185,13 +3175,23 @@
      "direct": true
     },
     {
+     "rt": "JFK-NBO",
+     "src": "virginatlantic",
+     "date": "2027-01-20",
+     "cab": "biz",
+     "miles": 140000,
+     "tax": 551,
+     "seats": 2,
+     "direct": true
+    },
+    {
      "rt": "PHL-DOH",
      "src": "qatar",
      "date": "2027-01-20",
      "cab": "biz",
      "miles": 140000,
      "tax": 0,
-     "seats": 9,
+     "seats": 8,
      "direct": true
     },
     {
@@ -3247,7 +3247,7 @@
    ]
   },
   "out_feed": {
-   "total": 40,
+   "total": 41,
    "rows": [
     {
      "rt": "NBO-KGL",
@@ -3362,7 +3362,17 @@
     {
      "rt": "LHR-KGL",
      "src": "qatar",
-     "date": "2027-01-20",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 25750,
+     "tax": 0,
+     "seats": 5,
+     "direct": true
+    },
+    {
+     "rt": "LHR-KGL",
+     "src": "qatar",
+     "date": "2027-01-22",
      "cab": "econ",
      "miles": 25750,
      "tax": 0,
@@ -3380,16 +3390,6 @@
      "direct": false
     },
     {
-     "rt": "IST-KGL",
-     "src": "aeroplan",
-     "date": "2027-01-21",
-     "cab": "econ",
-     "miles": 30000,
-     "tax": 86,
-     "seats": 2,
-     "direct": false
-    },
-    {
      "rt": "BRU-KGL",
      "src": "aeroplan",
      "date": "2027-01-21",
@@ -3398,6 +3398,16 @@
      "tax": 111,
      "seats": 9,
      "direct": true
+    },
+    {
+     "rt": "IST-KGL",
+     "src": "aeroplan",
+     "date": "2027-01-21",
+     "cab": "econ",
+     "miles": 30000,
+     "tax": 86,
+     "seats": 2,
+     "direct": false
     },
     {
      "rt": "BRU-KGL",
@@ -3440,16 +3450,6 @@
      "direct": false
     },
     {
-     "rt": "IST-KGL",
-     "src": "united",
-     "date": "2027-01-20",
-     "cab": "econ",
-     "miles": 35000,
-     "tax": 29,
-     "seats": 4,
-     "direct": false
-    },
-    {
      "rt": "BRU-KGL",
      "src": "united",
      "date": "2027-01-20",
@@ -3457,6 +3457,16 @@
      "miles": 35000,
      "tax": 54,
      "seats": 5,
+     "direct": false
+    },
+    {
+     "rt": "IST-KGL",
+     "src": "united",
+     "date": "2027-01-20",
+     "cab": "econ",
+     "miles": 35000,
+     "tax": 29,
+     "seats": 4,
      "direct": false
     },
     {
@@ -3610,16 +3620,6 @@
      "direct": false
     },
     {
-     "rt": "LHR-KGL",
-     "src": "qatar",
-     "date": "2027-01-20",
-     "cab": "biz",
-     "miles": 77250,
-     "tax": 0,
-     "seats": 3,
-     "direct": true
-    },
-    {
      "rt": "BRU-KGL",
      "src": "united",
      "date": "2027-01-20",
@@ -3627,16 +3627,6 @@
      "miles": 90000,
      "tax": 54,
      "seats": 3,
-     "direct": false
-    },
-    {
-     "rt": "BRU-KGL",
-     "src": "united",
-     "date": "2027-01-21",
-     "cab": "biz",
-     "miles": 90000,
-     "tax": 54,
-     "seats": null,
      "direct": false
     },
     {
@@ -3652,7 +3642,7 @@
     {
      "rt": "BRU-KGL",
      "src": "united",
-     "date": "2027-01-22",
+     "date": "2027-01-21",
      "cab": "biz",
      "miles": 90000,
      "tax": 54,
@@ -3667,6 +3657,16 @@
      "miles": 90000,
      "tax": 29,
      "seats": 2,
+     "direct": false
+    },
+    {
+     "rt": "BRU-KGL",
+     "src": "united",
+     "date": "2027-01-22",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 54,
+     "seats": null,
      "direct": false
     },
     {
@@ -3922,7 +3922,7 @@
      "miles": 17500,
      "tax": 0,
      "seats": 2,
-     "direct": false
+     "direct": true
     },
     {
      "rt": "DAR-DOH",
@@ -4040,7 +4040,7 @@
      "date": "2027-02-05",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 6,
      "direct": false
     },
@@ -4050,7 +4050,7 @@
      "date": "2027-02-05",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 6,
      "direct": false
     },
@@ -4060,7 +4060,7 @@
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 6,
      "direct": false
     },
@@ -4070,7 +4070,7 @@
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 4,
      "direct": false
     },
@@ -4080,7 +4080,7 @@
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 6,
      "direct": false
     },
@@ -4090,7 +4090,7 @@
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 6,
      "direct": false
     },
@@ -4100,7 +4100,7 @@
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 4,
      "direct": false
     },
@@ -4110,7 +4110,7 @@
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 31000,
-     "tax": 291,
+     "tax": 293,
      "seats": 6,
      "direct": false
     },
@@ -4128,16 +4128,6 @@
      "rt": "DAR-DOH",
      "src": "qatar",
      "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 35000,
-     "tax": 0,
-     "seats": 2,
-     "direct": false
-    },
-    {
-     "rt": "DAR-DOH",
-     "src": "qatar",
-     "date": "2027-02-08",
      "cab": "biz",
      "miles": 35000,
      "tax": 0,
@@ -4152,6 +4142,16 @@
      "miles": 35000,
      "tax": 205,
      "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "DAR-DOH",
+     "src": "qatar",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 35000,
+     "tax": 0,
+     "seats": 2,
      "direct": true
     },
     {
@@ -4411,7 +4411,7 @@
      "cab": "biz",
      "miles": 70000,
      "tax": 0,
-     "seats": 4,
+     "seats": 2,
      "direct": true
     },
     {
@@ -4437,10 +4437,30 @@
     {
      "rt": "DAR-CDG",
      "src": "virginatlantic",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 89500,
+     "tax": 351,
+     "seats": 2,
+     "direct": false
+    },
+    {
+     "rt": "DAR-AMS",
+     "src": "virginatlantic",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 89500,
+     "tax": 351,
+     "seats": 2,
+     "direct": false
+    },
+    {
+     "rt": "DAR-CDG",
+     "src": "virginatlantic",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 89500,
-     "tax": 348,
+     "tax": 351,
      "seats": 2,
      "direct": false
     },
@@ -4587,7 +4607,7 @@
    ]
   },
   "ret_long": {
-   "total": 536,
+   "total": 530,
    "rows": [
     {
      "rt": "AMS-IAD",
@@ -4635,7 +4655,17 @@
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 12000,
-     "tax": 293,
+     "tax": 292,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
+     "src": "virginatlantic",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 292,
      "seats": 9,
      "direct": true
     },
@@ -4645,19 +4675,9 @@
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 12000,
-     "tax": 273,
+     "tax": 272,
      "seats": 9,
      "direct": false
-    },
-    {
-     "rt": "AMS-IAD",
-     "src": "virginatlantic",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 293,
-     "seats": 9,
-     "direct": true
     },
     {
      "rt": "CDG-EWR",
@@ -4665,7 +4685,7 @@
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 12000,
-     "tax": 265,
+     "tax": 264,
      "seats": 9,
      "direct": true
     },
@@ -4688,6 +4708,16 @@
      "tax": 219,
      "seats": 9,
      "direct": false
+    },
+    {
+     "rt": "CDG-JFK",
+     "src": "virginatlantic",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 264,
+     "seats": 9,
+     "direct": true
     },
     {
      "rt": "AMS-IAD",
@@ -4698,6 +4728,16 @@
      "tax": 319,
      "seats": 9,
      "direct": false
+    },
+    {
+     "rt": "CDG-EWR",
+     "src": "virginatlantic",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 12000,
+     "tax": 264,
+     "seats": 9,
+     "direct": true
     },
     {
      "rt": "CDG-IAD",
@@ -4715,27 +4755,7 @@
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 12000,
-     "tax": 293,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-JFK",
-     "src": "virginatlantic",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 264,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-EWR",
-     "src": "virginatlantic",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 12000,
-     "tax": 265,
+     "tax": 292,
      "seats": 9,
      "direct": true
     },
@@ -4777,16 +4797,6 @@
      "miles": 20750,
      "tax": 0,
      "seats": 7,
-     "direct": true
-    },
-    {
-     "rt": "CDG-JFK",
-     "src": "flyingblue",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 23500,
-     "tax": 372,
-     "seats": 9,
      "direct": true
     },
     {
@@ -4802,6 +4812,16 @@
     {
      "rt": "CDG-JFK",
      "src": "flyingblue",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 23500,
+     "tax": 372,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-JFK",
+     "src": "flyingblue",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 23500,
@@ -4856,26 +4876,6 @@
      "cab": "econ",
      "miles": 24000,
      "tax": 400,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-IAD",
-     "src": "flyingblue",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 25000,
-     "tax": 286,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-IAD",
-     "src": "flyingblue",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 25000,
-     "tax": 307,
      "seats": 9,
      "direct": true
     },
@@ -4892,6 +4892,26 @@
     {
      "rt": "AMS-IAD",
      "src": "flyingblue",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 25000,
+     "tax": 307,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "flyingblue",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 25000,
+     "tax": 286,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
+     "src": "flyingblue",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 25000,
@@ -4900,12 +4920,12 @@
      "direct": true
     },
     {
-     "rt": "ZRH-JFK",
+     "rt": "CDG-EWR",
      "src": "flyingblue",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 25000,
-     "tax": 236,
+     "tax": 276,
      "seats": 9,
      "direct": true
     },
@@ -4920,12 +4940,12 @@
      "direct": true
     },
     {
-     "rt": "CDG-EWR",
+     "rt": "ZRH-JFK",
      "src": "flyingblue",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 25000,
-     "tax": 276,
+     "tax": 236,
      "seats": 9,
      "direct": true
     },
@@ -5015,7 +5035,7 @@
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 30000,
-     "tax": 356,
+     "tax": 355,
      "seats": 9,
      "direct": true
     },
@@ -5040,22 +5060,22 @@
      "direct": true
     },
     {
-     "rt": "AMS-JFK",
-     "src": "virginatlantic",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 30000,
-     "tax": 356,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "CDG-JFK",
      "src": "virginatlantic",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 30000,
      "tax": 322,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-JFK",
+     "src": "virginatlantic",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 30000,
+     "tax": 355,
      "seats": 9,
      "direct": true
     },
@@ -5080,16 +5100,6 @@
      "direct": true
     },
     {
-     "rt": "CDG-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 31600,
-     "tax": 218,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "CDG-EWR",
      "src": "flyingblue",
      "date": "2027-02-06",
@@ -5100,6 +5110,16 @@
      "direct": true
     },
     {
+     "rt": "CDG-EWR",
+     "src": "aeroplan",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 32500,
+     "tax": 258,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "ZRH-JFK",
      "src": "aeroplan",
      "date": "2027-02-06",
@@ -5116,16 +5136,6 @@
      "cab": "econ",
      "miles": 32500,
      "tax": 157,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 32500,
-     "tax": 258,
      "seats": 9,
      "direct": true
     },
@@ -5160,7 +5170,7 @@
      "direct": true
     },
     {
-     "rt": "ZRH-JFK",
+     "rt": "ZRH-EWR",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "econ",
@@ -5170,7 +5180,7 @@
      "direct": true
     },
     {
-     "rt": "ZRH-EWR",
+     "rt": "ZRH-JFK",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "econ",
@@ -5186,6 +5196,16 @@
      "cab": "econ",
      "miles": 32500,
      "tax": 258,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 32500,
+     "tax": 157,
      "seats": 9,
      "direct": true
     },
@@ -5200,12 +5220,12 @@
      "direct": true
     },
     {
-     "rt": "ZRH-JFK",
+     "rt": "CDG-IAD",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 32500,
-     "tax": 157,
+     "tax": 218,
      "seats": 9,
      "direct": true
     },
@@ -5220,6 +5240,16 @@
      "direct": true
     },
     {
+     "rt": "DOH-IAD",
+     "src": "qatar",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 35000,
+     "tax": 0,
+     "seats": 4,
+     "direct": true
+    },
+    {
      "rt": "DOH-JFK",
      "src": "qatar",
      "date": "2027-02-06",
@@ -5230,23 +5260,13 @@
      "direct": true
     },
     {
-     "rt": "DOH-IAD",
-     "src": "qatar",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 35000,
-     "tax": 0,
-     "seats": 4,
-     "direct": true
-    },
-    {
-     "rt": "DOH-IAD",
+     "rt": "DOH-PHL",
      "src": "qatar",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 35000,
      "tax": 0,
-     "seats": 9,
+     "seats": 2,
      "direct": true
     },
     {
@@ -5260,13 +5280,23 @@
      "direct": true
     },
     {
-     "rt": "DOH-PHL",
+     "rt": "DOH-IAD",
      "src": "qatar",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 35000,
      "tax": 0,
-     "seats": 2,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "DOH-JFK",
+     "src": "qatar",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 35000,
+     "tax": 0,
+     "seats": 4,
      "direct": true
     },
     {
@@ -5280,39 +5310,9 @@
      "direct": true
     },
     {
-     "rt": "DOH-JFK",
-     "src": "qatar",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 35000,
-     "tax": 0,
-     "seats": 4,
-     "direct": true
-    },
-    {
      "rt": "DOH-IAD",
      "src": "qatar",
      "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 35000,
-     "tax": 0,
-     "seats": 4,
-     "direct": true
-    },
-    {
-     "rt": "DOH-JFK",
-     "src": "qatar",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 35000,
-     "tax": 0,
-     "seats": 4,
-     "direct": true
-    },
-    {
-     "rt": "DOH-IAD",
-     "src": "qatar",
-     "date": "2027-02-09",
      "cab": "econ",
      "miles": 35000,
      "tax": 0,
@@ -5327,6 +5327,26 @@
      "miles": 35000,
      "tax": 0,
      "seats": 2,
+     "direct": true
+    },
+    {
+     "rt": "DOH-JFK",
+     "src": "qatar",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 35000,
+     "tax": 0,
+     "seats": 4,
+     "direct": true
+    },
+    {
+     "rt": "DOH-IAD",
+     "src": "qatar",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 35000,
+     "tax": 0,
+     "seats": 4,
      "direct": true
     },
     {
@@ -5334,8 +5354,8 @@
      "src": "united",
      "date": "2027-02-06",
      "cab": "econ",
-     "miles": 35600,
-     "tax": 130,
+     "miles": 35700,
+     "tax": 131,
      "seats": 9,
      "direct": true
     },
@@ -5344,18 +5364,8 @@
      "src": "united",
      "date": "2027-02-07",
      "cab": "econ",
-     "miles": 35600,
-     "tax": 130,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 35600,
-     "tax": 130,
+     "miles": 35700,
+     "tax": 131,
      "seats": 9,
      "direct": true
     },
@@ -5371,23 +5381,23 @@
     },
     {
      "rt": "CDG-EWR",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 35700,
+     "tax": 131,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-EWR",
      "src": "virginatlantic",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 37500,
-     "tax": 327,
+     "tax": 326,
      "seats": 9,
      "direct": false
-    },
-    {
-     "rt": "ZRH-EWR",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 62,
-     "seats": 9,
-     "direct": true
     },
     {
      "rt": "AMS-EWR",
@@ -5405,27 +5415,17 @@
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 40000,
-     "tax": 161,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
     {
-     "rt": "CDG-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 252,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-IAD",
+     "rt": "ZRH-EWR",
      "src": "united",
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 40000,
-     "tax": 161,
+     "tax": 62,
      "seats": 9,
      "direct": true
     },
@@ -5440,12 +5440,42 @@
      "direct": true
     },
     {
+     "rt": "AMS-IAD",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 162,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "ZRH-IAD",
      "src": "united",
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 40000,
      "tax": 62,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 252,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 294,
      "seats": 9,
      "direct": true
     },
@@ -5460,12 +5490,32 @@
      "direct": true
     },
     {
-     "rt": "AMS-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-06",
+     "rt": "ZRH-EWR",
+     "src": "united",
+     "date": "2027-02-07",
      "cab": "econ",
      "miles": 40000,
-     "tax": 294,
+     "tax": 62,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 252,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-EWR",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
@@ -5480,66 +5530,6 @@
      "direct": true
     },
     {
-     "rt": "ZRH-EWR",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 62,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-EWR",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 161,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 252,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-IAD",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 161,
-     "seats": null,
-     "direct": true
-    },
-    {
-     "rt": "CDG-IAD",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 130,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ZRH-IAD",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 62,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "AMS-EWR",
      "src": "aeroplan",
      "date": "2027-02-07",
@@ -5556,6 +5546,16 @@
      "cab": "econ",
      "miles": 40000,
      "tax": 294,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
@@ -5570,12 +5570,82 @@
      "direct": true
     },
     {
+     "rt": "CDG-IAD",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 131,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-IAD",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 62,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 252,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-EWR",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 62,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "AMS-EWR",
      "src": "united",
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 40000,
-     "tax": 161,
+     "tax": 162,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-EWR",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 294,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 294,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 157,
      "seats": 9,
      "direct": true
     },
@@ -5590,62 +5660,22 @@
      "direct": false
     },
     {
-     "rt": "ZRH-EWR",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 62,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 294,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ZRH-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 157,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 252,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 294,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "AMS-IAD",
      "src": "flyingblue",
      "date": "2027-02-08",
      "cab": "prem",
      "miles": 40000,
      "tax": 407,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 131,
      "seats": 9,
      "direct": true
     },
@@ -5670,16 +5700,6 @@
      "direct": true
     },
     {
-     "rt": "CDG-IAD",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 130,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "AMS-IAD",
      "src": "united",
      "date": "2027-02-08",
@@ -5690,7 +5710,7 @@
      "direct": true
     },
     {
-     "rt": "AMS-IAD",
+     "rt": "AMS-EWR",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "econ",
@@ -5700,52 +5720,12 @@
      "direct": true
     },
     {
-     "rt": "ZRH-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 157,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ZRH-IAD",
+     "rt": "AMS-EWR",
      "src": "united",
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 40000,
-     "tax": 61,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ZRH-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 62,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-IAD",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 130,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-IAD",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 160,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
@@ -5770,6 +5750,16 @@
      "direct": false
     },
     {
+     "rt": "ZRH-EWR",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 62,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "NBO-JFK",
      "src": "flyingblue",
      "date": "2027-02-09",
@@ -5780,7 +5770,47 @@
      "direct": true
     },
     {
-     "rt": "AMS-EWR",
+     "rt": "CDG-IAD",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 131,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-IAD",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 61,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 162,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 40000,
+     "tax": 157,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-IAD",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "econ",
@@ -5800,16 +5830,6 @@
      "direct": true
     },
     {
-     "rt": "AMS-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 40000,
-     "tax": 161,
-     "seats": null,
-     "direct": true
-    },
-    {
      "rt": "CDG-IAD",
      "src": "virginatlantic",
      "date": "2027-02-06",
@@ -5825,7 +5845,7 @@
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 41000,
-     "tax": 327,
+     "tax": 326,
      "seats": 9,
      "direct": false
     },
@@ -5855,22 +5875,22 @@
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 41600,
-     "tax": 186,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IST-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 42500,
-     "tax": 183,
+     "tax": 185,
      "seats": 9,
      "direct": false
     },
     {
      "rt": "IST-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 42500,
+     "tax": 198,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "IST-EWR",
      "src": "aeroplan",
      "date": "2027-02-06",
      "cab": "econ",
@@ -5890,17 +5910,17 @@
      "direct": false
     },
     {
-     "rt": "IST-EWR",
+     "rt": "IST-JFK",
      "src": "aeroplan",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 42500,
-     "tax": 183,
+     "tax": 198,
      "seats": 9,
      "direct": false
     },
     {
-     "rt": "IST-JFK",
+     "rt": "IST-EWR",
      "src": "aeroplan",
      "date": "2027-02-07",
      "cab": "econ",
@@ -5916,26 +5936,6 @@
      "cab": "econ",
      "miles": 42500,
      "tax": 198,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IST-JFK",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 42500,
-     "tax": 183,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IST-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 42500,
-     "tax": 183,
      "seats": 9,
      "direct": false
     },
@@ -5946,18 +5946,28 @@
      "cab": "econ",
      "miles": 42500,
      "tax": 167,
-     "seats": 6,
+     "seats": 8,
      "direct": false
     },
     {
-     "rt": "IST-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-09",
+     "rt": "IST-JFK",
+     "src": "united",
+     "date": "2027-02-06",
      "cab": "econ",
-     "miles": 42500,
-     "tax": 198,
+     "miles": 44000,
+     "tax": 45,
      "seats": 9,
-     "direct": false
+     "direct": true
+    },
+    {
+     "rt": "ZRH-JFK",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 61,
+     "seats": null,
+     "direct": true
     },
     {
      "rt": "CDG-JFK",
@@ -5978,26 +5988,6 @@
      "tax": 51,
      "seats": 9,
      "direct": false
-    },
-    {
-     "rt": "ZRH-JFK",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 61,
-     "seats": null,
-     "direct": true
-    },
-    {
-     "rt": "IST-JFK",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 45,
-     "seats": 9,
-     "direct": true
     },
     {
      "rt": "DXB-EWR",
@@ -6030,16 +6020,6 @@
      "direct": true
     },
     {
-     "rt": "IST-EWR",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 65,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "ZRH-JFK",
      "src": "united",
      "date": "2027-02-07",
@@ -6070,32 +6050,22 @@
      "direct": true
     },
     {
+     "rt": "IST-EWR",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 65,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "CDG-JFK",
      "src": "united",
      "date": "2027-02-07",
      "cab": "econ",
      "miles": 44000,
      "tax": 126,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-JFK",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 179,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IST-JFK",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 45,
      "seats": 9,
      "direct": true
     },
@@ -6110,12 +6080,12 @@
      "direct": true
     },
     {
-     "rt": "IST-EWR",
+     "rt": "AMS-JFK",
      "src": "united",
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 44000,
-     "tax": 50,
+     "tax": 179,
      "seats": 9,
      "direct": false
     },
@@ -6140,12 +6110,42 @@
      "direct": false
     },
     {
+     "rt": "IST-EWR",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 51,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "CDG-JFK",
      "src": "united",
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 44000,
      "tax": 126,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "IST-JFK",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 65,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "CDG-JFK",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 127,
      "seats": 9,
      "direct": true
     },
@@ -6158,6 +6158,16 @@
      "tax": 45,
      "seats": 9,
      "direct": true
+    },
+    {
+     "rt": "IST-EWR",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 44000,
+     "tax": 51,
+     "seats": 9,
+     "direct": false
     },
     {
      "rt": "IST-JFK",
@@ -6176,26 +6186,6 @@
      "cab": "econ",
      "miles": 44000,
      "tax": 61,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IST-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 51,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "CDG-JFK",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 44000,
-     "tax": 127,
      "seats": 9,
      "direct": true
     },
@@ -6250,16 +6240,6 @@
      "direct": true
     },
     {
-     "rt": "ADD-EWR",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 49500,
-     "tax": 58,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "ADD-JFK",
      "src": "united",
      "date": "2027-02-06",
@@ -6270,29 +6250,19 @@
      "direct": false
     },
     {
-     "rt": "ADD-IAD",
+     "rt": "ADD-EWR",
      "src": "united",
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 49500,
-     "tax": 52,
-     "seats": null,
+     "tax": 58,
+     "seats": 9,
      "direct": false
     },
     {
      "rt": "ADD-IAD",
      "src": "united",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 49500,
-     "tax": 52,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "ADD-EWR",
-     "src": "united",
-     "date": "2027-02-07",
+     "date": "2027-02-06",
      "cab": "econ",
      "miles": 49500,
      "tax": 52,
@@ -6312,6 +6282,26 @@
     {
      "rt": "ADD-EWR",
      "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 49500,
+     "tax": 52,
+     "seats": null,
+     "direct": false
+    },
+    {
+     "rt": "ADD-IAD",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 49500,
+     "tax": 52,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "ADD-EWR",
+     "src": "united",
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 49500,
@@ -6320,7 +6310,7 @@
      "direct": false
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "ADD-IAD",
      "src": "united",
      "date": "2027-02-08",
      "cab": "econ",
@@ -6330,7 +6320,7 @@
      "direct": false
     },
     {
-     "rt": "ADD-IAD",
+     "rt": "ADD-JFK",
      "src": "united",
      "date": "2027-02-08",
      "cab": "econ",
@@ -6375,7 +6365,7 @@
      "date": "2027-02-06",
      "cab": "prem",
      "miles": 50000,
-     "tax": 161,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
@@ -6390,16 +6380,6 @@
      "direct": true
     },
     {
-     "rt": "AMS-EWR",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 161,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "NBO-JFK",
      "src": "virginatlantic",
      "date": "2027-02-07",
@@ -6412,10 +6392,10 @@
     {
      "rt": "AMS-EWR",
      "src": "united",
-     "date": "2027-02-08",
+     "date": "2027-02-07",
      "cab": "prem",
      "miles": 50000,
-     "tax": 161,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
@@ -6430,6 +6410,16 @@
      "direct": true
     },
     {
+     "rt": "AMS-EWR",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 162,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "ZRH-IAD",
      "src": "united",
      "date": "2027-02-08",
@@ -6440,32 +6430,22 @@
      "direct": true
     },
     {
-     "rt": "ZRH-IAD",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 61,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "NBO-JFK",
-     "src": "virginatlantic",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 50000,
-     "tax": 377,
-     "seats": 6,
-     "direct": true
-    },
-    {
      "rt": "CDG-EWR",
      "src": "united",
      "date": "2027-02-09",
      "cab": "prem",
      "miles": 50000,
-     "tax": 130,
+     "tax": 131,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-EWR",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 162,
      "seats": 9,
      "direct": true
     },
@@ -6485,8 +6465,28 @@
      "date": "2027-02-09",
      "cab": "prem",
      "miles": 50000,
-     "tax": 130,
+     "tax": 131,
      "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-IAD",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "prem",
+     "miles": 50000,
+     "tax": 61,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "NBO-JFK",
+     "src": "virginatlantic",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 50000,
+     "tax": 377,
+     "seats": 6,
      "direct": true
     },
     {
@@ -6495,18 +6495,8 @@
      "date": "2027-02-09",
      "cab": "prem",
      "miles": 50000,
-     "tax": 160,
+     "tax": 162,
      "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "AMS-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "prem",
-     "miles": 50000,
-     "tax": 161,
-     "seats": null,
      "direct": true
     },
     {
@@ -6570,16 +6560,6 @@
      "direct": false
     },
     {
-     "rt": "DXB-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-06",
-     "cab": "econ",
-     "miles": 55000,
-     "tax": 164,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "DXB-JFK",
      "src": "aeroplan",
      "date": "2027-02-06",
@@ -6587,6 +6567,16 @@
      "miles": 60000,
      "tax": 159,
      "seats": 6,
+     "direct": false
+    },
+    {
+     "rt": "ADD-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-06",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 156,
+     "seats": 4,
      "direct": false
     },
     {
@@ -6610,13 +6600,23 @@
      "direct": true
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "DXB-EWR",
      "src": "aeroplan",
      "date": "2027-02-06",
      "cab": "econ",
      "miles": 60000,
-     "tax": 156,
-     "seats": 4,
+     "tax": 182,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "DXB-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-07",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 159,
+     "seats": 9,
      "direct": false
     },
     {
@@ -6640,16 +6640,6 @@
      "direct": false
     },
     {
-     "rt": "DXB-JFK",
-     "src": "aeroplan",
-     "date": "2027-02-07",
-     "cab": "econ",
-     "miles": 60000,
-     "tax": 159,
-     "seats": 9,
-     "direct": false
-    },
-    {
      "rt": "ZRH-JFK",
      "src": "aeroplan",
      "date": "2027-02-08",
@@ -6660,22 +6650,32 @@
      "direct": false
     },
     {
+     "rt": "IST-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 144,
+     "seats": 4,
+     "direct": false
+    },
+    {
+     "rt": "ADD-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 156,
+     "seats": 9,
+     "direct": false
+    },
+    {
      "rt": "DXB-JFK",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "econ",
      "miles": 60000,
      "tax": 159,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "ADD-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "econ",
-     "miles": 60000,
-     "tax": 156,
      "seats": 9,
      "direct": false
     },
@@ -6690,7 +6690,7 @@
      "direct": false
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "ADD-IAD",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "econ",
@@ -6700,44 +6700,24 @@
      "direct": false
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "IST-JFK",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 60000,
-     "tax": 156,
+     "tax": 144,
      "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "DXB-JFK",
-     "src": "aeroplan",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 60000,
-     "tax": 159,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ADD-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-09",
-     "cab": "econ",
-     "miles": 60000,
-     "tax": 155,
-     "seats": 4,
      "direct": false
     },
     {
      "rt": "ZRH-JFK",
-     "src": "flyingblue",
+     "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 60000,
-     "tax": 484,
+     "tax": 157,
      "seats": 9,
-     "direct": false
+     "direct": true
     },
     {
      "rt": "ZRH-EWR",
@@ -6751,21 +6731,41 @@
     },
     {
      "rt": "ZRH-JFK",
-     "src": "aeroplan",
+     "src": "flyingblue",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 60000,
-     "tax": 157,
+     "tax": 484,
      "seats": 9,
-     "direct": true
+     "direct": false
     },
     {
-     "rt": "IST-JFK",
+     "rt": "ADD-EWR",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "econ",
      "miles": 60000,
-     "tax": 144,
+     "tax": 155,
+     "seats": 4,
+     "direct": false
+    },
+    {
+     "rt": "DXB-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 159,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ADD-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 60000,
+     "tax": 156,
      "seats": 9,
      "direct": false
     },
@@ -6830,26 +6830,6 @@
      "direct": false
     },
     {
-     "rt": "AMS-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 75000,
-     "tax": 322,
-     "seats": 9,
-     "direct": false
-    },
-    {
-     "rt": "IST-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 75000,
-     "tax": 198,
-     "seats": 3,
-     "direct": false
-    },
-    {
      "rt": "CDG-EWR",
      "src": "aeroplan",
      "date": "2027-02-06",
@@ -6860,22 +6840,22 @@
      "direct": false
     },
     {
-     "rt": "IST-JFK",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "biz",
-     "miles": 75000,
-     "tax": 167,
-     "seats": 4,
-     "direct": false
-    },
-    {
      "rt": "AMS-EWR",
      "src": "aeroplan",
-     "date": "2027-02-08",
+     "date": "2027-02-06",
      "cab": "biz",
      "miles": 75000,
      "tax": 322,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 75000,
+     "tax": 377,
      "seats": 8,
      "direct": false
     },
@@ -6890,23 +6870,33 @@
      "direct": false
     },
     {
-     "rt": "ZRH-IAD",
+     "rt": "AMS-EWR",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "biz",
      "miles": 75000,
-     "tax": 188,
+     "tax": 322,
+     "seats": 8,
+     "direct": false
+    },
+    {
+     "rt": "CDG-EWR",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 75000,
+     "tax": 395,
      "seats": 9,
      "direct": false
     },
     {
-     "rt": "CDG-IAD",
+     "rt": "IST-JFK",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "biz",
      "miles": 75000,
-     "tax": 377,
-     "seats": 8,
+     "tax": 167,
+     "seats": 2,
      "direct": false
     },
     {
@@ -6920,42 +6910,42 @@
      "direct": false
     },
     {
-     "rt": "CDG-EWR",
+     "rt": "ZRH-IAD",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "biz",
      "miles": 75000,
-     "tax": 396,
+     "tax": 188,
      "seats": 9,
      "direct": false
     },
     {
-     "rt": "AMS-IAD",
+     "rt": "IST-EWR",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 75000,
-     "tax": 321,
-     "seats": 8,
+     "tax": 167,
+     "seats": 4,
      "direct": false
     },
     {
-     "rt": "ZRH-IAD",
+     "rt": "IST-JFK",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 75000,
-     "tax": 157,
-     "seats": 9,
-     "direct": true
+     "tax": 167,
+     "seats": 6,
+     "direct": false
     },
     {
-     "rt": "CDG-IAD",
+     "rt": "CDG-EWR",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 75000,
-     "tax": 376,
+     "tax": 377,
      "seats": 9,
      "direct": false
     },
@@ -6970,7 +6960,7 @@
      "direct": false
     },
     {
-     "rt": "CDG-EWR",
+     "rt": "CDG-IAD",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
@@ -6980,23 +6970,23 @@
      "direct": false
     },
     {
-     "rt": "IST-JFK",
+     "rt": "ZRH-IAD",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 75000,
-     "tax": 167,
-     "seats": 6,
-     "direct": false
+     "tax": 157,
+     "seats": 9,
+     "direct": true
     },
     {
-     "rt": "IST-EWR",
+     "rt": "AMS-IAD",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 75000,
-     "tax": 167,
-     "seats": 4,
+     "tax": 322,
+     "seats": 9,
      "direct": false
     },
     {
@@ -7040,22 +7030,22 @@
      "direct": false
     },
     {
-     "rt": "CDG-EWR",
-     "src": "flyingblue",
-     "date": "2027-02-06",
-     "cab": "prem",
-     "miles": 79000,
-     "tax": 376,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "CDG-JFK",
      "src": "flyingblue",
      "date": "2027-02-06",
      "cab": "prem",
      "miles": 79000,
      "tax": 374,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-EWR",
+     "src": "flyingblue",
+     "date": "2027-02-06",
+     "cab": "prem",
+     "miles": 79000,
+     "tax": 376,
      "seats": 9,
      "direct": true
     },
@@ -7110,6 +7100,66 @@
      "direct": false
     },
     {
+     "rt": "ADD-JFK",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 52,
+     "seats": 2,
+     "direct": false
+    },
+    {
+     "rt": "ADD-EWR",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 60,
+     "seats": 4,
+     "direct": false
+    },
+    {
+     "rt": "IST-JFK",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 45,
+     "seats": 2,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-JFK",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 61,
+     "seats": null,
+     "direct": true
+    },
+    {
+     "rt": "CDG-EWR",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 221,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "AMS-EWR",
+     "src": "united",
+     "date": "2027-02-06",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 182,
+     "seats": 9,
+     "direct": true
+    },
+    {
      "rt": "ZRH-EWR",
      "src": "united",
      "date": "2027-02-06",
@@ -7140,76 +7190,6 @@
      "direct": false
     },
     {
-     "rt": "ZRH-JFK",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 61,
-     "seats": null,
-     "direct": true
-    },
-    {
-     "rt": "ADD-EWR",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 60,
-     "seats": 4,
-     "direct": false
-    },
-    {
-     "rt": "ADD-JFK",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 52,
-     "seats": 2,
-     "direct": false
-    },
-    {
-     "rt": "CDG-EWR",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 220,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IST-JFK",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 45,
-     "seats": 2,
-     "direct": true
-    },
-    {
-     "rt": "AMS-EWR",
-     "src": "united",
-     "date": "2027-02-06",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 181,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ADD-IAD",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 60,
-     "seats": 2,
-     "direct": false
-    },
-    {
      "rt": "ZRH-EWR",
      "src": "united",
      "date": "2027-02-07",
@@ -7218,36 +7198,6 @@
      "tax": 70,
      "seats": 9,
      "direct": true
-    },
-    {
-     "rt": "AMS-EWR",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 169,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IST-IAD",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 45,
-     "seats": 4,
-     "direct": true
-    },
-    {
-     "rt": "ADD-EWR",
-     "src": "united",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 52,
-     "seats": null,
-     "direct": false
     },
     {
      "rt": "ADD-JFK",
@@ -7262,12 +7212,82 @@
     {
      "rt": "AMS-EWR",
      "src": "united",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 170,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ADD-EWR",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 52,
+     "seats": null,
+     "direct": false
+    },
+    {
+     "rt": "ADD-IAD",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 60,
+     "seats": 2,
+     "direct": false
+    },
+    {
+     "rt": "IST-IAD",
+     "src": "united",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 45,
+     "seats": 4,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-EWR",
+     "src": "united",
      "date": "2027-02-08",
      "cab": "biz",
      "miles": 88000,
-     "tax": 194,
+     "tax": 70,
      "seats": 9,
      "direct": true
+    },
+    {
+     "rt": "AMS-EWR",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 195,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-EWR",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 235,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "ZRH-JFK",
+     "src": "united",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 69,
+     "seats": 2,
+     "direct": false
     },
     {
      "rt": "ADD-EWR",
@@ -7280,14 +7300,14 @@
      "direct": false
     },
     {
-     "rt": "ZRH-EWR",
+     "rt": "ADD-IAD",
      "src": "united",
      "date": "2027-02-08",
      "cab": "biz",
      "miles": 88000,
-     "tax": 95,
-     "seats": 9,
-     "direct": true
+     "tax": 52,
+     "seats": 2,
+     "direct": false
     },
     {
      "rt": "ADD-JFK",
@@ -7310,54 +7330,54 @@
      "direct": false
     },
     {
-     "rt": "IST-JFK",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 45,
-     "seats": 2,
-     "direct": true
-    },
-    {
-     "rt": "ZRH-JFK",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 69,
-     "seats": 2,
-     "direct": false
-    },
-    {
-     "rt": "ADD-IAD",
-     "src": "united",
-     "date": "2027-02-08",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 52,
-     "seats": 2,
-     "direct": false
-    },
-    {
      "rt": "CDG-EWR",
      "src": "united",
-     "date": "2027-02-08",
+     "date": "2027-02-09",
      "cab": "biz",
      "miles": 88000,
-     "tax": 235,
+     "tax": 221,
      "seats": 9,
      "direct": true
     },
     {
-     "rt": "IST-EWR",
+     "rt": "AMS-EWR",
      "src": "united",
-     "date": "2027-02-08",
+     "date": "2027-02-09",
      "cab": "biz",
      "miles": 88000,
-     "tax": 91,
+     "tax": 182,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-JFK",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 220,
      "seats": 9,
      "direct": false
+    },
+    {
+     "rt": "ZRH-EWR",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 62,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "CDG-IAD",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 221,
+     "seats": 9,
+     "direct": true
     },
     {
      "rt": "ADD-JFK",
@@ -7410,6 +7430,16 @@
      "direct": false
     },
     {
+     "rt": "IST-EWR",
+     "src": "united",
+     "date": "2027-02-09",
+     "cab": "biz",
+     "miles": 88000,
+     "tax": 99,
+     "seats": 6,
+     "direct": false
+    },
+    {
      "rt": "IST-JFK",
      "src": "united",
      "date": "2027-02-09",
@@ -7430,64 +7460,14 @@
      "direct": true
     },
     {
-     "rt": "CDG-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 220,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "ZRH-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 62,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "CDG-IAD",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 220,
-     "seats": 9,
-     "direct": true
-    },
-    {
-     "rt": "IST-EWR",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 99,
-     "seats": 6,
-     "direct": false
-    },
-    {
      "rt": "AMS-IAD",
      "src": "united",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 88000,
-     "tax": 180,
+     "tax": 182,
      "seats": 9,
      "direct": true
-    },
-    {
-     "rt": "CDG-JFK",
-     "src": "united",
-     "date": "2027-02-09",
-     "cab": "biz",
-     "miles": 88000,
-     "tax": 220,
-     "seats": 9,
-     "direct": false
     },
     {
      "rt": "DXB-JFK",
@@ -7520,13 +7500,13 @@
      "direct": false
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "DXB-JFK",
      "src": "aeroplan",
      "date": "2027-02-07",
      "cab": "biz",
      "miles": 90000,
-     "tax": 156,
-     "seats": 2,
+     "tax": 159,
+     "seats": 3,
      "direct": false
     },
     {
@@ -7550,23 +7530,33 @@
      "direct": false
     },
     {
-     "rt": "DXB-JFK",
-     "src": "aeroplan",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 90000,
-     "tax": 159,
-     "seats": 3,
-     "direct": false
-    },
-    {
      "rt": "DXB-EWR",
      "src": "aeroplan",
      "date": "2027-02-07",
      "cab": "biz",
      "miles": 90000,
-     "tax": 158,
-     "seats": 4,
+     "tax": 157,
+     "seats": 8,
+     "direct": false
+    },
+    {
+     "rt": "ADD-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 156,
+     "seats": 2,
+     "direct": false
+    },
+    {
+     "rt": "ADD-JFK",
+     "src": "aeroplan",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 156,
+     "seats": 6,
      "direct": false
     },
     {
@@ -7577,16 +7567,6 @@
      "miles": 90000,
      "tax": 159,
      "seats": 4,
-     "direct": false
-    },
-    {
-     "rt": "ADD-IAD",
-     "src": "aeroplan",
-     "date": "2027-02-08",
-     "cab": "biz",
-     "miles": 90000,
-     "tax": 156,
-     "seats": 2,
      "direct": false
     },
     {
@@ -7600,13 +7580,13 @@
      "direct": false
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "ADD-IAD",
      "src": "aeroplan",
      "date": "2027-02-08",
      "cab": "biz",
      "miles": 90000,
      "tax": 156,
-     "seats": 6,
+     "seats": 2,
      "direct": false
     },
     {
@@ -7620,12 +7600,22 @@
      "direct": true
     },
     {
-     "rt": "ADD-JFK",
+     "rt": "DXB-EWR",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 90000,
-     "tax": 156,
+     "tax": 157,
+     "seats": 9,
+     "direct": false
+    },
+    {
+     "rt": "ADD-EWR",
+     "src": "aeroplan",
+     "date": "2027-02-09",
+     "cab": "biz",
+     "miles": 90000,
+     "tax": 155,
      "seats": 3,
      "direct": false
     },
@@ -7640,23 +7630,13 @@
      "direct": true
     },
     {
-     "rt": "ADD-EWR",
+     "rt": "ADD-JFK",
      "src": "aeroplan",
      "date": "2027-02-09",
      "cab": "biz",
      "miles": 90000,
-     "tax": 155,
+     "tax": 156,
      "seats": 3,
-     "direct": false
-    },
-    {
-     "rt": "DXB-EWR",
-     "src": "aeroplan",
-     "date": "2027-02-09",
-     "cab": "biz",
-     "miles": 90000,
-     "tax": 159,
-     "seats": 6,
      "direct": false
     },
     {
@@ -7697,6 +7677,16 @@
      "miles": 92500,
      "tax": 166,
      "seats": 3,
+     "direct": false
+    },
+    {
+     "rt": "IST-IAD",
+     "src": "aeroplan",
+     "date": "2027-02-09",
+     "cab": "econ",
+     "miles": 93700,
+     "tax": 154,
+     "seats": 9,
      "direct": false
     },
     {
@@ -7770,36 +7760,6 @@
      "direct": true
     },
     {
-     "rt": "DOH-IAD",
-     "src": "qatar",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 140000,
-     "tax": 0,
-     "seats": 5,
-     "direct": true
-    },
-    {
-     "rt": "DOH-JFK",
-     "src": "qatar",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 140000,
-     "tax": 0,
-     "seats": 4,
-     "direct": true
-    },
-    {
-     "rt": "DOH-PHL",
-     "src": "qatar",
-     "date": "2027-02-07",
-     "cab": "biz",
-     "miles": 140000,
-     "tax": 0,
-     "seats": 9,
-     "direct": true
-    },
-    {
      "rt": "NBO-JFK",
      "src": "virginatlantic",
      "date": "2027-02-07",
@@ -7812,11 +7772,31 @@
     {
      "rt": "DOH-PHL",
      "src": "qatar",
-     "date": "2027-02-08",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 140000,
+     "tax": 0,
+     "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "DOH-JFK",
+     "src": "qatar",
+     "date": "2027-02-07",
      "cab": "biz",
      "miles": 140000,
      "tax": 0,
      "seats": 4,
+     "direct": true
+    },
+    {
+     "rt": "DOH-IAD",
+     "src": "qatar",
+     "date": "2027-02-07",
+     "cab": "biz",
+     "miles": 140000,
+     "tax": 0,
+     "seats": 5,
      "direct": true
     },
     {
@@ -7827,6 +7807,16 @@
      "miles": 140000,
      "tax": 0,
      "seats": 9,
+     "direct": true
+    },
+    {
+     "rt": "DOH-PHL",
+     "src": "qatar",
+     "date": "2027-02-08",
+     "cab": "biz",
+     "miles": 140000,
+     "tax": 0,
+     "seats": 4,
      "direct": true
     },
     {
