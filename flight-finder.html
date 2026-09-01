@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Finder — The Big Trip 2026!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --ink-primary: #1e293b;
+            --ink-secondary: #52514e;
+            --ink-muted: #898781;
+            --gridline: #e1e0d9;
+            --baseline: #c3c2b7;
+            --cabin-1: #86b6ef;   /* economy */
+            --cabin-2: #2a78d6;   /* premium */
+            --cabin-3: #104281;   /* business/first */
+            --meter-points: #2a78d6;
+            --meter-points-track: #cde2fb;
+            --meter-cash: #1baf7a;
+            --meter-cash-track: #d3f2e5;
+            --status-critical: #d03b3b;
+            --status-warning: #fab219;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: var(--ink-primary);
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle { font-size: 1.1rem; color: #64748b; margin-bottom: 5px; }
+
+        .banner {
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .section { margin-bottom: 40px; }
+
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .section-header .icon { font-size: 1.6rem; }
+        .section-header h2 { font-size: 1.4rem; font-weight: 600; color: var(--ink-primary); }
+        .section-note { font-size: 0.875rem; color: #64748b; margin-bottom: 18px; }
+
+        /* ---- Budget meters ---- */
+        .meters { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 640px) { .meters { grid-template-columns: 1fr; } }
+
+        .meter-tile {
+            border: 1px solid rgba(11,11,11,0.10);
+            border-radius: 14px;
+            padding: 20px 22px;
+        }
+        .meter-label { font-size: 0.85rem; font-weight: 600; color: var(--ink-secondary); margin-bottom: 6px; }
+        .meter-value { font-size: 1.9rem; font-weight: 700; margin-bottom: 12px; }
+        .meter-value .limit { font-size: 1rem; font-weight: 500; color: var(--ink-muted); }
+        .meter-track { height: 10px; border-radius: 5px; overflow: hidden; }
+        .meter-fill { height: 100%; border-radius: 5px; transition: width 0.3s ease; }
+        #pointsTrack { background: var(--meter-points-track); }
+        #pointsFill { background: var(--meter-points); }
+        #cashTrack { background: var(--meter-cash-track); }
+        #cashFill { background: var(--meter-cash); }
+        .meter-status { margin-top: 10px; font-size: 0.8rem; font-weight: 600; min-height: 1.1em; }
+        .meter-status.over { color: var(--status-critical); }
+
+        /* ---- Priority sliders ---- */
+        .sliders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        @media (max-width: 640px) { .sliders { grid-template-columns: 1fr; } }
+        .slider-group label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; color: var(--ink-secondary); }
+        .slider-group label .w { color: #667eea; }
+        .slider-group input[type=range] { width: 100%; accent-color: #667eea; }
+
+        /* ---- Filter row ---- */
+        .filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; align-items: center; }
+        .filter-row .flabel { font-size: 0.8rem; font-weight: 600; color: var(--ink-muted); margin-right: 4px; }
+        .chip {
+            border: 1px solid var(--gridline);
+            background: white;
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: inherit;
+            color: var(--ink-secondary);
+            cursor: pointer;
+        }
+        .chip.active { background: #667eea; border-color: #667eea; color: white; }
+        .chip:hover:not(.active) { background: #f1f5f9; }
+
+        /* ---- Scatter ---- */
+        .chart-wrap { position: relative; }
+        .chart-legend { display: flex; gap: 18px; margin-bottom: 8px; flex-wrap: wrap; }
+        .chart-legend .li { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--ink-secondary); }
+        .chart-legend .sw { width: 11px; height: 11px; border-radius: 50%; }
+        .tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: var(--ink-primary);
+            color: white;
+            font-size: 0.78rem;
+            line-height: 1.45;
+            padding: 8px 11px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.12s ease;
+            max-width: 230px;
+            z-index: 5;
+        }
+        .tooltip.show { opacity: 1; }
+        svg text { font-family: 'Inter', sans-serif; }
+        .axis-tick { font-size: 11px; fill: var(--ink-muted); font-variant-numeric: tabular-nums; }
+        .axis-title { font-size: 11px; fill: var(--ink-muted); font-weight: 600; }
+        .pt-label { font-size: 10.5px; fill: var(--ink-secondary); font-weight: 600; }
+
+        /* ---- Option cards ---- */
+        .option-card {
+            border: 1px solid rgba(11,11,11,0.10);
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            display: grid;
+            grid-template-columns: auto 1fr 200px;
+            gap: 18px;
+            align-items: center;
+        }
+        @media (max-width: 720px) { .option-card { grid-template-columns: auto 1fr; } .axis-bars { grid-column: 1 / -1; } }
+        .option-card.shortlisted { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.25); }
+        .rank-badge {
+            width: 46px; height: 46px; border-radius: 12px;
+            background: #f1f5f9; color: var(--ink-primary);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.05rem;
+        }
+        .rank-badge .s { font-size: 0.6rem; font-weight: 600; color: var(--ink-muted); }
+        .opt-main .route { font-weight: 600; font-size: 1rem; margin-bottom: 3px; }
+        .opt-main .cabin-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+        .opt-main .meta { font-size: 0.83rem; color: var(--ink-secondary); }
+        .opt-main .meta b { font-variant-numeric: tabular-nums; }
+        .opt-main .pick { margin-top: 8px; }
+        .pick label { font-size: 0.8rem; font-weight: 600; color: #667eea; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .pick input { accent-color: #667eea; }
+        .axis-bars { display: grid; gap: 6px; }
+        .abar { display: grid; grid-template-columns: 62px 1fr; align-items: center; gap: 8px; font-size: 0.72rem; color: var(--ink-muted); font-weight: 600; }
+        .abar .track { height: 6px; border-radius: 3px; background: #f1f5f9; overflow: hidden; }
+        .abar .fill { height: 100%; border-radius: 3px; background: #667eea; }
+
+        /* ---- Table ---- */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { text-align: left; font-weight: 600; color: var(--ink-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 8px 12px; border-bottom: 2px solid var(--gridline); }
+        td { padding: 10px 12px; border-bottom: 1px solid var(--gridline); color: var(--ink-primary); }
+        td.num { font-variant-numeric: tabular-nums; text-align: right; }
+        th.num { text-align: right; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>✈️ Flight Finder</h1>
+                <div class="subtitle">East Africa honeymoon — into Kigali by Jan 22, home from Dar es Salaam after Feb 5<br>Budget: 300k Chase UR points + $4,000 cash for two travelers</div>
+            </div>
+
+            <div class="banner" id="sampleBanner" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd">
+                <span>🛰️</span>
+                <span><strong>Live award availability</strong> from seats.aero, pulled September 1, 2026 (auto-refreshed daily around 8am ET). Each option is <strong>one direction for both travelers</strong> — shortlist one Outbound and one Return to build the trip. Award space changes daily; verify on the program's site before transferring points. The Kigali → Dar es Salaam hop mid-trip is a separate cash ticket (roughly $250–350/person).</span>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="icon">💰</span><h2>Budget</h2></div>
+                <div class="section-note">Totals update as you shortlist options below (☆ Shortlist). Points transfer 1:1 from Chase Ultimate Rewards.</div>
+                <div class="meters">
+                    <div class="meter-tile">
+                        <div class="meter-label">Ultimate Rewards points</div>
+                        <div class="meter-value"><span id="pointsUsed">0</span> <span class="limit">/ 300,000</span></div>
+                        <div class="meter-track" id="pointsTrack"><div class="meter-fill" id="pointsFill" style="width:0%"></div></div>
+                        <div class="meter-status" id="pointsStatus"></div>
+                    </div>
+                    <div class="meter-tile">
+                        <div class="meter-label">Cash (fares, taxes &amp; fees)</div>
+                        <div class="meter-value"><span id="cashUsed">$0</span> <span class="limit">/ $4,000</span></div>
+                        <div class="meter-track" id="cashTrack"><div class="meter-fill" id="cashFill" style="width:0%"></div></div>
+                        <div class="meter-status" id="cashStatus"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="icon">🎚️</span><h2>What matters most?</h2></div>
+                <div class="section-note">Drag to weight each axis — the ranking below re-sorts instantly.</div>
+                <div class="sliders">
+                    <div class="slider-group">
+                        <label>Price <span class="w" id="wPriceLabel">5</span></label>
+                        <input type="range" id="wPrice" min="0" max="10" value="5">
+                    </div>
+                    <div class="slider-group">
+                        <label>Duration <span class="w" id="wDurLabel">5</span></label>
+                        <input type="range" id="wDur" min="0" max="10" value="5">
+                    </div>
+                    <div class="slider-group">
+                        <label>Comfort <span class="w" id="wComfortLabel">5</span></label>
+                        <input type="range" id="wComfort" min="0" max="10" value="5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="icon">🔍</span><h2>Options</h2></div>
+                <div class="section-note">One filter row scopes everything below it — the chart, the ranked list and the table.</div>
+                <div class="filter-row" id="filterRow">
+                    <span class="flabel">LEG</span>
+                    <span id="legChips"></span>
+                    <span class="flabel" style="margin-left:12px">CABIN</span>
+                    <span id="cabinChips"></span>
+                </div>
+
+                <div class="chart-legend" id="legend"></div>
+                <div class="chart-wrap">
+                    <svg id="scatter" width="100%" viewBox="0 0 920 380" role="img" aria-label="Scatter plot of trip cost versus travel time, colored by cabin class"></svg>
+                    <div class="tooltip" id="tooltip"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="icon">🏆</span><h2>Ranked picks</h2></div>
+                <div class="section-note">Score blends the three axes using your weights. Shortlist one Outbound + one Return to see the budget impact.</div>
+                <div id="optionList"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header"><span class="icon">📋</span><h2>All the numbers</h2></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Option</th><th>From</th><th>Cabin</th><th>Stops</th>
+                                <th class="num">Points</th><th class="num">Cash</th>
+                                <th class="num">Travel time</th><th class="num">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // DATA — real seats.aero award availability, pulled 2026-09-01.
+        // Note: Virgin Atlantic's 24k saver on NBO-JFK disappeared 2026-07-18 (now 50k);
+        // option 8 switched to Flying Blue, which still prices the same KQ flights at 40k.
+        // Each option is ONE DIRECTION (leg: 'out' = US→KGL arriving by Jan 22,
+        // 'ret' = DAR→US departing Feb 6-9) priced for BOTH travelers (2 seats confirmed).
+        // points: UR points after 1:1 transfer; cash: award taxes/fees ($, estimated
+        // where the program under-reports). durationH: total door-to-door travel time.
+        // cabin: 1=Economy, 2=Premium, 3=Business/First.
+        // ============================================================
+        const SAMPLE = false;
+        const CABIN_NAMES = { 1: 'Economy', 2: 'Premium', 3: 'Business/First' };
+        const CABIN_COLORS = { 1: '#86b6ef', 2: '#2a78d6', 3: '#104281' };
+
+        const OPTIONS = [
+            // ---- OUTBOUND: arrive Kigali by Jan 22 ----
+            // ur: effective UR cost when a transfer bonus applies (none active —
+            // the 30% Virgin Atlantic bonus ended Jul 14, 2026). Meters & scores use ur when present.
+            { id: 1,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'Kenya Airways — Virgin Atlantic pts',           cabin: 1, stops: 1, points: 59000,  cash: 700,  durationH: 17.5 },
+            { id: 2,  leg: 'out', origin: 'JFK', route: 'JFK → BRU → KGL · dep Jan 20',     program: 'Brussels Airlines — Aeroplan through-award*',   cabin: 3, stops: 1, points: 175000, cash: 420,  durationH: 19.5 },
+            { id: 3,  leg: 'out', origin: 'JFK', route: 'JFK/IAD → DOH → KGL · dep Jan 20', program: 'Qatar Airways — Avios (BA/Iberia transfer)',    cabin: 1, stops: 1, points: 96000,  cash: 150,  durationH: 20.0 },
+            { id: 4,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian lie-flat — United miles',             cabin: 3, stops: 1, points: 266000, cash: 140,  durationH: 21.0 },
+            { id: 5,  leg: 'out', origin: 'EWR', route: 'EWR → ADD → KGL · dep Jan 20',     program: 'Ethiopian — United miles',                      cabin: 1, stops: 1, points: 134000, cash: 80,   durationH: 21.0 },
+            { id: 6,  leg: 'out', origin: 'JFK', route: 'JFK → NBO → KGL · dep Jan 21',     program: 'KQ Premium — Flying Blue + Virgin pts',         cabin: 2, stops: 1, points: 141000, cash: 1160, durationH: 17.5 },
+            // ---- RETURN: depart Dar es Salaam Feb 6-9 ----
+            { id: 7,  leg: 'ret', origin: 'DAR', route: 'DAR → DOH → PHL/JFK · dep Feb 6–8', program: 'Qatar Airways — Avios (BA/Iberia transfer)',   cabin: 1, stops: 1, points: 105000, cash: 150,  durationH: 22.0 },
+            { id: 8,  leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 7–9',     program: 'Kenya Airways — Flying Blue pts',              cabin: 1, stops: 1, points: 90000,  cash: 966,  durationH: 20.0 },
+            { id: 9,  leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK · dep Feb 8',       program: 'Ethiopian lie-flat — Aeroplan through-award*', cabin: 3, stops: 1, points: 200000, cash: 320,  durationH: 21.0 },
+            { id: 10, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → JFK/IAD · dep Feb 6–8', program: 'Ethiopian lie-flat — United miles',            cabin: 3, stops: 1, points: 266000, cash: 310,  durationH: 21.0 },
+            { id: 11, leg: 'ret', origin: 'DAR', route: 'DAR → ADD → US · dep Feb 6–9',      program: 'Ethiopian — United miles',                     cabin: 1, stops: 1, points: 134000, cash: 310,  durationH: 21.0 },
+            { id: 12, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 6–9',     program: 'KQ Premium — Flying Blue',                     cabin: 2, stops: 1, points: 140000, cash: 1340, durationH: 20.0 },
+            { id: 13, leg: 'ret', origin: 'DAR', route: 'DAR → NBO → JFK · dep Feb 9',       program: 'Kenya Airways lie-flat — Virgin Atlantic pts', cabin: 3, stops: 1, points: 309000, cash: 1592, durationH: 20.0 },
+        ];
+        // * Through-award pricing (one booking spanning both segments on the program's own
+        //   site) — cheaper than the segment-by-segment cache prices; confirm when booking.
+
+        const BUDGET = { points: 300000, cash: 4000 };
+        const CENTS_PER_POINT = 1.25; // UR portal redemption value, used only to place points+cash on one cost axis
+
+        // ---------- state ----------
+        const state = {
+            leg: 'All', cabin: 'All',
+            weights: { price: 5, dur: 5, comfort: 5 },
+            shortlist: new Set(),
+        };
+
+        const urCost = o => o.ur ?? o.points;   // UR points actually leaving the Chase account
+        const dollarEquiv = o => o.cash + urCost(o) * CENTS_PER_POINT / 100;
+        const fmtPts = n => n.toLocaleString();
+        const fmtMoney = n => '$' + Math.round(n).toLocaleString();
+        const fmtDur = h => Math.floor(h) + 'h ' + String(Math.round(h % 1 * 60)).padStart(2, '0') + 'm';
+
+        const LEG_NAMES = { out: 'Outbound → Kigali', ret: 'Return from Dar' };
+        function filtered() {
+            return OPTIONS.filter(o =>
+                (state.leg === 'All' || o.leg === state.leg) &&
+                (state.cabin === 'All' || String(o.cabin) === state.cabin));
+        }
+
+        // Normalized 0–1 per axis (1 = best) across ALL options so scores stay
+        // stable when filtering.
+        function axisScores(o) {
+            const costs = OPTIONS.map(dollarEquiv), durs = OPTIONS.map(x => x.durationH);
+            const cMin = Math.min(...costs), cMax = Math.max(...costs);
+            const dMin = Math.min(...durs), dMax = Math.max(...durs);
+            return {
+                price: cMax === cMin ? 1 : (cMax - dollarEquiv(o)) / (cMax - cMin),
+                dur: dMax === dMin ? 1 : (dMax - o.durationH) / (dMax - dMin),
+                comfort: (o.cabin - 1) / 2,
+            };
+        }
+
+        function score(o) {
+            const a = axisScores(o), w = state.weights;
+            const total = w.price + w.dur + w.comfort;
+            if (total === 0) return 0;
+            return Math.round(100 * (w.price * a.price + w.dur * a.dur + w.comfort * a.comfort) / total);
+        }
+
+        // ---------- filters ----------
+        function buildChips() {
+            const legs = ['All', ...new Set(OPTIONS.map(o => o.leg))];
+            document.getElementById('legChips').innerHTML = legs.map(l =>
+                `<button class="chip ${state.leg === l ? 'active' : ''}" data-k="leg" data-v="${l}">${l === 'All' ? 'All' : LEG_NAMES[l]}</button>`).join(' ');
+            const cabins = ['All', ...new Set(OPTIONS.map(o => o.cabin))].map(String);
+            document.getElementById('cabinChips').innerHTML = cabins.map(c =>
+                `<button class="chip ${state.cabin === c ? 'active' : ''}" data-k="cabin" data-v="${c}">${c === 'All' ? 'All' : CABIN_NAMES[c]}</button>`).join(' ');
+        }
+        document.getElementById('filterRow').addEventListener('click', e => {
+            const b = e.target.closest('.chip');
+            if (!b) return;
+            state[b.dataset.k] = b.dataset.v;
+            render();
+        });
+
+        // ---------- scatter ----------
+        function drawScatter() {
+            const data = filtered();
+            const svg = document.getElementById('scatter');
+            const W = 920, H = 380, m = { t: 16, r: 24, b: 52, l: 74 };
+            const iw = W - m.l - m.r, ih = H - m.t - m.b;
+
+            const xs = OPTIONS.map(o => o.durationH), ys = OPTIONS.map(dollarEquiv);
+            const xMax = Math.ceil(Math.max(...xs) + 0.5), xMin = Math.floor(Math.min(...xs) - 0.5);
+            const yMax = Math.ceil(Math.max(...ys) / 250) * 250 + 100, yMin = 0;
+            const X = v => m.l + (v - xMin) / (xMax - xMin) * iw;
+            const Y = v => m.t + ih - (v - yMin) / (yMax - yMin) * ih;
+
+            let g = '';
+            // gridlines + ticks (solid hairlines)
+            const yStep = yMax > 2500 ? 800 : 400;
+            for (let yv = 0; yv <= yMax; yv += yStep) {
+                g += `<line x1="${m.l}" y1="${Y(yv)}" x2="${W - m.r}" y2="${Y(yv)}" stroke="#e1e0d9" stroke-width="1"/>`;
+                g += `<text class="axis-tick" x="${m.l - 8}" y="${Y(yv) + 4}" text-anchor="end">$${yv.toLocaleString()}</text>`;
+            }
+            for (let xv = Math.ceil(xMin); xv <= xMax; xv += 1) {
+                g += `<text class="axis-tick" x="${X(xv)}" y="${m.t + ih + 18}" text-anchor="middle">${xv}h</text>`;
+            }
+            g += `<line x1="${m.l}" y1="${m.t + ih}" x2="${W - m.r}" y2="${m.t + ih}" stroke="#c3c2b7" stroke-width="1"/>`;
+            g += `<text class="axis-title" x="${m.l + iw / 2}" y="${H - 8}" text-anchor="middle">Door-to-door travel time</text>`;
+            g += `<text class="axis-title" transform="rotate(-90 14 ${m.t + ih / 2})" x="14" y="${m.t + ih / 2}" text-anchor="middle">Cost for 2, one direction (points at 1.25¢)</text>`;
+
+            // best-per-cabin gets a direct label; the rest rely on tooltip + table
+            const bestPerCabin = {};
+            data.forEach(o => {
+                const s = score(o);
+                if (!bestPerCabin[o.cabin] || s > bestPerCabin[o.cabin].s) bestPerCabin[o.cabin] = { id: o.id, s };
+            });
+
+            data.forEach(o => {
+                const cx = X(o.durationH), cy = Y(dollarEquiv(o));
+                g += `<circle cx="${cx}" cy="${cy}" r="7" fill="${CABIN_COLORS[o.cabin]}" stroke="#ffffff" stroke-width="2"/>`;
+                // oversized invisible hit target (~24px)
+                g += `<circle cx="${cx}" cy="${cy}" r="13" fill="transparent" data-id="${o.id}" style="cursor:pointer"/>`;
+                if (bestPerCabin[o.cabin] && bestPerCabin[o.cabin].id === o.id) {
+                    const anchor = cx > W - 190 ? 'end' : 'start';
+                    g += `<text class="pt-label" x="${cx + (anchor === 'end' ? -12 : 12)}" y="${cy + 4}" text-anchor="${anchor}">${o.program}</text>`;
+                }
+            });
+            svg.innerHTML = g;
+
+            document.getElementById('legend').innerHTML = [1, 2, 3]
+                .filter(c => OPTIONS.some(o => o.cabin === c))
+                .map(c => `<span class="li"><span class="sw" style="background:${CABIN_COLORS[c]}"></span>${CABIN_NAMES[c]}</span>`).join('');
+        }
+
+        const tooltip = document.getElementById('tooltip');
+        document.getElementById('scatter').addEventListener('mousemove', e => {
+            const t = e.target.closest('circle[data-id]');
+            if (!t) { tooltip.classList.remove('show'); return; }
+            const o = OPTIONS.find(x => x.id === +t.dataset.id);
+            tooltip.innerHTML = `<strong>${o.route}</strong><br>${o.program} · ${CABIN_NAMES[o.cabin]}<br>` +
+                `${o.points ? fmtPts(o.points) + ' pts + ' : ''}${fmtMoney(o.cash)} · ${fmtDur(o.durationH)}` +
+                `<br>Score: ${score(o)}`;
+            const wrap = t.closest('.chart-wrap') || t.ownerSVGElement.parentElement;
+            const r = wrap.getBoundingClientRect();
+            tooltip.style.left = Math.min(e.clientX - r.left + 14, r.width - 240) + 'px';
+            tooltip.style.top = (e.clientY - r.top - 10) + 'px';
+            tooltip.classList.add('show');
+        });
+        document.getElementById('scatter').addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+
+        // ---------- ranked cards ----------
+        function drawCards() {
+            const ranked = filtered().map(o => ({ o, s: score(o) })).sort((a, b) => b.s - a.s);
+            document.getElementById('optionList').innerHTML = ranked.map(({ o, s }, i) => {
+                const a = axisScores(o);
+                return `
+                <div class="option-card ${state.shortlist.has(o.id) ? 'shortlisted' : ''}">
+                    <div class="rank-badge">#${i + 1}<span class="s">${s} pts</span></div>
+                    <div class="opt-main">
+                        <div class="route"><span class="cabin-dot" style="background:${CABIN_COLORS[o.cabin]}"></span>${o.route} · ${CABIN_NAMES[o.cabin]}</div>
+                        <div class="meta">${o.program} · ${o.stops === 0 ? 'nonstop' : o.stops + ' stop'} ·
+                            <b>${o.points ? fmtPts(o.points) + ' pts' : ''}${o.ur ? ' (≈' + fmtPts(o.ur) + ' UR with bonus)' : ''}${o.points && o.cash ? ' + ' : ''}${o.cash ? fmtMoney(o.cash) : ''}</b>
+                            · ${fmtDur(o.durationH)} door-to-door</div>
+                        <div class="pick"><label><input type="checkbox" data-id="${o.id}" ${state.shortlist.has(o.id) ? 'checked' : ''}> ☆ Shortlist this option</label></div>
+                    </div>
+                    <div class="axis-bars">
+                        <div class="abar"><span>Price</span><div class="track"><div class="fill" style="width:${Math.round(a.price * 100)}%"></div></div></div>
+                        <div class="abar"><span>Duration</span><div class="track"><div class="fill" style="width:${Math.round(a.dur * 100)}%"></div></div></div>
+                        <div class="abar"><span>Comfort</span><div class="track"><div class="fill" style="width:${Math.round(a.comfort * 100)}%"></div></div></div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+        document.getElementById('optionList').addEventListener('change', e => {
+            if (!e.target.matches('input[type=checkbox]')) return;
+            const id = +e.target.dataset.id;
+            e.target.checked ? state.shortlist.add(id) : state.shortlist.delete(id);
+            render();
+        });
+
+        // ---------- table ----------
+        function drawTable() {
+            const ranked = filtered().map(o => ({ o, s: score(o) })).sort((a, b) => b.s - a.s);
+            document.getElementById('tableBody').innerHTML = ranked.map(({ o, s }) => `
+                <tr>
+                    <td>${o.route}<br><span style="color:#898781;font-size:0.78rem">${o.program}</span></td>
+                    <td>${o.origin}</td><td>${CABIN_NAMES[o.cabin]}</td><td>${o.stops}</td>
+                    <td class="num">${o.points ? fmtPts(o.points) : '—'}${o.ur ? '<br><span style="color:#898781;font-size:0.78rem">≈' + fmtPts(o.ur) + ' UR</span>' : ''}</td>
+                    <td class="num">${o.cash ? fmtMoney(o.cash) : '—'}</td>
+                    <td class="num">${fmtDur(o.durationH)}</td>
+                    <td class="num"><strong>${s}</strong></td>
+                </tr>`).join('');
+        }
+
+        // ---------- budget meters ----------
+        function drawMeters() {
+            const picks = OPTIONS.filter(o => state.shortlist.has(o.id));
+            const pts = picks.reduce((n, o) => n + urCost(o), 0);
+            const cash = picks.reduce((n, o) => n + o.cash, 0);
+            document.getElementById('pointsUsed').textContent = fmtPts(pts);
+            document.getElementById('cashUsed').textContent = fmtMoney(cash);
+            document.getElementById('pointsFill').style.width = Math.min(100, pts / BUDGET.points * 100) + '%';
+            document.getElementById('cashFill').style.width = Math.min(100, cash / BUDGET.cash * 100) + '%';
+            const ps = document.getElementById('pointsStatus'), cs = document.getElementById('cashStatus');
+            ps.textContent = pts > BUDGET.points ? '⛔ Over by ' + fmtPts(pts - BUDGET.points) + ' points' : '';
+            ps.className = 'meter-status' + (pts > BUDGET.points ? ' over' : '');
+            document.getElementById('pointsFill').style.background = pts > BUDGET.points ? 'var(--status-critical)' : 'var(--meter-points)';
+            cs.textContent = cash > BUDGET.cash ? '⛔ Over by ' + fmtMoney(cash - BUDGET.cash) : '';
+            cs.className = 'meter-status' + (cash > BUDGET.cash ? ' over' : '');
+            document.getElementById('cashFill').style.background = cash > BUDGET.cash ? 'var(--status-critical)' : 'var(--meter-cash)';
+        }
+
+        // ---------- sliders ----------
+        [['wPrice', 'price'], ['wDur', 'dur'], ['wComfort', 'comfort']].forEach(([id, key]) => {
+            document.getElementById(id).addEventListener('input', e => {
+                state.weights[key] = +e.target.value;
+                document.getElementById(id + 'Label').textContent = e.target.value;
+                render();
+            });
+        });
+
+        function render() {
+            buildChips();
+            drawScatter();
+            drawCards();
+            drawTable();
+            drawMeters();
+        }
+        render();
+    </script>
+</body>
+</html>
